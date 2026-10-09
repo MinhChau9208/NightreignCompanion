@@ -1,0 +1,5 @@
+{
+  "verified": false,
+  "note": "Night-boss pools per Nightlord are not sourced yet (Phase 2). An empty pool means 'no signal': the predictor must fall back to a uniform prior.",
+  "pools": []
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "id": "phys_atk_up",
+    "name": { "en": "Physical Attack Up", "vi": "Tăng sát thương vật lý" },
+    "category": "attack",
+    "tiers": [
+      { "level": 0, "value": null, "unit": "multiplier" },
+      { "level": 1, "value": null, "unit": "multiplier" },
+      { "level": 2, "value": null, "unit": "multiplier" }
+    ],
+    "stacking": "unknown",
+    "characters": [],
+    "deepOnly": false,
+    "negative": false,
+    "source": "",
+    "verified": false
+  }
+]

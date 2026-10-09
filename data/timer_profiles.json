@@ -1,0 +1,21 @@
+[
+  {
+    "id": "normal",
+    "name": { "en": "Normal expedition", "vi": "Expedition thường" },
+    "verified": false,
+    "note": "Durations are placeholders; measure in-game before relying on them.",
+    "phases": [
+      { "id": "day1_explore",  "kind": "explore", "seconds": 270, "label": { "en": "Day 1 – until the rain closes in", "vi": "Ngày 1 – tới lúc bo thu" } },
+      { "id": "day1_shrink_1", "kind": "shrink",  "seconds": 180, "label": { "en": "Day 1 – circle shrinking",           "vi": "Ngày 1 – bo đang thu" } },
+      { "id": "day1_explore_2","kind": "explore", "seconds": 210, "label": { "en": "Day 1 – until the second shrink",    "vi": "Ngày 1 – tới lần thu thứ 2" } },
+      { "id": "day1_shrink_2", "kind": "shrink",  "seconds": 180, "label": { "en": "Day 1 – final shrink",               "vi": "Ngày 1 – thu lần cuối" } },
+      { "id": "night1_boss",   "kind": "boss",    "seconds": 0,   "label": { "en": "Night 1 boss",                       "vi": "Boss đêm 1" } },
+      { "id": "day2_explore",  "kind": "explore", "seconds": 270, "label": { "en": "Day 2 – until the rain closes in",   "vi": "Ngày 2 – tới lúc bo thu" } },
+      { "id": "day2_shrink_1", "kind": "shrink",  "seconds": 180, "label": { "en": "Day 2 – circle shrinking",           "vi": "Ngày 2 – bo đang thu" } },
+      { "id": "day2_explore_2","kind": "explore", "seconds": 210, "label": { "en": "Day 2 – until the second shrink",    "vi": "Ngày 2 – tới lần thu thứ 2" } },
+      { "id": "day2_shrink_2", "kind": "shrink",  "seconds": 180, "label": { "en": "Day 2 – final shrink",               "vi": "Ngày 2 – thu lần cuối" } },
+      { "id": "night2_boss",   "kind": "boss",    "seconds": 0,   "label": { "en": "Night 2 boss",                       "vi": "Boss đêm 2" } },
+      { "id": "nightlord",     "kind": "boss",    "seconds": 0,   "label": { "en": "Day 3 – Nightlord",                  "vi": "Ngày 3 – Nightlord" } }
+    ]
+  }
+]

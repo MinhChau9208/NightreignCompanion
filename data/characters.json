@@ -1,0 +1,10 @@
+[
+  { "id": "wylder",   "name": { "en": "Wylder",   "vi": "Wylder" } },
+  { "id": "guardian", "name": { "en": "Guardian", "vi": "Guardian" } },
+  { "id": "ironeye",  "name": { "en": "Ironeye",  "vi": "Ironeye" } },
+  { "id": "duchess",  "name": { "en": "Duchess",  "vi": "Duchess" } },
+  { "id": "raider",   "name": { "en": "Raider",   "vi": "Raider" } },
+  { "id": "revenant", "name": { "en": "Revenant", "vi": "Revenant" } },
+  { "id": "recluse",  "name": { "en": "Recluse",  "vi": "Recluse" } },
+  { "id": "executor", "name": { "en": "Executor", "vi": "Executor" } }
+]

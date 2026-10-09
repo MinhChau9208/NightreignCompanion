@@ -1,0 +1,14 @@
+# Build output
+build/bin
+frontend/dist/*
+!frontend/dist/gitkeep
+
+# Dependencies
+frontend/node_modules
+
+# Local data / editor
+*.db
+*.db-journal
+.vscode/
+.idea/
+frontend/package.json.md5

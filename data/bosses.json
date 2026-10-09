@@ -1,0 +1,10 @@
+[
+  { "id": "gladius",  "kind": "nightlord", "name": { "en": "Gladius, Beast of Night",       "vi": "Gladius, Beast of Night" },       "expedition": { "en": "Tricephalos",        "vi": "Tricephalos" },        "weaknesses": [], "verified": false },
+  { "id": "adel",     "kind": "nightlord", "name": { "en": "Adel, Baron of Night",          "vi": "Adel, Baron of Night" },          "expedition": { "en": "Gaping Jaw",         "vi": "Gaping Jaw" },         "weaknesses": [], "verified": false },
+  { "id": "gnoster",  "kind": "nightlord", "name": { "en": "Gnoster, Wisdom of Night",      "vi": "Gnoster, Wisdom of Night" },      "expedition": { "en": "Sentient Pest",      "vi": "Sentient Pest" },      "weaknesses": [], "verified": false },
+  { "id": "maris",    "kind": "nightlord", "name": { "en": "Maris, Fathom of Night",        "vi": "Maris, Fathom of Night" },        "expedition": { "en": "Augur",              "vi": "Augur" },              "weaknesses": [], "verified": false },
+  { "id": "libra",    "kind": "nightlord", "name": { "en": "Libra, Creature of Night",      "vi": "Libra, Creature of Night" },      "expedition": { "en": "Equilibrious Beast", "vi": "Equilibrious Beast" }, "weaknesses": [], "verified": false },
+  { "id": "fulghor",  "kind": "nightlord", "name": { "en": "Fulghor, Champion of Nightglow", "vi": "Fulghor, Champion of Nightglow" }, "expedition": { "en": "Darkdrift Knight",   "vi": "Darkdrift Knight" },   "weaknesses": [], "verified": false },
+  { "id": "caligo",   "kind": "nightlord", "name": { "en": "Caligo, Miasma of Night",       "vi": "Caligo, Miasma of Night" },       "expedition": { "en": "Fissure in the Fog", "vi": "Fissure in the Fog" }, "weaknesses": [], "verified": false },
+  { "id": "heolstor", "kind": "nightlord", "name": { "en": "Heolstor the Nightlord",        "vi": "Heolstor the Nightlord" },        "expedition": { "en": "Night Aspect",       "vi": "Night Aspect" },       "weaknesses": [], "verified": false }
+]
