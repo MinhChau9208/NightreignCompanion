@@ -4,6 +4,7 @@
   import {lang, t, type Key} from './lib/i18n'
   import Dashboard from './pages/Dashboard.svelte'
   import Settings from './pages/Settings.svelte'
+  import Network from './pages/Network.svelte'
   import ComingSoon from './pages/ComingSoon.svelte'
 
   type Page = {id: string; label: Key; phase?: string}
@@ -11,7 +12,7 @@
     {id: 'dashboard', label: 'nav.dashboard'},
     {id: 'timer', label: 'nav.timer', phase: 'Phase 1'},
     {id: 'relics', label: 'nav.relics', phase: 'Phase 1'},
-    {id: 'network', label: 'nav.network', phase: 'Phase 1'},
+    {id: 'network', label: 'nav.network'},
     {id: 'builds', label: 'nav.builds', phase: 'Phase 2'},
     {id: 'bosses', label: 'nav.bosses', phase: 'Phase 2'},
     {id: 'settings', label: 'nav.settings'},
@@ -48,6 +49,8 @@
   <main>
     {#if current.id === 'dashboard'}
       <Dashboard />
+    {:else if current.id === 'network'}
+      <Network />
     {:else if current.id === 'settings'}
       <Settings />
     {:else}

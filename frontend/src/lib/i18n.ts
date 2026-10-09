@@ -42,6 +42,26 @@ const vi = {
   'overlay.disconnected': 'Mất kết nối',
   'overlay.timer': 'Timer',
   'overlay.idle': 'Chờ bắt đầu',
+  'net.good': 'Tốt',
+  'net.warn': 'Cảnh báo',
+  'net.bad': 'Kém',
+  'net.unknown': 'Chưa có dữ liệu',
+  'net.gateway': 'Router (gateway)',
+  'net.lost': 'Mất gói',
+  'net.avg': 'Trung bình',
+  'net.loss60': 'Mất gói (60s)',
+  'net.lossSession': 'Mất gói (phiên)',
+  'net.starting': 'Đang bắt đầu đo…',
+  'net.summaryHint': 'Đo mỗi giây; chỉ số tính trên 60 giây gần nhất.',
+  'net.diagLocal': 'Router phản hồi chậm hoặc mất gói → vấn đề nằm ở mạng nội bộ (Wi-Fi/LAN). Thử cắm dây LAN.',
+  'net.diagRemote': 'Router ổn nhưng ra Internet kém → vấn đề ở nhà mạng/đường truyền.',
+  'net.footnote':
+    'Nightreign chơi co-op qua P2P/relay nên không có server cố định để ping. Các mục tiêu này đo chất lượng đường truyền của bạn; đo trực tiếp tới người chơi cùng phòng sẽ có ở bước sau.',
+  'net.fpsSoon': 'Đo FPS qua ETW (cần quyền Admin) — phần tiếp theo của Phase 1.',
+  'settings.network': 'Mạng',
+  'settings.targets': 'Mục tiêu đo (mỗi dòng một mục)',
+  'settings.targetsHint': '"gateway" = router của bạn · IP/tên miền = ping ICMP · host:port = đo thời gian kết nối TCP',
+  'settings.thresholds': 'Ngưỡng cảnh báo',
 }
 
 const en: Record<keyof typeof vi, string> = {
@@ -84,6 +104,26 @@ const en: Record<keyof typeof vi, string> = {
   'overlay.disconnected': 'Disconnected',
   'overlay.timer': 'Timer',
   'overlay.idle': 'Waiting to start',
+  'net.good': 'Good',
+  'net.warn': 'Warning',
+  'net.bad': 'Poor',
+  'net.unknown': 'No data yet',
+  'net.gateway': 'Router (gateway)',
+  'net.lost': 'Lost',
+  'net.avg': 'Average',
+  'net.loss60': 'Loss (60s)',
+  'net.lossSession': 'Loss (session)',
+  'net.starting': 'Starting measurements…',
+  'net.summaryHint': 'Probed every second; stats cover the last 60 seconds.',
+  'net.diagLocal': 'Your router is slow or dropping packets → the problem is your local network (Wi-Fi/LAN). Try a cable.',
+  'net.diagRemote': 'Router is fine but the internet path is not → the problem is your ISP/route.',
+  'net.footnote':
+    'Nightreign co-op runs over P2P/relays, so there is no fixed game server to ping. These targets measure your own connection; probing your party members directly comes later.',
+  'net.fpsSoon': 'FPS via ETW (requires Admin) — next part of Phase 1.',
+  'settings.network': 'Network',
+  'settings.targets': 'Targets (one per line)',
+  'settings.targetsHint': '"gateway" = your router · IP/hostname = ICMP ping · host:port = TCP connect time',
+  'settings.thresholds': 'Warning thresholds',
 }
 
 export type Key = keyof typeof vi

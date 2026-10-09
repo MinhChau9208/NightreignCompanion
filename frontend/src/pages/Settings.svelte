@@ -6,15 +6,21 @@
 
   let s: config.Settings | null = null
   let status = ''
+  let targetsText = ''
 
   onMount(async () => {
     s = await GetSettings()
+    targetsText = s.network.pingTargets.join('\n')
   })
 
   async function save() {
     if (!s) return
     status = ''
     try {
+      s.network.pingTargets = targetsText
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => l !== '')
       // Opening the settings page counts as having seen the consent text.
       s.sharing.asked = true
       await SaveSettings(config.Settings.createFrom(s))
@@ -45,6 +51,21 @@
         <input type="range" min="0.2" max="1" step="0.05" bind:value={s.overlay.opacity} />
         <span>{Math.round(s.overlay.opacity * 100)}%</span>
       </label>
+    </section>
+
+    <section class="card">
+      <h2>{$t('settings.network')}</h2>
+      <label class="field">
+        {$t('settings.targets')}
+        <textarea rows="4" spellcheck="false" bind:value={targetsText} />
+      </label>
+      <p class="muted hint">{$t('settings.targetsHint')}</p>
+      <h3>{$t('settings.thresholds')}</h3>
+      <div class="thresholds">
+        <label>Ping (ms)<input type="number" min="1" bind:value={s.network.thresholds.pingMs} /></label>
+        <label>Jitter (ms)<input type="number" min="1" bind:value={s.network.thresholds.jitterMs} /></label>
+        <label>{$t('net.lost')} (%)<input type="number" min="0" step="0.5" bind:value={s.network.thresholds.lossPct} /></label>
+      </div>
     </section>
 
     <section class="card">
@@ -84,6 +105,42 @@
     display: flex;
     align-items: center;
     gap: 12px;
+  }
+  .field {
+    display: grid;
+    gap: 6px;
+  }
+  textarea,
+  input[type='number'] {
+    background: var(--hover);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: inherit;
+  }
+  textarea {
+    font-family: Consolas, monospace;
+    resize: vertical;
+  }
+  .hint {
+    font-size: 12px;
+  }
+  h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 14px 0 8px;
+  }
+  .thresholds {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .thresholds label {
+    display: grid;
+    gap: 4px;
+    color: var(--muted);
+    font-size: 12px;
   }
   .check {
     display: flex;

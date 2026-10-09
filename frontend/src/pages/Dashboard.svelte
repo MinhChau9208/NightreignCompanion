@@ -75,7 +75,7 @@
       <h2>{$t('dash.app')}</h2>
       <ul class="stats">
         <li><span>Version</span><b>{info.version}</b></li>
-        <li><span>{$t('dash.configDir')}</span><code>{info.configDir}</code></li>
+        <li class="stacked"><span>{$t('dash.configDir')}</span><code>{info.configDir}</code></li>
       </ul>
     </section>
   {/if}
@@ -98,6 +98,10 @@
     display: inline-block;
     min-width: 90px;
     color: var(--muted);
+  }
+  .stacked {
+    display: grid;
+    gap: 2px;
   }
   .danger {
     border-color: var(--danger);

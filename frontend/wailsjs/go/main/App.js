@@ -14,6 +14,10 @@ export function Mode() {
   return window['go']['main']['App']['Mode']();
 }
 
+export function NetStats() {
+  return window['go']['main']['App']['NetStats']();
+}
+
 export function OverlayRunning() {
   return window['go']['main']['App']['OverlayRunning']();
 }

@@ -9,7 +9,7 @@ Full design: [docs/SCOPE.md](docs/SCOPE.md).
 
 ## Status
 
-**Phase 0 — foundation.** App shell, overlay window, settings, local database and data pack are in place; the feature modules are not implemented yet.
+**Phase 1 — in progress.** Foundation (Phase 0) is done; the network monitor (ping, jitter, packet loss) works. Timer, relic lookup and FPS are next.
 
 ## Requirements
 
@@ -25,6 +25,7 @@ wails dev                       # run with hot reload
 wails build                     # build/bin/nightreign-companion.exe
 go test ./...                   # backend tests
 go run ./cmd/nrc-cli validate   # validate the bundled data pack
+go run ./cmd/nrc-cli ping       # measure ping/jitter/loss from the terminal
 cd frontend && npm run check    # frontend type-check
 ```
 
@@ -36,6 +37,7 @@ internal/config               user settings (%AppData%\NightreignCompanion\confi
 internal/gamedata             data pack loader + validator
 internal/store                SQLite (pure Go) — runs, builds
 internal/ipc                  event bus between main and overlay processes
+internal/netmon               ping (ICMP/TCP), jitter, packet loss, gateway detection
 data/                         bundled data pack (JSON)
 cmd/nrc-cli                   developer utilities
 frontend/                     Svelte + TypeScript UI

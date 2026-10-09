@@ -39,6 +39,7 @@ type App struct {
 	db     *store.DB
 	hub    *ipc.Server
 	ovl    overlayProc
+	net    netWatcher
 
 	initErr error
 }
@@ -80,6 +81,7 @@ func (a *App) init() error {
 		return fmt.Errorf("ipc: %w", err)
 	}
 	go a.publishStatus()
+	a.startNet(a.cfg.Get().Network)
 	return nil
 }
 
@@ -197,6 +199,7 @@ func (a *App) SaveSettings(s config.Settings) error {
 	if err := a.cfg.Save(s); err != nil {
 		return err
 	}
+	a.startNet(s.Network)
 	return a.hub.Publish("settings", s)
 }
 

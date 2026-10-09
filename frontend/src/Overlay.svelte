@@ -3,6 +3,9 @@
   import {GetSettings} from '../wailsjs/go/main/App'
   import {EventsOn, Quit} from '../wailsjs/runtime/runtime'
   import {lang, t} from './lib/i18n'
+  import {fmtMs, icon, netStats} from './lib/net'
+
+  const net = netStats()
 
   type Status = {uptimeSec: number; dataVersion: string; phase: string}
 
@@ -47,6 +50,16 @@
     {#if status}<span class="muted">· {fmt(status.uptimeSec)}</span>{/if}
     <button class="close" on:click={Quit} title="Close">×</button>
   </div>
+  <ul class="net">
+    {#each $net.slice(0, 3) as n (n.target)}
+      <li class="level-{n.level}">
+        <span class="icon">{icon(n.level)}</span>
+        <span class="name">{n.target === 'gateway' ? 'Router' : n.target}</span>
+        <span class="num">{n.sent === 0 ? '—' : n.lastLost ? $t('net.lost') : `${fmtMs(n.lastMs)} ms`}</span>
+        <span class="num loss">{n.sent ? `${n.lossPct.toFixed(0)}%` : ''}</span>
+      </li>
+    {/each}
+  </ul>
   <div class="timer">
     <span class="muted">{$t('overlay.timer')}</span>
     <strong>{status?.phase === 'idle' || !status ? $t('overlay.idle') : status.phase}</strong>
@@ -92,13 +105,50 @@
   .close:hover {
     color: var(--text);
   }
+  .net {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+  }
+  .net li {
+    display: grid;
+    grid-template-columns: 14px 1fr auto 36px;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .num {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .loss {
+    color: var(--muted);
+  }
+  .level-good .icon {
+    color: var(--ok);
+  }
+  .level-warn .icon {
+    color: var(--warn);
+  }
+  .level-bad .icon {
+    color: var(--danger);
+  }
+  .level-unknown .icon {
+    color: var(--muted);
+  }
   .timer {
-    margin-top: 10px;
+    margin-top: 8px;
     display: flex;
     flex-direction: column;
   }
   .timer strong {
-    font-size: 20px;
+    font-size: 16px;
     color: var(--accent);
   }
 </style>

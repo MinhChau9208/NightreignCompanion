@@ -72,3 +72,25 @@ func TestOpenPartialFileKeepsDefaults(t *testing.T) {
 		t.Errorf("partial file not merged onto defaults: %+v", got)
 	}
 }
+
+func TestValidatePingTargets(t *testing.T) {
+	cases := []struct {
+		name    string
+		targets []string
+		ok      bool
+	}{
+		{"defaults", Defaults().Network.PingTargets, true},
+		{"tcp target", []string{"example.com:443"}, true},
+		{"empty list", nil, false},
+		{"blank entry", []string{"1.1.1.1", " "}, false},
+		{"duplicate", []string{"1.1.1.1", "1.1.1.1"}, false},
+		{"too many", []string{"a", "b", "c", "d", "e", "f", "g"}, false},
+	}
+	for _, tc := range cases {
+		s := Defaults()
+		s.Network.PingTargets = tc.targets
+		if err := s.Validate(); (err == nil) != tc.ok {
+			t.Errorf("%s: err = %v, want ok=%v", tc.name, err, tc.ok)
+		}
+	}
+}
