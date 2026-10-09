@@ -5,7 +5,7 @@ import (
 	"testing"
 	"testing/fstest"
 
-	"github.com/Chau9208/nightreign-companion/data"
+	"github.com/MinhChau9208/NightreignCompanion/data"
 )
 
 func TestEmbeddedPackIsValid(t *testing.T) {

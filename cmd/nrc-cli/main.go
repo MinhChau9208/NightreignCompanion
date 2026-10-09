@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/Chau9208/nightreign-companion/internal/gamedata"
+	"github.com/MinhChau9208/NightreignCompanion/internal/gamedata"
 )
 
 func main() {

@@ -1,4 +1,4 @@
-module github.com/Chau9208/nightreign-companion
+module github.com/MinhChau9208/NightreignCompanion
 
 go 1.26.0
 

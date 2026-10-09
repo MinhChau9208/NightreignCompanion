@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Chau9208/nightreign-companion/internal/ipc"
+	"github.com/MinhChau9208/NightreignCompanion/internal/ipc"
 )
 
 // overlayProc manages the overlay child process (same executable, run

@@ -12,10 +12,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"github.com/Chau9208/nightreign-companion/internal/config"
-	"github.com/Chau9208/nightreign-companion/internal/gamedata"
-	"github.com/Chau9208/nightreign-companion/internal/ipc"
-	"github.com/Chau9208/nightreign-companion/internal/store"
+	"github.com/MinhChau9208/NightreignCompanion/internal/config"
+	"github.com/MinhChau9208/NightreignCompanion/internal/gamedata"
+	"github.com/MinhChau9208/NightreignCompanion/internal/ipc"
+	"github.com/MinhChau9208/NightreignCompanion/internal/store"
 )
 
 type Mode string
