@@ -1,7 +1,6 @@
 # Build output
 build/bin
-frontend/dist/*
-!frontend/dist/gitkeep
+frontend/dist
 
 # Dependencies
 frontend/node_modules
