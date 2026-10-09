@@ -1,0 +1,82 @@
+name: Release
+
+# Push a tag like v0.1.0 to build and publish a GitHub Release.
+on:
+  push:
+    tags: ['v*.*.*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Check tag matches wails.json version
+        shell: pwsh
+        run: |
+          $tag = "${{ github.ref_name }}".TrimStart('v')
+          $ver = (Get-Content wails.json -Raw | ConvertFrom-Json).info.productVersion
+          if ($tag -ne $ver) { throw "Tag v$tag does not match wails.json productVersion $ver" }
+
+      # Same checks as CI, so a release never ships untested code.
+      - name: Frontend build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run check
+          npm run build
+      - name: Go tests
+        run: |
+          go vet ./...
+          go test ./...
+          go run ./cmd/nrc-cli validate
+
+      - name: Build
+        run: |
+          go install github.com/wailsapp/wails/v2/cmd/wails@v2.10.1
+          wails build -clean -trimpath -ldflags "-s -w -X main.version=${{ github.ref_name }}"
+
+      - name: Package
+        id: pkg
+        shell: pwsh
+        run: |
+          $name = "NightreignCompanion-${{ github.ref_name }}-windows-amd64"
+          New-Item -ItemType Directory -Force dist/$name | Out-Null
+          Copy-Item build/bin/nightreign-companion.exe dist/$name/
+          Copy-Item README.md dist/$name/
+          Compress-Archive -Path dist/$name/* -DestinationPath dist/$name.zip
+          $hash = (Get-FileHash dist/$name.zip -Algorithm SHA256).Hash.ToLower()
+          "$hash  $name.zip" | Out-File -Encoding ascii dist/$name.zip.sha256
+          "name=$name" >> $env:GITHUB_OUTPUT
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/${{ steps.pkg.outputs.name }}.zip
+            dist/${{ steps.pkg.outputs.name }}.zip.sha256
+          # 0.x releases ship unverified game data; mark them as pre-releases.
+          prerelease: ${{ startsWith(github.ref_name, 'v0.') }}
+          generate_release_notes: true
+          body: |
+            **Nightreign Companion ${{ github.ref_name }}** — unofficial companion app for ELDEN RING NIGHTREIGN (Windows 10/11, x64).
+
+            ### Install
+            1. Download `${{ steps.pkg.outputs.name }}.zip`, extract it, run `nightreign-companion.exe`. No installer needed.
+            2. Windows SmartScreen may warn because the app is not code-signed yet: **More info → Run anyway**.
+            3. Needs the WebView2 runtime (built into Windows 11; on Windows 10 install it from Microsoft if the window stays blank).
+
+            ### Notes
+            - FPS measurement asks for Administrator permission (UAC) for a small helper process only. The app never injects into or reads memory from the game.
+            - Most game data (relic values, timer durations, boss info) is **not verified yet** and is marked as such in the app.
+            - Verify the download: compare `Get-FileHash <zip> -Algorithm SHA256` with the `.sha256` file.
