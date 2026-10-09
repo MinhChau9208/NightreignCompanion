@@ -4,13 +4,17 @@
   import {t} from '../lib/i18n'
   import {diagnose, fmtMs, icon, label, netStats, worst} from '../lib/net'
   import Sparkline from '../lib/Sparkline.svelte'
+  import FPSCard from './FPSCard.svelte'
 
   const stats = netStats()
   let pingThreshold = 0
+  let minFps = 50
 
   onMount(async () => {
     try {
-      pingThreshold = (await GetSettings()).network.thresholds.pingMs
+      const th = (await GetSettings()).network.thresholds
+      pingThreshold = th.pingMs
+      minFps = th.minFps
     } catch {
       // No threshold line then.
     }
@@ -57,7 +61,7 @@
         {/if}
       </div>
 
-      <Sparkline history={s.history} thresholdMs={pingThreshold} lostLabel={$t('net.lost')} />
+      <Sparkline history={s.history} threshold={pingThreshold} lostLabel={$t('net.lost')} />
 
       <dl>
         <div><dt>{$t('net.avg')}</dt><dd>{s.received ? `${fmtMs(s.avgMs)} ms` : '—'}</dd></div>
@@ -75,10 +79,9 @@
 
 <p class="muted foot">{$t('net.footnote')}</p>
 
-<section class="card fps">
-  <h2>FPS</h2>
-  <p class="muted">{$t('net.fpsSoon')}</p>
-</section>
+<div class="fps">
+  <FPSCard {minFps} />
+</div>
 
 <style>
   .summary {
@@ -154,6 +157,9 @@
     color: var(--danger);
     font-size: 12px;
     word-break: break-word;
+  }
+  .fps {
+    max-width: 460px;
   }
   .foot {
     font-size: 12px;

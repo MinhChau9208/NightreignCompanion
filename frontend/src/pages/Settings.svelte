@@ -65,7 +65,12 @@
         <label>Ping (ms)<input type="number" min="1" bind:value={s.network.thresholds.pingMs} /></label>
         <label>Jitter (ms)<input type="number" min="1" bind:value={s.network.thresholds.jitterMs} /></label>
         <label>{$t('net.lost')} (%)<input type="number" min="0" step="0.5" bind:value={s.network.thresholds.lossPct} /></label>
+        <label>{$t('settings.minFps')}<input type="number" min="1" bind:value={s.network.thresholds.minFps} /></label>
       </div>
+      <label class="field process">
+        {$t('settings.fpsProcess')}
+        <input type="text" spellcheck="false" bind:value={s.fps.process} />
+      </label>
     </section>
 
     <section class="card">
@@ -111,6 +116,7 @@
     gap: 6px;
   }
   textarea,
+  input[type='text'],
   input[type='number'] {
     background: var(--hover);
     color: var(--text);
@@ -123,6 +129,9 @@
     font-family: Consolas, monospace;
     resize: vertical;
   }
+  .process {
+    margin-top: 14px;
+  }
   .hint {
     font-size: 12px;
   }
@@ -133,7 +142,7 @@
   }
   .thresholds {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 12px;
   }
   .thresholds label {

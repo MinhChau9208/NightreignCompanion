@@ -56,3 +56,24 @@ func TestSubscribeRejectsBadToken(t *testing.T) {
 		t.Fatalf("err = %v, want 401", err)
 	}
 }
+
+func TestPost(t *testing.T) {
+	s, err := Listen()
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer s.Close()
+	got := make(chan Message, 1)
+	s.OnMessage(func(m Message) { got <- m })
+
+	if err := Post(context.Background(), s.Addr(), s.Token(), "fps:stats", map[string]float64{"fps": 60}); err != nil {
+		t.Fatal(err)
+	}
+	m := <-got
+	if m.Type != "fps:stats" || !strings.Contains(string(m.Data), `"fps":60`) {
+		t.Fatalf("got %+v", m)
+	}
+	if err := Post(context.Background(), s.Addr(), "wrong", "x", nil); err == nil {
+		t.Fatal("expected unauthorized")
+	}
+}

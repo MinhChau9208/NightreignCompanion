@@ -4,8 +4,11 @@
   import {EventsOn, Quit} from '../wailsjs/runtime/runtime'
   import {lang, t} from './lib/i18n'
   import {fmtMs, icon, netStats} from './lib/net'
+  import {fpsLevel, fpsStatus} from './lib/fps'
 
   const net = netStats()
+  const fps = fpsStatus()
+  let minFps = 50
 
   type Status = {uptimeSec: number; dataVersion: string; phase: string}
 
@@ -13,8 +16,9 @@
   let connected = false
   let opacity = 0.85
 
-  function applySettings(s: {language: string; overlay: {opacity: number}}) {
+  function applySettings(s: {language: string; overlay: {opacity: number}; network: {thresholds: {minFps: number}}}) {
     opacity = s.overlay.opacity
+    minFps = s.network.thresholds.minFps
     lang.set(s.language === 'en' ? 'en' : 'vi')
   }
 
@@ -51,6 +55,14 @@
     <button class="close" on:click={Quit} title="Close">×</button>
   </div>
   <ul class="net">
+    {#if $fps?.state === 'running'}
+      <li class="level-{fpsLevel($fps, minFps)}">
+        <span class="icon">{icon(fpsLevel($fps, minFps))}</span>
+        <span class="name">FPS</span>
+        <span class="num">{Math.round($fps.fps)}</span>
+        <span class="num loss">{Math.round($fps.low1Fps)}</span>
+      </li>
+    {/if}
     {#each $net.slice(0, 3) as n (n.target)}
       <li class="level-{n.level}">
         <span class="icon">{icon(n.level)}</span>

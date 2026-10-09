@@ -1,14 +1,15 @@
 // Package ipc is the event bus between the main app process and helper
-// processes (the overlay window today, the elevated FPS helper later).
+// processes (the overlay window and the elevated FPS helper).
 //
 // Wails v2 supports one window per process, so the overlay runs as a second
 // process. The main process owns all state and streams events to helpers
-// over Server-Sent Events on 127.0.0.1, guarded by a random bearer token
-// passed through the environment.
+// over Server-Sent Events on 127.0.0.1, guarded by a random bearer token.
+// Helpers that produce data (the FPS helper) send it back with Post.
 package ipc
 
 import (
 	"bufio"
+	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/subtle"
@@ -40,9 +41,13 @@ type Server struct {
 	ln    net.Listener
 	srv   *http.Server
 
-	mu   sync.Mutex
-	subs map[chan []byte]struct{}
+	mu        sync.Mutex
+	subs      map[chan []byte]struct{}
+	onMessage func(Message)
 }
+
+// maxPostBytes bounds a single message sent by a helper.
+const maxPostBytes = 64 << 10
 
 // Listen starts a server on a random loopback port.
 func Listen() (*Server, error) {
@@ -58,9 +63,18 @@ func Listen() (*Server, error) {
 	s := &Server{token: hex.EncodeToString(tok[:]), ln: ln, subs: map[chan []byte]struct{}{}}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /events", s.handleEvents)
+	mux.HandleFunc("POST /messages", s.handlePost)
 	s.srv = &http.Server{Handler: mux, ReadHeaderTimeout: 5 * time.Second}
 	go s.srv.Serve(ln)
 	return s, nil
+}
+
+// OnMessage sets the handler for messages helpers send with Post. It is
+// called on the HTTP goroutine and must not block for long.
+func (s *Server) OnMessage(fn func(Message)) {
+	s.mu.Lock()
+	s.onMessage = fn
+	s.mu.Unlock()
 }
 
 func (s *Server) Addr() string  { return s.ln.Addr().String() }
@@ -98,10 +112,35 @@ func (s *Server) Close() error {
 	return s.srv.Shutdown(ctx)
 }
 
-func (s *Server) handleEvents(w http.ResponseWriter, r *http.Request) {
+func (s *Server) authorized(w http.ResponseWriter, r *http.Request) bool {
 	got := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 	if subtle.ConstantTimeCompare([]byte(got), []byte(s.token)) != 1 {
 		http.Error(w, "unauthorized", http.StatusUnauthorized)
+		return false
+	}
+	return true
+}
+
+func (s *Server) handlePost(w http.ResponseWriter, r *http.Request) {
+	if !s.authorized(w, r) {
+		return
+	}
+	var m Message
+	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, maxPostBytes)).Decode(&m); err != nil || m.Type == "" {
+		http.Error(w, "bad message", http.StatusBadRequest)
+		return
+	}
+	s.mu.Lock()
+	fn := s.onMessage
+	s.mu.Unlock()
+	if fn != nil {
+		fn(m)
+	}
+	w.WriteHeader(http.StatusNoContent)
+}
+
+func (s *Server) handleEvents(w http.ResponseWriter, r *http.Request) {
+	if !s.authorized(w, r) {
 		return
 	}
 	flusher, ok := w.(http.Flusher)
@@ -173,4 +212,32 @@ func Subscribe(ctx context.Context, addr, token string, fn func(Message)) error 
 		return err
 	}
 	return errors.New("ipc: connection closed")
+}
+
+// Post sends one message from a helper process to the server.
+func Post(ctx context.Context, addr, token, typ string, data any) error {
+	b, err := json.Marshal(struct {
+		Type string `json:"type"`
+		Data any    `json:"data"`
+	}{typ, data})
+	if err != nil {
+		return err
+	}
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, "http://"+addr+"/messages", bytes.NewReader(b))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+token)
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusNoContent {
+		return fmt.Errorf("ipc: %s", resp.Status)
+	}
+	return nil
 }

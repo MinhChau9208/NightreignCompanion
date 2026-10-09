@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 
 	"github.com/MinhChau9208/NightreignCompanion/internal/netmon"
@@ -24,7 +25,13 @@ type Settings struct {
 	Overlay  OverlaySettings `json:"overlay"`
 	Hotkeys  Hotkeys         `json:"hotkeys"`
 	Network  NetworkSettings `json:"network"`
+	FPS      FPSSettings     `json:"fps"`
 	Sharing  Sharing         `json:"sharing"`
+}
+
+// FPSSettings configures the elevated FPS helper.
+type FPSSettings struct {
+	Process string `json:"process"` // image name, e.g. nightreign.exe
 }
 
 type OverlaySettings struct {
@@ -77,6 +84,7 @@ func Defaults() Settings {
 			PingTargets: []string{"gateway", "1.1.1.1", "8.8.8.8"},
 			Thresholds:  Thresholds{PingMs: 150, JitterMs: 30, LossPct: 2, MinFPS: 50},
 		},
+		FPS: FPSSettings{Process: "nightreign.exe"},
 	}
 }
 
@@ -105,11 +113,29 @@ func (s Settings) Validate() error {
 		}
 		seen[tgt] = true
 	}
+	if !validExeName(s.FPS.Process) {
+		errs = append(errs, fmt.Errorf("fps process %q: must be a file name like nightreign.exe", s.FPS.Process))
+	}
 	t := s.Network.Thresholds
 	if t.PingMs <= 0 || t.JitterMs <= 0 || t.LossPct < 0 || t.MinFPS <= 0 {
 		errs = append(errs, errors.New("network thresholds must be positive"))
 	}
 	return errors.Join(errs...)
+}
+
+// validExeName accepts a bare image name. It ends up on the elevated
+// helper's command line, so anything beyond [A-Za-z0-9._-] is refused.
+func validExeName(name string) bool {
+	if len(name) < 5 || len(name) > 64 || !strings.HasSuffix(strings.ToLower(name), ".exe") {
+		return false
+	}
+	for _, r := range name {
+		ok := r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '.' || r == '_' || r == '-'
+		if !ok {
+			return false
+		}
+	}
+	return true
 }
 
 // Store reads and writes Settings to a single JSON file.

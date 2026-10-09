@@ -1,5 +1,17 @@
 export namespace config {
 	
+	export class FPSSettings {
+	    process: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new FPSSettings(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.process = source["process"];
+	    }
+	}
 	export class Hotkeys {
 	    timerStart: string;
 	    timerSync: string;
@@ -107,6 +119,7 @@ export namespace config {
 	    overlay: OverlaySettings;
 	    hotkeys: Hotkeys;
 	    network: NetworkSettings;
+	    fps: FPSSettings;
 	    sharing: Sharing;
 	
 	    static createFrom(source: any = {}) {
@@ -119,6 +132,7 @@ export namespace config {
 	        this.overlay = this.convertValues(source["overlay"], OverlaySettings);
 	        this.hotkeys = this.convertValues(source["hotkeys"], Hotkeys);
 	        this.network = this.convertValues(source["network"], NetworkSettings);
+	        this.fps = this.convertValues(source["fps"], FPSSettings);
 	        this.sharing = this.convertValues(source["sharing"], Sharing);
 	    }
 	

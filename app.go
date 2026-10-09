@@ -40,6 +40,7 @@ type App struct {
 	hub    *ipc.Server
 	ovl    overlayProc
 	net    netWatcher
+	fps    fpsHelper
 
 	initErr error
 }
@@ -80,6 +81,7 @@ func (a *App) init() error {
 	if a.hub, err = ipc.Listen(); err != nil {
 		return fmt.Errorf("ipc: %w", err)
 	}
+	a.hub.OnMessage(a.onHelperMessage)
 	go a.publishStatus()
 	a.startNet(a.cfg.Get().Network)
 	return nil
@@ -94,8 +96,9 @@ func (a *App) domReady(ctx context.Context) {
 
 func (a *App) shutdown(context.Context) {
 	a.cancel()
-	if a.mode == ModeMain {
+	if a.mode == ModeMain && a.hub != nil {
 		a.ovl.stop(a.hub)
+		a.hub.Publish("fps:stop", nil)
 	}
 	if a.hub != nil {
 		a.hub.Close()

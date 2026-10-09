@@ -1,11 +1,13 @@
 <script lang="ts">
-  // RTT history as a single 2px line. Lost packets break the line and get
-  // a tick on the baseline; a dashed line marks the ping threshold.
+  // A per-second history as a single 2px line (RTT or FPS). Negative values
+  // mean "lost": they break the line and get a tick on the baseline. A dashed
+  // line marks the threshold (max ping or min FPS).
   import {fmtMs} from './net'
 
   export let history: number[] = []
   export let windowSize = 60
-  export let thresholdMs = 0
+  export let threshold = 0
+  export let format = (v: number) => `${fmtMs(v)} ms`
   export let lostLabel = 'lost'
 
   const W = 300
@@ -18,8 +20,8 @@
   $: received = history.filter((v) => v >= 0)
   $: top = Math.max(20, ...received) * 1.15
   // Show the threshold only when it is near the data, so it never squashes the line.
-  $: showThreshold = thresholdMs > 0 && thresholdMs <= top * 1.5
-  $: yMax = showThreshold ? Math.max(top, thresholdMs * 1.1) : top
+  $: showThreshold = threshold > 0 && threshold <= top * 1.5
+  $: yMax = showThreshold ? Math.max(top, threshold * 1.1) : top
   $: step = (W - PAD * 2) / Math.max(1, windowSize - 1)
   // Right-align so the newest sample is always at the right edge.
   $: offset = windowSize - history.length
@@ -54,7 +56,7 @@
   >
     <line class="base" x1={PAD} x2={W - PAD} y1={H - PAD} y2={H - PAD} />
     {#if showThreshold}
-      <line class="threshold" x1={PAD} x2={W - PAD} y1={y(thresholdMs)} y2={y(thresholdMs)} />
+      <line class="threshold" x1={PAD} x2={W - PAD} y1={y(threshold)} y2={y(threshold)} />
     {/if}
     <path d={path} />
     {#each history as v, i}
@@ -67,7 +69,7 @@
   </svg>
   {#if hover !== null}
     <div class="tip" style="left: {(x(hover) / W) * 100}%">
-      {history[hover] >= 0 ? `${fmtMs(history[hover])} ms` : lostLabel}
+      {history[hover] >= 0 ? format(history[hover]) : lostLabel}
       <span>−{history.length - 1 - hover}s</span>
     </div>
   {/if}

@@ -94,3 +94,21 @@ func TestValidatePingTargets(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateFPSProcess(t *testing.T) {
+	for name, ok := range map[string]bool{
+		"nightreign.exe":       true,
+		"eldenring_v2-x.EXE":   true,
+		"":                     false,
+		"nightreign":           false,
+		`C:\Games\x.exe`:       false,
+		"a b.exe":              false,
+		`x.exe" --evil "y.exe`: false,
+	} {
+		s := Defaults()
+		s.FPS.Process = name
+		if err := s.Validate(); (err == nil) != ok {
+			t.Errorf("%q: err = %v, want ok=%v", name, err, ok)
+		}
+	}
+}

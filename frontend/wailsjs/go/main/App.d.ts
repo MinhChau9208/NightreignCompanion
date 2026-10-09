@@ -4,6 +4,8 @@ import {config} from '../models';
 import {main} from '../models';
 import {netmon} from '../models';
 
+export function FPSRunning():Promise<boolean>;
+
 export function GetSettings():Promise<config.Settings>;
 
 export function Info():Promise<main.AppInfo>;
@@ -15,5 +17,9 @@ export function NetStats():Promise<Array<netmon.Stats>>;
 export function OverlayRunning():Promise<boolean>;
 
 export function SaveSettings(arg1:config.Settings):Promise<void>;
+
+export function StartFPS():Promise<void>;
+
+export function StopFPS():Promise<void>;
 
 export function ToggleOverlay():Promise<boolean>;

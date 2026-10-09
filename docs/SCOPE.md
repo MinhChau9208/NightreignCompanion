@@ -99,10 +99,12 @@ nightreign-companion.exe            (process chính — giữ toàn bộ state, 
    │  internal/ipc: SSE trên 127.0.0.1:<port ngẫu nhiên>, xác thực bằng token ngẫu nhiên
    │  (địa chỉ + token truyền qua biến môi trường, không lộ trên command line)
    ├──► nightreign-companion.exe --overlay   (frameless, always-on-top, nền trong suốt)
-   └──► nrc-fps.exe (Phase 1, chạy Admin)   (đọc ETW, gửi FPS về process chính)
+   └──► nightreign-companion.exe --fps-helper   (chạy Admin qua UAC; đọc ETW, POST FPS về process chính)
 ```
 - Overlay tự thoát khi mất kết nối với process chính quá 3 lần liên tiếp.
-- Cùng kênh IPC sẽ dùng cho helper FPS chạy quyền Admin — app chính không cần Admin.
+- Helper FPS dùng cùng file exe (1 file duy nhất để phát hành), chỉ helper chạy quyền Admin — app chính không cần.
+  UAC không truyền biến môi trường nên địa chỉ + token IPC đi qua tham số dòng lệnh; tên tiến trình game được validate chặt (`[A-Za-z0-9._-]+.exe`).
+- Helper gửi dữ liệu bằng `POST /messages`, nhận lệnh dừng qua SSE, và tự thoát khi mất kết nối với process chính.
 
 ---
 
@@ -119,7 +121,7 @@ nightreign-companion.exe            (process chính — giữ toàn bộ state, 
 | Phát hiện kết nối của game | Liệt kê UDP/TCP endpoint của process `nightreign.exe` qua Windows API `GetExtendedUdpTable`/`GetExtendedTcpTable` (chỉ đọc bảng mạng của OS, không đụng vào game) | P1 |
 | Đo latency tới peer | Ping IP peer phát hiện được (nhiều peer chặn ICMP → hiển thị "không đo được" thay vì số sai) | P1 |
 | Đánh giá chất lượng mạng nhà | Bufferbloat test, packet loss dài hạn, gợi ý (Wi-Fi vs LAN, NAT type) | P2 |
-| **FPS / frametime / 1% low** | Đọc sự kiện Present từ ETW (provider DXGI/D3D9/DxgKrnl) — giống PresentMon; cần quyền Admin hoặc nhóm "Performance Log Users" | **P0** (D3) |
+| ✅ **FPS / frametime / 1% low** | Sự kiện `Present_Start` (ID 42) của provider Microsoft-Windows-DXGI qua phiên ETW real-time — giống PresentMon; lọc theo PID của `nightreign.exe`; cửa sổ 30s (FPS 1s, trung bình, 1% low, frametime tệ nhất) | **P0** (D3) |
 | ✅ Overlay mini | Góc màn hình: ping/loss từng mục tiêu (FPS thêm sau) | P1 |
 | Lịch sử & biểu đồ | Lưu vào SQLite, xem lại khi run bị lag | P2 |
 
