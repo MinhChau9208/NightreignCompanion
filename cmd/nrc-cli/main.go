@@ -144,10 +144,15 @@ func measureConns(args []string) {
 		process = fs.Arg(0)
 	}
 
-	pid, err := fps.FindProcess(process)
-	if err != nil || pid == 0 {
-		fmt.Fprintf(os.Stderr, "%s is not running (%v)\n", process, err)
-		os.Exit(1)
+	// "*" watches every process (pid 0), to check the parser on any traffic.
+	var pid uint32
+	if process != "*" {
+		var err error
+		pid, err = fps.FindProcess(process)
+		if err != nil || pid == 0 {
+			fmt.Fprintf(os.Stderr, "%s is not running (%v)\n", process, err)
+			os.Exit(1)
+		}
 	}
 	tr := gamenet.NewTracker(10 * time.Second)
 	if addrs, err := gamenet.LocalAddrs(); err == nil {
@@ -158,7 +163,7 @@ func measureConns(args []string) {
 		if *raw {
 			dump.add(e)
 		}
-		if p, ok := gamenet.ParseEvent(e); ok && p.PID == pid {
+		if p, ok := gamenet.ParseEvent(e); ok && (pid == 0 || p.PID == pid) {
 			tr.Add(p)
 		}
 	})
@@ -199,6 +204,7 @@ type rawDump struct {
 	mine   map[uint16]int // events per ID whose payload PID is the target
 	header map[uint16]int // events per ID whose header PID is the target
 	sample []string
+	perID  map[uint16]int // samples kept per ID
 }
 
 func (d *rawDump) add(e *etw.Event) {
@@ -209,17 +215,18 @@ func (d *rawDump) add(e *etw.Event) {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	if d.all == nil {
-		d.all, d.mine, d.header = map[uint16]int{}, map[uint16]int{}, map[uint16]int{}
+		d.all, d.mine, d.header, d.perID = map[uint16]int{}, map[uint16]int{}, map[uint16]int{}, map[uint16]int{}
 	}
 	d.all[e.ID()]++
 	if e.ProcessID() == d.target {
 		d.header[e.ID()]++
 	}
-	if len(data) < 4 || binary.LittleEndian.Uint32(data) != d.target {
+	if len(data) < 4 || (d.target != 0 && binary.LittleEndian.Uint32(data) != d.target) {
 		return
 	}
 	d.mine[e.ID()]++
-	if len(d.sample) < 40 {
+	if d.perID[e.ID()] < 4 {
+		d.perID[e.ID()]++
 		line := fmt.Sprintf("id=%-3d hdrpid=%-6d len=%-3d % x", e.ID(), e.ProcessID(), len(data), data[:min(len(data), 44)])
 		if p, ok := gamenet.ParseEvent(e); ok {
 			line += fmt.Sprintf("\n       -> %s out=%v size=%d src=%v dst=%v", p.Proto, p.Out, p.Size, p.Src, p.Dst)
