@@ -8,7 +8,9 @@ import {Mode} from '../wailsjs/go/main/App'
 Mode().then((mode) => {
   const target = document.getElementById('app')!
   if (mode === 'overlay') {
-    document.body.classList.add('overlay')
+    // On <html>, not <body>: the html element paints var(--bg) too and
+    // would hide the transparent window behind it.
+    document.documentElement.classList.add('overlay')
     new Overlay({target})
   } else {
     new App({target})

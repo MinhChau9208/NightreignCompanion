@@ -15,7 +15,7 @@ import (
 var assets embed.FS
 
 // version is overridden at build time: -ldflags "-X main.version=1.2.3".
-var version = "0.1.1-dev"
+var version = "0.1.2-dev"
 
 func main() {
 	overlay := flag.Bool("overlay", false, "run as the in-game overlay window (started by the main app)")
@@ -73,9 +73,15 @@ func runOverlay() error {
 		OnStartup:        app.startup,
 		OnDomReady:       app.domReady,
 		OnShutdown:       app.shutdown,
+		// The overlay's opacity is the alpha of its CSS background, so both the
+		// webview and the host window must be see-through. WindowIsTranslucent
+		// with BackdropType None gives a plain transparent window (no Mica or
+		// Acrylic blur); without it the host window paints solid black.
 		Windows: &windows.Options{
-			WebviewIsTransparent: true,
-			WindowIsTranslucent:  false,
+			WebviewIsTransparent:              true,
+			WindowIsTranslucent:               true,
+			BackdropType:                      windows.None,
+			DisableFramelessWindowDecorations: true,
 		},
 		Bind: []any{app},
 	})
