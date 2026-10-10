@@ -39,6 +39,7 @@ const (
 	invalidProcessTraceHandle    = ^uint64(0)
 	errorAlreadyExists           = 183
 	errorAccessDenied            = 5
+	errorInvalidHandle           = 6
 	errorCtxClosePending         = 6730
 	loggerNameBytes              = 1024
 	eventTracePropertiesBaseSize = 120
@@ -203,6 +204,7 @@ type Session struct {
 	props   []uint64 // backing store, 8-byte aligned
 	session uint64
 	trace   uint64
+	closed  atomic.Bool
 }
 
 func (s *Session) properties() *eventTraceProperties {
@@ -278,7 +280,15 @@ func StartSession(name string, onPresent func(pid uint32, ts int64)) (*Session, 
 
 // Process delivers events until Close is called. It blocks.
 func (s *Session) Process() error {
+	if s.closed.Load() {
+		return nil
+	}
 	r, _, _ := procProcessTrace.Call(uintptr(unsafe.Pointer(&s.trace)), 1, 0, 0)
+	// Close may run before ProcessTrace starts; the trace handle is then
+	// already closed, which is a normal shutdown, not an error.
+	if r == errorInvalidHandle && s.closed.Load() {
+		return nil
+	}
 	if r != 0 && r != errorCtxClosePending {
 		return fmt.Errorf("ProcessTrace: %w", windows.Errno(r))
 	}
@@ -288,6 +298,7 @@ func (s *Session) Process() error {
 // Close stops the session; Process returns shortly after.
 func (s *Session) Close() error {
 	presentHandler.Store(nil)
+	s.closed.Store(true)
 	if s.trace != 0 {
 		procCloseTrace.Call(uintptr(s.trace))
 	}
