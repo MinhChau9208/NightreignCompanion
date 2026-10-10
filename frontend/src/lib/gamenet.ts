@@ -40,7 +40,7 @@ export const gapWarnMs = 400
 export const gapBadMs = 1000
 
 export function gapLevel(f: Flow): Level {
-  if (f.pktsInPerSec === 0) return 'unknown'
+  if (f.proto !== 'udp' || f.pktsInPerSec === 0) return 'unknown' // silence is normal on TCP
   if (f.maxGapMs >= gapBadMs) return 'bad'
   if (f.maxGapMs >= gapWarnMs) return 'warn'
   return 'good'

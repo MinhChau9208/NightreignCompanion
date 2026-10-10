@@ -135,6 +135,23 @@ func TestSnapshot(t *testing.T) {
 	}
 }
 
+// HTTPS to a game server sits idle between requests; that is not lag, so
+// TCP flows get no gap figure (seen live: 4 s gaps on Nightreign's :443).
+func TestNoGapForTCP(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	srv := netip.AddrPortFrom(peer, 443)
+	local := netip.AddrPortFrom(me, 50000)
+	base := int64(1_000_000_000)
+	tr.Add(Packet{Proto: "tcp", Size: 900, TS: base, Src: srv, Dst: local})
+	tr.Add(Packet{Proto: "tcp", Size: 900, TS: base + 4*ticksPerSecond, Src: srv, Dst: local})
+	tr.Add(Packet{Proto: "tcp", Out: true, Size: 300, TS: base + 5*ticksPerSecond, Src: local, Dst: srv})
+	f := tr.Snapshot(base+6*ticksPerSecond, 8)
+	if len(f) != 1 || f[0].Kind != KindServer || f[0].MaxGapMs != 0 || f[0].PktsInPerSec == 0 {
+		t.Errorf("tcp flow = %+v", f)
+	}
+}
+
 func TestFlowLimit(t *testing.T) {
 	tr := NewTracker(10 * time.Second)
 	tr.SetLocal([]netip.Addr{me})

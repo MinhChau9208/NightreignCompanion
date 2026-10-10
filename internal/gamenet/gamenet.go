@@ -51,7 +51,9 @@ type Flow struct {
 	KbpsOut       float64 `json:"kbpsOut"`
 	// MaxGapMs is the longest silence from the remote side in the window,
 	// including a trailing gap while we keep sending but nothing comes back.
-	// A spike here is what a lag spike looks like on the wire. 0 = no data.
+	// A spike here is what a lag spike looks like on the wire. UDP only:
+	// request/response TCP is silent between requests by design (measured
+	// on Nightreign's HTTPS connections: 4 s gaps while idle). 0 = no data.
 	MaxGapMs float64 `json:"maxGapMs"`
 	IdleMs   float64 `json:"idleMs"` // since the last packet in either direction
 	AgeSec   float64 `json:"ageSec"` // since the first packet seen
@@ -277,7 +279,7 @@ func summarize(k flowKey, f *flow, now, window int64) Flow {
 	fl.PktsInPerSec, fl.KbpsIn = rate(f.in)
 	fl.PktsOutPerSec, fl.KbpsOut = rate(f.out)
 
-	if len(f.in) > 0 {
+	if k.proto == "udp" && len(f.in) > 0 {
 		var gap int64
 		for i := 1; i < len(f.in); i++ {
 			gap = max(gap, f.in[i].ts-f.in[i-1].ts)

@@ -31,7 +31,7 @@
 <section class="card">
   <header>
     <h2>{$t('gnet.title')}</h2>
-    {#if flows.length > 0}
+    {#if flows.some((f) => f.proto === 'udp')}
       <span class="pill level-{overall}">{icon(overall)} {$t(label(overall))}</span>
     {/if}
   </header>
@@ -75,7 +75,7 @@
               {/if}
             </span>
             <span role="cell" class="num">
-              {#if f.pktsInPerSec > 0}
+              {#if f.proto === 'udp' && f.pktsInPerSec > 0}
                 <span class="level-{gapLevel(f)}">{icon(gapLevel(f))}</span>
                 {Math.round(f.maxGapMs)} ms
               {:else}
