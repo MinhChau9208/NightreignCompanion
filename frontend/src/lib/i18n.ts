@@ -84,7 +84,9 @@ const vi = {
   'gnet.kbps': 'kbps vào · ra',
   'gnet.gap': 'Khoảng lặng dài nhất',
   'gnet.footnote':
-    'Số liệu tính trên 10 giây gần nhất. "Khoảng lặng" là lúc lâu nhất không nhận được gói nào từ phía bên kia — tăng vọt khi giật lag. Ping tới relay chỉ đo tới relay, không phải tới người chơi phía sau nó. Địa chỉ IP chỉ hiển thị trên máy bạn, không lưu hay gửi đi, và không hiện trên overlay.',
+    'Số liệu tính trên 10 giây gần nhất. Khi co-op, Nightreign gửi dữ liệu trận đấu qua Steam (steam.exe → relay của Valve), nên luồng chính hiện "qua steam.exe". "Khoảng lặng" là lúc lâu nhất không nhận được gói nào từ phía bên kia — tăng vọt khi giật lag. Relay Steam không trả lời ping, nên ping có dấu ≈ là ping tới router của trạm relay (gần đúng), và chỉ đo tới relay, không tới người chơi phía sau nó. Địa chỉ IP chỉ hiển thị trên máy bạn, không lưu hay gửi đi, và không hiện trên overlay.',
+  'gnet.via': 'qua',
+  'gnet.pingApprox': 'Gần đúng: relay không trả lời ping, đây là ping tới router của trạm relay',
   'helper.start': 'Bắt đầu đo trong game',
 }
 
@@ -170,7 +172,9 @@ const en: Record<keyof typeof vi, string> = {
   'gnet.kbps': 'kbps in · out',
   'gnet.gap': 'Longest silence',
   'gnet.footnote':
-    'Stats cover the last 10 seconds. "Silence" is the longest time nothing arrived from the other side — it spikes when the game lags. Ping to a relay measures the relay only, not the players behind it. IP addresses are shown on your machine only, never stored or sent, and not shown on the overlay.',
+    'Stats cover the last 10 seconds. In co-op, Nightreign sends its match data through Steam (steam.exe → a Valve relay), so the main flow shows "via steam.exe". "Silence" is the longest time nothing arrived from the other side — it spikes when the game lags. Steam relays ignore ping, so a ping marked ≈ goes to the relay site router (approximate), and it only reaches the relay, not the players behind it. IP addresses are shown on your machine only, never stored or sent, and not shown on the overlay.',
+  'gnet.via': 'via',
+  'gnet.pingApprox': 'Approximate: the relay ignores ping, this is the relay site router',
   'helper.start': 'Start in-game measurement',
 }
 

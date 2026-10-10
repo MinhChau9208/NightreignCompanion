@@ -181,3 +181,47 @@ func TestClassify(t *testing.T) {
 		}
 	}
 }
+
+// mDNS/SSDP showed up as "peers" in a live capture; they are LAN discovery.
+func TestMulticastSkipped(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	for _, dst := range []string{"224.0.0.251:5353", "239.255.255.250:1900", "[ff02::fb]:5353", "255.255.255.255:67"} {
+		tr.Add(Packet{Proto: "udp", Out: true, TS: 1,
+			Src: netip.AddrPortFrom(me, 5353), Dst: netip.MustParseAddrPort(dst)})
+	}
+	if n := len(tr.flows); n != 0 {
+		t.Errorf("tracked %d multicast/broadcast flows", n)
+	}
+}
+
+func TestViaAndSustained(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	base := int64(1_000_000_000)
+	// Co-op through a relay: 20 packets/s each way for 5 s, sent by Steam.
+	for i := int64(0); i < 100; i++ {
+		ts := base + i*50*msTicks
+		tr.Add(Packet{Proto: "udp", Out: true, TS: ts, Size: 190, Via: "steam.exe",
+			Src: netip.AddrPortFrom(me, 1), Dst: netip.AddrPortFrom(relay, 4380)})
+		tr.Add(Packet{Proto: "udp", TS: ts, Size: 170, Via: "steam.exe",
+			Src: netip.AddrPortFrom(relay, 4380), Dst: netip.AddrPortFrom(me, 1)})
+	}
+	// A relay ping burst: a couple of packets, then nothing.
+	other := netip.MustParseAddr("162.254.195.71")
+	tr.Add(Packet{Proto: "udp", Out: true, TS: base, Via: "steam.exe",
+		Src: netip.AddrPortFrom(me, 1), Dst: netip.AddrPortFrom(other, 27019)})
+	tr.Add(Packet{Proto: "udp", TS: base + 80*msTicks, Via: "steam.exe",
+		Src: netip.AddrPortFrom(other, 27019), Dst: netip.AddrPortFrom(me, 1)})
+
+	flows := tr.Snapshot(base+5*ticksPerSecond, 8)
+	if len(flows) != 2 {
+		t.Fatalf("flows = %+v", flows)
+	}
+	if f := flows[0]; f.Via != "steam.exe" || f.Kind != KindRelay || !Sustained(f) {
+		t.Errorf("session flow = %+v (sustained %v)", f, Sustained(f))
+	}
+	if f := flows[1]; Sustained(f) {
+		t.Errorf("ping burst counted as sustained: %+v", f)
+	}
+}

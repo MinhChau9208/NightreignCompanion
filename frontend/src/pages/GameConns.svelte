@@ -61,12 +61,12 @@
           <div class="row" role="row" class:stale={f.idleMs > 5000}>
             <span role="cell">
               <b>{$t(kind(f.kind))}</b>
-              <small class="muted">{f.proto.toUpperCase()} · {f.remote}</small>
+              <small class="muted">{f.proto.toUpperCase()} · {f.remote}{f.via ? ` · ${$t('gnet.via')} ${f.via}` : ''}</small>
             </span>
             <span role="cell" class="num">
               {#if f.ping && hasPing(f)}
                 <span class="level-{f.ping.level}">{icon(f.ping.level)}</span>
-                {fmtMs(f.ping.avgMs)} ms
+                <span title={f.pingAddr ? `${$t('gnet.pingApprox')} ${f.pingAddr}` : ''}>{f.pingAddr ? '≈' : ''}{fmtMs(f.ping.avgMs)} ms</span>
                 {#if f.ping.lossPct > 0}<small class="muted">· {f.ping.lossPct.toFixed(0)}%</small>{/if}
               {:else if pingNoReply(f)}
                 <small class="muted">{$t('gnet.noReply')}</small>

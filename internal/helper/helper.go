@@ -18,6 +18,11 @@ const historyLen = 60
 // maxFlows is how many game connections are reported.
 const maxFlows = 8
 
+// steamProcess carries Nightreign's co-op traffic: the game hands its
+// packets to Steam networking, which sends them through a Valve relay
+// (measured live: nightreign.exe itself only talks TCP to servers).
+const steamProcess = "steam.exe"
+
 type Config struct {
 	Addr, Token string // main process IPC endpoint
 	Process     string // image name to measure, e.g. nightreign.exe

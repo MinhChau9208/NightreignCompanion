@@ -72,7 +72,7 @@
         <span class="icon">{icon(flowLevel(gf))}</span>
         <span class="name">{$t(kind(gf.kind))}</span>
         {#if gf.ping && hasPing(gf)}
-          <span class="num">{gf.ping.lastLost ? $t('net.lost') : `${fmtMs(gf.ping.lastMs)} ms`}</span>
+          <span class="num">{gf.ping.lastLost ? $t('net.lost') : `${gf.pingAddr ? '≈' : ''}${fmtMs(gf.ping.lastMs)} ms`}</span>
           <span class="num loss">{gf.ping.lossPct.toFixed(0)}%</span>
         {:else}
           <span class="num">{gf.pktsInPerSec > 0 ? `${Math.round(gf.maxGapMs)} ms` : '—'}</span>

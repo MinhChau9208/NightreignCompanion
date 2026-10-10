@@ -58,8 +58,16 @@ type Flow struct {
 	IdleMs   float64 `json:"idleMs"` // since the last packet in either direction
 	AgeSec   float64 `json:"ageSec"` // since the first packet seen
 
+	// Via names the process that carries the flow when it is not the game
+	// itself: Nightreign's co-op traffic is sent by steam.exe (Steam
+	// networking through a Valve relay), not by nightreign.exe.
+	Via string `json:"via,omitempty"`
+
 	// Ping is filled in by the main process, which probes active peers.
-	Ping *netmon.Stats `json:"ping,omitempty"`
+	// PingAddr is set when the probe went to a stand-in address because the
+	// remote itself ignores ICMP (Steam relays do).
+	Ping     *netmon.Stats `json:"ping,omitempty"`
+	PingAddr string        `json:"pingAddr,omitempty"`
 }
 
 // Packet is one send or receive as reported by the OS.
@@ -71,6 +79,7 @@ type Packet struct {
 	Src   netip.AddrPort // saddr/sport of the event
 	Dst   netip.AddrPort // daddr/dport of the event
 	TS    int64          // FILETIME ticks (100 ns)
+	Via   string         // set by the caller, see Flow.Via
 }
 
 // Kernel-Network event IDs (from the provider manifest).
@@ -133,6 +142,7 @@ type flowKey struct {
 }
 
 type flow struct {
+	via         string
 	in, out     []sample // sorted by ts
 	first, last int64
 }
@@ -170,18 +180,33 @@ func (t *Tracker) isLocal(a netip.Addr) bool {
 // is one of our addresses, and fall back to the manifest only when neither is.
 func (t *Tracker) remote(p Packet) (netip.AddrPort, bool) {
 	sl, dl := t.isLocal(p.Src.Addr()), t.isLocal(p.Dst.Addr())
+	var r netip.AddrPort
 	switch {
 	case sl && dl:
 		return netip.AddrPort{}, false // loopback or to ourselves
 	case sl:
-		return p.Dst, true
+		r = p.Dst
 	case dl:
-		return p.Src, true
+		r = p.Src
 	case p.Out:
-		return p.Dst, true
+		r = p.Dst
 	default:
-		return p.Src, true
+		r = p.Src
 	}
+	// Multicast/broadcast (mDNS, SSDP, …) is LAN discovery, not a remote host.
+	if a := r.Addr(); a.IsMulticast() || a == broadcast {
+		return netip.AddrPort{}, false
+	}
+	return r, true
+}
+
+var broadcast = netip.AddrFrom4([4]byte{255, 255, 255, 255})
+
+// Sustained reports whether a flow carries steady two-way traffic: what a
+// game session looks like, as opposed to Steam's periodic relay ping bursts
+// (seen live: the co-op relay ran at 20 packets/s each way).
+func Sustained(f Flow) bool {
+	return f.AgeSec >= 3 && f.PktsInPerSec >= 2 && f.PktsOutPerSec >= 2
 }
 
 // Add records one packet. ETW may deliver events slightly out of order
@@ -199,7 +224,7 @@ func (t *Tracker) Add(p Packet) {
 		if len(t.flows) >= maxFlows {
 			return
 		}
-		f = &flow{first: p.TS, last: p.TS}
+		f = &flow{first: p.TS, last: p.TS, via: p.Via}
 		t.flows[k] = f
 	}
 	f.first, f.last = min(f.first, p.TS), max(f.last, p.TS)
@@ -263,6 +288,7 @@ func summarize(k flowKey, f *flow, now, window int64) Flow {
 		Remote: k.remote.String(),
 		IP:     k.remote.Addr().String(),
 		Kind:   classify(k.proto, k.remote.Addr()),
+		Via:    f.via,
 		IdleMs: ticksToMs(max(0, now-f.last)),
 		AgeSec: float64(max(0, now-f.first)) / float64(ticksPerSecond),
 	}

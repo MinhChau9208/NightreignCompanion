@@ -207,7 +207,9 @@ export namespace gamenet {
 	    maxGapMs: number;
 	    idleMs: number;
 	    ageSec: number;
+	    via?: string;
 	    ping?: netmon.Stats;
+	    pingAddr?: string;
 	
 	    static createFrom(source: any = {}) {
 	        return new Flow(source);
@@ -226,7 +228,9 @@ export namespace gamenet {
 	        this.maxGapMs = source["maxGapMs"];
 	        this.idleMs = source["idleMs"];
 	        this.ageSec = source["ageSec"];
+	        this.via = source["via"];
 	        this.ping = this.convertValues(source["ping"], netmon.Stats);
+	        this.pingAddr = source["pingAddr"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

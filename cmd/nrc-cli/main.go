@@ -161,12 +161,20 @@ func measureConns(args []string) {
 	if addrs, err := gamenet.LocalAddrs(); err == nil {
 		tr.SetLocal(addrs)
 	}
+	// Like the app: Steam's UDP counts too, since it carries the co-op traffic.
+	steam, _ := fps.FindProcess("steam.exe")
 	dump := &rawDump{target: pid}
 	sess, err := etw.StartSession(helper.SessionName+"-CLI", func(e *etw.Event) {
 		if *raw {
 			dump.add(e)
 		}
-		if p, ok := gamenet.ParseEvent(e); ok && (pid == 0 || p.PID == pid) {
+		p, ok := gamenet.ParseEvent(e)
+		switch {
+		case !ok:
+		case pid == 0 || p.PID == pid:
+			tr.Add(p)
+		case p.PID == steam && steam != 0 && p.Proto == "udp":
+			p.Via = "steam.exe"
 			tr.Add(p)
 		}
 	})
@@ -185,10 +193,13 @@ func measureConns(args []string) {
 	fmt.Printf("watching %s (pid %d) for %ds; stats cover the last 10s\n", process, pid, *seconds)
 	for i := 2; i <= *seconds; i += 2 {
 		time.Sleep(2 * time.Second)
-		fmt.Printf("\n%3ds %-4s %-7s %-28s %9s %9s %9s %9s %9s\n", i, "PROTO", "KIND", "REMOTE", "PKT/s IN", "PKT/s OUT", "kbps IN", "kbps OUT", "MAX GAP")
-		for _, f := range tr.Snapshot(nowFiletime(), 10) {
-			fmt.Printf("     %-4s %-7s %-28s %9.1f %9.1f %9.1f %9.1f %7.0fms\n",
-				f.Proto, f.Kind, f.Remote, f.PktsInPerSec, f.PktsOutPerSec, f.KbpsIn, f.KbpsOut, f.MaxGapMs)
+		fmt.Printf("\n%3ds %-4s %-7s %-28s %9s %9s %9s %9s %9s  %s\n", i, "PROTO", "KIND", "REMOTE", "PKT/s IN", "PKT/s OUT", "kbps IN", "kbps OUT", "MAX GAP", "VIA")
+		for _, f := range tr.Snapshot(nowFiletime(), 20) {
+			if f.Via != "" && !gamenet.Sustained(f) {
+				continue // Steam's own chatter, not the game session
+			}
+			fmt.Printf("     %-4s %-7s %-28s %9.1f %9.1f %9.1f %9.1f %7.0fms  %s\n",
+				f.Proto, f.Kind, f.Remote, f.PktsInPerSec, f.PktsOutPerSec, f.KbpsIn, f.KbpsOut, f.MaxGapMs, f.Via)
 		}
 	}
 	if *raw {

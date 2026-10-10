@@ -126,7 +126,20 @@ Các module được trình bày theo **thứ tự làm**: M1 → M5 → M3 → 
 **Hiện trạng (2026-10-10):**
 - ✅ Ping/jitter/loss tới các mục tiêu cố định (mặc định `gateway`, `1.1.1.1`, `8.8.8.8`, tối đa 6) — đo **chất lượng đường truyền của máy/nhà mạng**.
 - ✅ FPS / frametime / 1% low của `nightreign.exe` qua ETW (helper Admin), hiện cả trên overlay.
-- ✅ Kết nối thật của game: các endpoint `nightreign.exe` đang trao đổi dữ liệu (relay Steam / peer / server TCP), gói/s, kbps, **khoảng lặng dài nhất** và ping tới peer/relay. ⚠️ Chưa kiểm chứng trong trận thật — xác minh bằng `nrc-cli conns` (terminal Admin) khi đang chơi.
+- ✅ Kết nối thật của game: server TCP của `nightreign.exe` + luồng co-op mà `steam.exe` mang hộ, gói/s, kbps, **khoảng lặng dài nhất** và ping (gần đúng) tới relay. Đã kiểm chứng trong expedition co-op (2026-10-10).
+
+**Kết quả đo thực tế (2026-10-10, expedition co-op, host và teammate):**
+| Process | Remote | Giao thức | Lưu lượng | Ý nghĩa |
+|---------|--------|-----------|-----------|---------|
+| `nightreign.exe` | AWS `:10901` | TCP | 0.3–18 kbps | Server game (matchmaking/online) |
+| `nightreign.exe` | Cloudflare / AWS `:443` | TCP | vài kbps, im lặng nhiều giây giữa các request | HTTPS (telemetry/dịch vụ) |
+| `steam.exe` | relay Valve `103.28.54.x:4380` | UDP | **20 gói/s mỗi chiều, ~27–31 kbps**, khoảng lặng tối đa 198 ms / 30s | **Luồng co-op thật** (Steam Datagram Relay) |
+
+Kết luận:
+- **`nightreign.exe` không gửi UDP nào.** Game giao dữ liệu trận đấu cho Steam networking, và `steam.exe` gửi qua relay của Valve (không P2P trực tiếp). Vì vậy helper theo dõi thêm UDP của `steam.exe` khi game đang chạy, chỉ giữ luồng hai chiều ổn định (≥ 3s, ≥ 2 gói/s mỗi chiều) để bỏ các đợt Steam ping thử relay.
+- **Relay Steam không trả lời ICMP**, nhưng router `.1` của trạm relay thì có (đo: 74 ms, jitter 1.6 ms) → dùng làm ping gần đúng, đánh dấu ≈ trên UI.
+- **Khoảng lặng chỉ có nghĩa với UDP**: kết nối HTTPS im lặng 4s giữa các request là bình thường.
+- Địa chỉ multicast (mDNS, SSDP) bị loại, không phải máy ở xa.
 
 **Tính năng:**
 | Tính năng | Cách làm | Ưu tiên |
@@ -134,9 +147,9 @@ Các module được trình bày theo **thứ tự làm**: M1 → M5 → M3 → 
 | ✅ Ping/jitter/loss tới các endpoint cố định (gateway, DNS, host tuỳ chọn) | ICMP qua `IcmpSendEcho` (iphlpapi — không cần Admin), TCP connect time cho mục tiêu `host:port`; cửa sổ trượt 60 mẫu + tổng phiên | P0 |
 | ✅ **FPS / frametime / 1% low** | Sự kiện `Present_Start` (ID 42) của provider Microsoft-Windows-DXGI qua phiên ETW real-time — giống PresentMon; lọc theo PID của `nightreign.exe`; cửa sổ 30s (FPS 1s, trung bình, 1% low, frametime tệ nhất) | **P0** (D3) |
 | ✅ Overlay mini | Góc màn hình: ping/loss từng mục tiêu + FPS | P1 |
-| ✅ Phát hiện kết nối của game | ETW provider `Microsoft-Windows-Kernel-Network` (event 10/11/26/27 TCP, 42/43/58/59 UDP; PID lấy từ payload) trong helper Admin đã có. Không dùng `GetExtendedUdpTable` vì UDP **chỉ có cổng local, không có địa chỉ remote**. Phía remote xác định bằng cách so với địa chỉ của máy. Phân loại: relay Steam (dải IP của Valve, AS32590), peer, server TCP, LAN. Chỉ đọc dữ liệu của OS, không đụng vào game | P1 |
-| ✅ Chất lượng kết nối game | Gói/s, kbps vào/ra, và **khoảng lặng dài nhất** (thời gian lâu nhất không nhận gói nào từ phía bên kia trong 10s, kể cả lúc mình vẫn gửi mà không có hồi đáp) — đo thụ động, có số kể cả khi peer chặn ping. Ngưỡng tạm: ≥ 400 ms cảnh báo, ≥ 1000 ms kém | P1 |
-| ✅ Ping tới peer/relay | Process chính ping tối đa 4 endpoint UDP bận nhất (IPv4, không cần Admin). Peer/relay chặn ICMP → hiển thị "không trả lời ping" thay vì 100% mất gói | P1 |
+| ✅ Phát hiện kết nối của game | ETW provider `Microsoft-Windows-Kernel-Network` (event 10/11/26/27 TCP, 42/43/58/59 UDP; PID lấy từ payload) trong helper Admin đã có. Không dùng `GetExtendedUdpTable` vì UDP **chỉ có cổng local, không có địa chỉ remote**. Phía remote xác định bằng cách so với địa chỉ của máy. Phân loại: relay Steam (UDP tới dải IP của Valve, AS32590), peer, server TCP, LAN; bỏ multicast/broadcast. Theo dõi `nightreign.exe` + UDP ổn định của `steam.exe` (ghi "qua steam.exe"). Chỉ đọc dữ liệu của OS, không đụng vào game | P1 |
+| ✅ Chất lượng kết nối game | Gói/s, kbps vào/ra, và **khoảng lặng dài nhất** (thời gian lâu nhất không nhận gói nào từ phía bên kia trong 10s, kể cả lúc mình vẫn gửi mà không có hồi đáp) — đo thụ động, có số kể cả khi peer chặn ping. Chỉ tính cho UDP. Ngưỡng: ≥ 400 ms cảnh báo, ≥ 1000 ms kém (bình thường đo được ≤ 200 ms ở 20 gói/s) | P1 |
+| ✅ Ping tới peer/relay | Process chính ping tối đa 4 endpoint UDP bận nhất (IPv4, không cần Admin). Relay không trả lời → ping router `.1` của trạm relay, hiện "≈" (gần đúng). Peer chặn ICMP → "không trả lời ping" thay vì 100% mất gói | P1 |
 | ✅ Overlay: dòng kết nối game | Loại kết nối + ping (hoặc khoảng lặng nếu không ping được). **Không hiện IP** trên overlay (tránh lộ IP người chơi khác khi stream) | P1 |
 | Đánh giá chất lượng mạng nhà | Bufferbloat test, packet loss dài hạn, gợi ý (Wi-Fi vs LAN, NAT type) | P2 |
 | Lịch sử & biểu đồ | Lưu vào SQLite, xem lại khi run bị lag | P2 |
@@ -146,7 +159,7 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 **Chẩn đoán:** so sánh mục tiêu `gateway` (router) với các mục tiêu Internet để phân biệt lỗi mạng nội bộ (Wi-Fi/LAN) với lỗi nhà mạng.
 
 ⚠️ Lưu ý: Nightreign khoá 60 FPS — FPS chủ yếu để phát hiện tụt khung hình, không phải benchmark.
-⚠️ Cần xác minh trong trận thật: Nightreign đi P2P trực tiếp hay qua Steam Datagram Relay; relay có trả lời ICMP hay không; ngưỡng khoảng lặng 400/1000 ms có hợp lý không.
+⚠️ Còn cần đo: ngưỡng khoảng lặng 400/1000 ms trong một trận bị lag thật; ping tới router `.1` có luôn sát với ping tới relay không (tuỳ trạm).
 
 **Quyền riêng tư:** địa chỉ IP của peer chỉ hiện trong cửa sổ chính trên máy người dùng (như `netstat`), không lưu vào DB, không gửi đi (kể cả M6), không hiện trên overlay.
 

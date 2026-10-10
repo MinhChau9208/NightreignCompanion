@@ -46,7 +46,7 @@ func Run(ctx context.Context, cfg Config) error {
 		cancel()
 	}()
 
-	var pid atomic.Uint32
+	var pid, steamPID atomic.Uint32
 	frames := fps.NewTracker(cfg.Window)
 	conns := gamenet.NewTracker(cfg.NetWindow)
 	sess, err := etw.StartSession(SessionName, func(e *etw.Event) {
@@ -56,7 +56,15 @@ func Run(ctx context.Context, cfg Config) error {
 			}
 			return
 		}
-		if pk, ok := gamenet.ParseEvent(e); ok && pk.PID != 0 && pk.PID == pid.Load() {
+		pk, ok := gamenet.ParseEvent(e)
+		if !ok || pk.PID == 0 {
+			return
+		}
+		switch {
+		case pk.PID == pid.Load():
+			conns.Add(pk)
+		case pk.PID == steamPID.Load() && pk.Proto == "udp":
+			pk.Via = steamProcess
 			conns.Add(pk)
 		}
 	})
@@ -121,6 +129,12 @@ func Run(ctx context.Context, cfg Config) error {
 			history = history[:0]
 		}
 		st.PID = found
+		// Steam's traffic only counts while the game runs.
+		steam := uint32(0)
+		if found != 0 {
+			steam, _ = fps.FindProcess(steamProcess)
+		}
+		steamPID.Store(steam)
 		ns := gamenet.Status{PID: found, Error: netErr}
 		now := nowFiletime()
 		if found == 0 {
@@ -137,7 +151,7 @@ func Run(ctx context.Context, cfg Config) error {
 			if netErr != "" {
 				ns.State = fps.StateError
 			}
-			ns.Flows = conns.Snapshot(now, maxFlows)
+			ns.Flows = gameFlows(conns.Snapshot(now, 2*maxFlows))
 		}
 
 		err = postFPS(st)
@@ -152,6 +166,18 @@ func Run(ctx context.Context, cfg Config) error {
 			failures = 0
 		}
 	}
+}
+
+// gameFlows keeps the game's own flows and the steady ones Steam carries
+// for it, dropping Steam's other UDP chatter (relay pings and the like).
+func gameFlows(flows []gamenet.Flow) []gamenet.Flow {
+	out := flows[:0]
+	for _, f := range flows {
+		if f.Via == "" || gamenet.Sustained(f) {
+			out = append(out, f)
+		}
+	}
+	return out[:min(len(out), maxFlows)]
 }
 
 func nowFiletime() int64 {

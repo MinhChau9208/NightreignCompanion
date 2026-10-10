@@ -46,11 +46,7 @@ func (a *App) onGameNet(data json.RawMessage) {
 	for _, s := range mon.Snapshot() {
 		pings[s.Target] = s
 	}
-	for i := range st.Flows {
-		if p, ok := pings[st.Flows[i].IP]; ok && st.Flows[i].Proto == "udp" {
-			st.Flows[i].Ping = &p
-		}
-	}
+	attachPings(st.Flows, pings)
 	w.last = st
 	w.mu.Unlock()
 
@@ -78,12 +74,13 @@ func (w *gameNetWatcher) monitor(parent context.Context, th config.Thresholds) *
 }
 
 // peerTargets picks the busiest active UDP endpoints with an IPv4 address
-// (the ICMP prober is IPv4-only).
+// (the ICMP prober is IPv4-only). Relays also get their site router probed,
+// as a stand-in when the relay itself ignores ICMP.
 func peerTargets(flows []gamenet.Flow) []string {
 	var out []string
 	seen := map[string]bool{}
 	for _, f := range flows {
-		if len(out) == maxPeerPings {
+		if len(seen) == maxPeerPings {
 			break
 		}
 		if f.Proto != "udp" || f.IdleMs > peerActiveMs || seen[f.IP] {
@@ -94,8 +91,46 @@ func peerTargets(flows []gamenet.Flow) []string {
 		}
 		seen[f.IP] = true
 		out = append(out, f.IP)
+		if r := siteRouter(f); r != "" {
+			out = append(out, r)
+		}
 	}
 	return out
+}
+
+// siteRouter is the .1 address of a relay's /24. Steam relays drop ICMP,
+// but the router in front of them answers (measured: 103.28.54.185 silent,
+// 103.28.54.1 at 74 ms), which approximates the latency to the relay.
+func siteRouter(f gamenet.Flow) string {
+	ip, err := netip.ParseAddr(f.IP)
+	if f.Kind != gamenet.KindRelay || err != nil || !ip.Is4() {
+		return ""
+	}
+	b := ip.As4()
+	if b[3] == 1 {
+		return ""
+	}
+	b[3] = 1
+	return netip.AddrFrom4(b).String()
+}
+
+// attachPings puts each UDP flow's ping results on it, falling back to the
+// relay's site router when the relay never answers.
+func attachPings(flows []gamenet.Flow, pings map[string]netmon.Stats) {
+	for i := range flows {
+		f := &flows[i]
+		p, ok := pings[f.IP]
+		if f.Proto != "udp" || !ok {
+			continue
+		}
+		f.Ping = &p
+		if p.Received > 0 {
+			continue
+		}
+		if r, ok := pings[siteRouter(*f)]; ok && r.Received > 0 {
+			f.Ping, f.PingAddr = &r, r.Target
+		}
+	}
 }
 
 // clearGameNet stops pinging once the helper is gone.
