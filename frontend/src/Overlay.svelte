@@ -75,7 +75,7 @@
           <span class="num">{gf.ping.lastLost ? $t('net.lost') : `${gf.pingAddr ? '≈' : ''}${fmtMs(gf.ping.lastMs)} ms`}</span>
           <span class="num loss">{gf.ping.lossPct.toFixed(0)}%</span>
         {:else}
-          <span class="num">{gf.pktsInPerSec > 0 ? `${Math.round(gf.maxGapMs)} ms` : '—'}</span>
+          <span class="num">{gf.pktsInPerSec > 0 && !gf.sendOnly ? `${Math.round(gf.maxGapMs)} ms` : '—'}</span>
           <span class="num loss">gap</span>
         {/if}
       </li>

@@ -205,6 +205,7 @@ export namespace gamenet {
 	    kbpsIn: number;
 	    kbpsOut: number;
 	    maxGapMs: number;
+	    sendOnly?: boolean;
 	    idleMs: number;
 	    ageSec: number;
 	    via?: string;
@@ -226,6 +227,7 @@ export namespace gamenet {
 	        this.kbpsIn = source["kbpsIn"];
 	        this.kbpsOut = source["kbpsOut"];
 	        this.maxGapMs = source["maxGapMs"];
+	        this.sendOnly = source["sendOnly"];
 	        this.idleMs = source["idleMs"];
 	        this.ageSec = source["ageSec"];
 	        this.via = source["via"];

@@ -92,6 +92,7 @@ func Run(ctx context.Context, cfg Config) error {
 		history   []float64
 		failures  int
 		lastLocal time.Time
+		carried   gamenet.SessionFilter
 	)
 	tick := time.NewTicker(time.Second)
 	defer tick.Stop()
@@ -126,6 +127,7 @@ func Run(ctx context.Context, cfg Config) error {
 			pid.Store(found)
 			frames.Reset()
 			conns.Reset()
+			carried.Reset()
 			history = history[:0]
 		}
 		st.PID = found
@@ -151,7 +153,8 @@ func Run(ctx context.Context, cfg Config) error {
 			if netErr != "" {
 				ns.State = fps.StateError
 			}
-			ns.Flows = gameFlows(conns.Snapshot(now, 2*maxFlows))
+			flows := carried.Filter(conns.Snapshot(now, 2*maxFlows))
+			ns.Flows = flows[:min(len(flows), maxFlows)]
 		}
 
 		err = postFPS(st)
@@ -166,18 +169,6 @@ func Run(ctx context.Context, cfg Config) error {
 			failures = 0
 		}
 	}
-}
-
-// gameFlows keeps the game's own flows and the steady ones Steam carries
-// for it, dropping Steam's other UDP chatter (relay pings and the like).
-func gameFlows(flows []gamenet.Flow) []gamenet.Flow {
-	out := flows[:0]
-	for _, f := range flows {
-		if f.Via == "" || gamenet.Sustained(f) {
-			out = append(out, f)
-		}
-	}
-	return out[:min(len(out), maxFlows)]
 }
 
 func nowFiletime() int64 {
