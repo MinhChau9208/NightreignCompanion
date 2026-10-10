@@ -23,8 +23,8 @@ body {
   background: var(--bg);
 }
 
-body.overlay,
-body.overlay html {
+html.overlay,
+html.overlay body {
   background: transparent;
   overflow: hidden;
 }
