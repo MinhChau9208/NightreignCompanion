@@ -3,7 +3,8 @@
 //	nrc-cli validate [dir]                 validate the embedded data pack, or the pack in dir
 //	nrc-cli ping [-n count] [target ...]   measure ping/jitter/loss (default: gateway 1.1.1.1 8.8.8.8)
 //	nrc-cli fps [-n seconds] [process]     measure FPS via ETW (run from an Administrator terminal)
-//	nrc-cli conns [-n seconds] [process]   list the game's network connections via ETW (Administrator)
+//	nrc-cli conns [-n seconds] [process]   list the game's network connections via ETW (Administrator);
+//	                                       -all also lists the Steam flows the app filters out
 //	nrc-cli udp [-n seconds]               UDP traffic per process, to see who carries co-op data (Administrator)
 package main
 
@@ -49,7 +50,7 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [process] | udp [-n seconds]")
+	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [-all] [process] | udp [-n seconds]")
 	os.Exit(2)
 }
 
@@ -141,6 +142,7 @@ func measureConns(args []string) {
 	fs := flag.NewFlagSet("conns", flag.ExitOnError)
 	seconds := fs.Int("n", 20, "seconds to watch")
 	raw := fs.Bool("raw", false, "also dump raw Kernel-Network events (for debugging the parser)")
+	all := fs.Bool("all", false, "also list Steam flows the app filters out, marked '-'")
 	fs.Parse(args)
 	process := config.Defaults().FPS.Process
 	if fs.NArg() > 0 {
@@ -191,15 +193,30 @@ func measureConns(args []string) {
 	go sess.Process()
 
 	fmt.Printf("watching %s (pid %d) for %ds; stats cover the last 10s\n", process, pid, *seconds)
+	var carried gamenet.SessionFilter
 	for i := 2; i <= *seconds; i += 2 {
 		time.Sleep(2 * time.Second)
-		fmt.Printf("\n%3ds %-4s %-7s %-28s %9s %9s %9s %9s %9s  %s\n", i, "PROTO", "KIND", "REMOTE", "PKT/s IN", "PKT/s OUT", "kbps IN", "kbps OUT", "MAX GAP", "VIA")
-		for _, f := range tr.Snapshot(nowFiletime(), 20) {
-			if f.Via != "" && !gamenet.Sustained(f) {
-				continue // Steam's own chatter, not the game session
+		fmt.Printf("\n%3ds %-4s %-7s %-28s %9s %9s %9s %9s %9s %7s %6s  %s\n", i, "PROTO", "KIND", "REMOTE", "PKT/s IN", "PKT/s OUT", "kbps IN", "kbps OUT", "MAX GAP", "IDLE", "AGE", "VIA")
+		flows := tr.Snapshot(nowFiletime(), 20)
+		// Same filter as the app: Steam's own chatter is not the game session.
+		shown := map[string]bool{}
+		for _, f := range carried.Filter(slices.Clone(flows)) {
+			shown[f.Proto+f.Remote] = true
+		}
+		for _, f := range flows {
+			mark := " "
+			if !shown[f.Proto+f.Remote] {
+				if !*all {
+					continue
+				}
+				mark = "-"
 			}
-			fmt.Printf("     %-4s %-7s %-28s %9.1f %9.1f %9.1f %9.1f %7.0fms  %s\n",
-				f.Proto, f.Kind, f.Remote, f.PktsInPerSec, f.PktsOutPerSec, f.KbpsIn, f.KbpsOut, f.MaxGapMs, f.Via)
+			gap := fmt.Sprintf("%.0fms", f.MaxGapMs)
+			if f.SendOnly {
+				gap = "send" // only acks come back on this route
+			}
+			fmt.Printf("   %s %-4s %-7s %-28s %9.1f %9.1f %9.1f %9.1f %9s %5.0fms %5.0fs  %s\n",
+				mark, f.Proto, f.Kind, f.Remote, f.PktsInPerSec, f.PktsOutPerSec, f.KbpsIn, f.KbpsOut, gap, f.IdleMs, f.AgeSec, f.Via)
 		}
 	}
 	if *raw {

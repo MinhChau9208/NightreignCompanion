@@ -75,7 +75,9 @@
               {/if}
             </span>
             <span role="cell" class="num">
-              {#if f.proto === 'udp' && f.pktsInPerSec > 0}
+              {#if f.sendOnly}
+                <small class="muted" title={$t('gnet.sendOnlyHint')}>{$t('gnet.sendOnly')}</small>
+              {:else if f.proto === 'udp' && f.pktsInPerSec > 0}
                 <span class="level-{gapLevel(f)}">{icon(gapLevel(f))}</span>
                 {Math.round(f.maxGapMs)} ms
               {:else}

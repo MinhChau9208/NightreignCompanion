@@ -87,6 +87,9 @@ const vi = {
     'Số liệu tính trên 10 giây gần nhất. Khi co-op, Nightreign gửi dữ liệu trận đấu qua Steam (steam.exe → relay của Valve), nên luồng chính hiện "qua steam.exe". "Khoảng lặng" là lúc lâu nhất không nhận được gói nào từ phía bên kia — tăng vọt khi giật lag. Relay Steam không trả lời ping, nên ping có dấu ≈ là ping tới router của trạm relay (gần đúng), và chỉ đo tới relay, không tới người chơi phía sau nó. Địa chỉ IP chỉ hiển thị trên máy bạn, không lưu hay gửi đi, và không hiện trên overlay.',
   'gnet.via': 'qua',
   'gnet.pingApprox': 'Gần đúng: relay không trả lời ping, đây là ping tới router của trạm relay',
+  'gnet.sendOnly': 'chỉ gửi',
+  'gnet.sendOnlyHint':
+    'Steam chỉ dùng relay này để gửi dữ liệu đi; dữ liệu về đi qua relay khác, nên ở đây chỉ có gói xác nhận và khoảng lặng không phản ánh lag.',
   'helper.start': 'Bắt đầu đo trong game',
 }
 
@@ -175,6 +178,9 @@ const en: Record<keyof typeof vi, string> = {
     'Stats cover the last 10 seconds. In co-op, Nightreign sends its match data through Steam (steam.exe → a Valve relay), so the main flow shows "via steam.exe". "Silence" is the longest time nothing arrived from the other side — it spikes when the game lags. Steam relays ignore ping, so a ping marked ≈ goes to the relay site router (approximate), and it only reaches the relay, not the players behind it. IP addresses are shown on your machine only, never stored or sent, and not shown on the overlay.',
   'gnet.via': 'via',
   'gnet.pingApprox': 'Approximate: the relay ignores ping, this is the relay site router',
+  'gnet.sendOnly': 'send only',
+  'gnet.sendOnlyHint':
+    'Steam only sends through this relay; data comes back through another one, so only acks arrive here and its silence says nothing about lag.',
   'helper.start': 'Start in-game measurement',
 }
 

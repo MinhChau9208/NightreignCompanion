@@ -40,7 +40,8 @@ export const gapWarnMs = 400
 export const gapBadMs = 1000
 
 export function gapLevel(f: Flow): Level {
-  if (f.proto !== 'udp' || f.pktsInPerSec === 0) return 'unknown' // silence is normal on TCP
+  // Silence is normal on TCP, and a send-only route only gets acks back.
+  if (f.proto !== 'udp' || f.sendOnly || f.pktsInPerSec === 0) return 'unknown'
   if (f.maxGapMs >= gapBadMs) return 'bad'
   if (f.maxGapMs >= gapWarnMs) return 'warn'
   return 'good'
@@ -57,7 +58,10 @@ export function flowLevel(f: Flow): Level {
   return worst(levels)
 }
 
-// The connection that matters most: the busiest UDP flow still active.
+// The connection that matters most: the busiest UDP flow still active,
+// preferring one the session comes in on (its gaps show lag; a send-only
+// route's do not).
 export function mainFlow(s: GameNetStatus | null): Flow | null {
-  return s?.flows?.find((f) => f.proto === 'udp' && f.idleMs < 5000) ?? null
+  const active = (s?.flows ?? []).filter((f) => f.proto === 'udp' && f.idleMs < 5000)
+  return active.find((f) => !f.sendOnly) ?? active[0] ?? null
 }

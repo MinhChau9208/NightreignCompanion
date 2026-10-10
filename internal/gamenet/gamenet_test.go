@@ -225,3 +225,124 @@ func TestViaAndSustained(t *testing.T) {
 		t.Errorf("ping burst counted as sustained: %+v", f)
 	}
 }
+
+// A co-op session through a relay whose traffic dips (a loading screen)
+// must stay listed while it is still active, and Steam's ping bursts must
+// never be listed.
+func TestSessionFilterKeepsDippingSession(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	base := int64(1_000_000_000)
+	send := func(ts int64, to netip.Addr, port uint16) {
+		tr.Add(Packet{Proto: "udp", Out: true, TS: ts, Size: 190, Via: "steam.exe",
+			Src: netip.AddrPortFrom(me, 1), Dst: netip.AddrPortFrom(to, port)})
+		tr.Add(Packet{Proto: "udp", TS: ts + 30*msTicks, Size: 170, Via: "steam.exe",
+			Src: netip.AddrPortFrom(to, port), Dst: netip.AddrPortFrom(me, 1)})
+	}
+	// 10 s at 20 packets/s each way, then 1 packet/s for 10 s, then silence.
+	for i := int64(0); i < 200; i++ {
+		send(base+i*50*msTicks, relay, 4380)
+	}
+	for i := int64(0); i < 10; i++ {
+		send(base+10*ticksPerSecond+i*ticksPerSecond, relay, 4380)
+	}
+	other := netip.MustParseAddr("162.254.195.71")
+	send(base+12*ticksPerSecond, other, 27019) // a relay ping burst
+
+	var sf SessionFilter
+	listed := func(sec int64) bool {
+		flows := sf.Filter(tr.Snapshot(base+sec*ticksPerSecond, 16))
+		for _, f := range flows {
+			if f.IP == other.String() {
+				t.Fatalf("%ds: ping burst listed: %+v", sec, f)
+			}
+		}
+		return len(flows) == 1
+	}
+	for sec := int64(5); sec <= 20; sec++ {
+		if !listed(sec) {
+			t.Fatalf("%ds: session dropped while still active", sec)
+		}
+	}
+	// 6 s after the last packet the session is idle and goes away.
+	if listed(25) {
+		t.Error("idle session still listed")
+	}
+	// An unfiltered rate check would have dropped it during the dip.
+	if f := tr.Snapshot(base+18*ticksPerSecond, 16); Sustained(f[0]) {
+		t.Fatalf("test does not exercise the dip: %+v", f[0])
+	}
+}
+
+// The pattern measured in co-op: Steam sends the session through one relay
+// and receives it through another, each with only acks the other way.
+func TestSustainedAsymmetricRelays(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	base := int64(1_000_000_000)
+	sendRelay := netip.AddrPortFrom(netip.MustParseAddr("103.28.54.162"), 4379)
+	recvRelay := netip.AddrPortFrom(netip.MustParseAddr("103.28.54.178"), 4380)
+	add := func(ts int64, out bool, r netip.AddrPort) {
+		p := Packet{Proto: "udp", Out: out, TS: ts, Size: 180, Via: "steam.exe",
+			Src: netip.AddrPortFrom(me, 1), Dst: r}
+		if !out {
+			p.Src, p.Dst = r, netip.AddrPortFrom(me, 1)
+		}
+		tr.Add(p)
+	}
+	for ms := int64(0); ms < 10_000; ms += 50 {
+		ts := base + ms*msTicks
+		add(ts, true, sendRelay)  // 20 pkt/s out
+		add(ts, false, recvRelay) // 20 pkt/s in
+		if ms%500 == 0 {
+			add(ts, false, sendRelay) // acks: 2 pkt/s
+			add(ts, true, recvRelay)
+		}
+	}
+	// Acks a little under 2 pkt/s, as measured (1.8–1.9).
+	flows := tr.Snapshot(base+11*ticksPerSecond, 8)
+	if len(flows) != 2 {
+		t.Fatalf("flows = %+v", flows)
+	}
+	for _, f := range flows {
+		if min(f.PktsInPerSec, f.PktsOutPerSec) >= 2 {
+			t.Fatalf("test does not exercise the ack side under 2 pkt/s: %+v", f)
+		}
+		if !Sustained(f) {
+			t.Errorf("one-way relay route not sustained: %+v", f)
+		}
+		send := f.Remote == sendRelay.String()
+		if f.SendOnly != send {
+			t.Errorf("%s: sendOnly = %v, want %v", f.Remote, f.SendOnly, send)
+		}
+		// The acks' 500 ms spacing must not read as a lag spike.
+		if send && f.MaxGapMs != 0 {
+			t.Errorf("send route has a gap: %+v", f)
+		}
+		if !send && (f.MaxGapMs < 40 || f.MaxGapMs > 100) {
+			t.Errorf("receive route gap = %v, want ~50 ms", f.MaxGapMs)
+		}
+	}
+}
+
+// A two-way route whose inbound side stalls is lag, not a send-only route.
+func TestStallIsNotSendOnly(t *testing.T) {
+	tr := NewTracker(10 * time.Second)
+	tr.SetLocal([]netip.Addr{me})
+	base := int64(1_000_000_000)
+	r := netip.AddrPortFrom(relay, 4380)
+	for ms := int64(0); ms < 20_000; ms += 50 {
+		ts := base + ms*msTicks
+		tr.Add(Packet{Proto: "udp", Out: true, TS: ts, Src: netip.AddrPortFrom(me, 1), Dst: r})
+		if ms < 10_000 { // nothing comes back after 10 s
+			tr.Add(Packet{Proto: "udp", TS: ts, Src: r, Dst: netip.AddrPortFrom(me, 1)})
+		}
+		if ms%1000 == 0 {
+			tr.Snapshot(ts, 8) // the helper looks once per second
+		}
+	}
+	f := tr.Snapshot(base+19_500*msTicks, 8)[0]
+	if f.SendOnly || f.MaxGapMs < 9000 {
+		t.Errorf("stall hidden: %+v", f)
+	}
+}

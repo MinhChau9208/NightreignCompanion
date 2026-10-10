@@ -55,6 +55,11 @@ type Flow struct {
 	// request/response TCP is silent between requests by design (measured
 	// on Nightreign's HTTPS connections: 4 s gaps while idle). 0 = no data.
 	MaxGapMs float64 `json:"maxGapMs"`
+	// SendOnly marks a route Steam uses only to send the session: it comes
+	// back through another relay, so all this one returns is acks a few
+	// times per second, and its silence gaps say nothing about lag.
+	// MaxGapMs is 0 on such a flow.
+	SendOnly bool    `json:"sendOnly,omitempty"`
 	IdleMs   float64 `json:"idleMs"` // since the last packet in either direction
 	AgeSec   float64 `json:"ageSec"` // since the first packet seen
 
@@ -145,6 +150,9 @@ type flow struct {
 	via         string
 	in, out     []sample // sorted by ts
 	first, last int64
+	// recvd is set once a stream has come in, so that a later stall on a
+	// two-way route is reported as a gap rather than as a send-only route.
+	recvd bool
 }
 
 // Tracker aggregates the packets of one process per remote endpoint.
@@ -202,12 +210,65 @@ func (t *Tracker) remote(p Packet) (netip.AddrPort, bool) {
 
 var broadcast = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 
-// Sustained reports whether a flow carries steady two-way traffic: what a
-// game session looks like, as opposed to Steam's periodic relay ping bursts
-// (seen live: the co-op relay ran at 20 packets/s each way).
+// Sustained reports whether a flow carries a steady game stream, as opposed
+// to Steam's relay ping bursts (a few packets in all). Steam may route the
+// two directions of a session through different relays, so only one side
+// has to be a stream; the other may be just acknowledgements (measured in
+// a co-op session: ~19 pkt/s out and ~1.9 back on one relay, ~16 in and
+// ~1.9 out on another).
 func Sustained(f Flow) bool {
-	return f.AgeSec >= 3 && f.PktsInPerSec >= 2 && f.PktsOutPerSec >= 2
+	hi, lo := max(f.PktsInPerSec, f.PktsOutPerSec), min(f.PktsInPerSec, f.PktsOutPerSec)
+	return f.AgeSec >= 3 && hi >= streamPkts && lo >= 0.5
 }
+
+// keepIdleMs is how long a flow that was once Sustained stays listed while
+// it carries no traffic at all.
+const keepIdleMs = 5000
+
+// SessionFilter keeps the game's own flows and the ones another process
+// (Steam) carries for it, dropping that process's other chatter. A carried
+// flow must be Sustained to be listed, but once it has been, it stays while
+// it is still active: Sustained is judged on rates over the window, and the
+// session's rate dips (loading screens, quiet moments) must not make the
+// row blink in and out. Not safe for concurrent use.
+type SessionFilter struct {
+	kept map[string]bool // proto + remote
+}
+
+// Filter returns the flows to report, reusing the backing array of flows.
+func (s *SessionFilter) Filter(flows []Flow) []Flow {
+	if s.kept == nil {
+		s.kept = map[string]bool{}
+	}
+	present := make(map[string]bool, len(flows))
+	out := flows[:0]
+	for _, f := range flows {
+		if f.Via == "" {
+			out = append(out, f)
+			continue
+		}
+		k := f.Proto + " " + f.Remote
+		present[k] = true
+		switch {
+		case Sustained(f):
+			s.kept[k] = true
+		case s.kept[k] && f.IdleMs < keepIdleMs:
+		default:
+			delete(s.kept, k)
+			continue
+		}
+		out = append(out, f)
+	}
+	for k := range s.kept {
+		if !present[k] {
+			delete(s.kept, k) // aged out of the tracker
+		}
+	}
+	return out
+}
+
+// Reset forgets every kept flow (the game restarted).
+func (s *SessionFilter) Reset() { clear(s.kept) }
 
 // Add records one packet. ETW may deliver events slightly out of order
 // across CPU buffers, so samples are inserted in place.
@@ -305,7 +366,9 @@ func summarize(k flowKey, f *flow, now, window int64) Flow {
 	fl.PktsInPerSec, fl.KbpsIn = rate(f.in)
 	fl.PktsOutPerSec, fl.KbpsOut = rate(f.out)
 
-	if k.proto == "udp" && len(f.in) > 0 {
+	f.recvd = f.recvd || fl.PktsInPerSec >= streamPkts
+	fl.SendOnly = k.proto == "udp" && !f.recvd && sendOnly(fl.PktsInPerSec, fl.PktsOutPerSec)
+	if k.proto == "udp" && len(f.in) > 0 && !fl.SendOnly {
 		var gap int64
 		for i := 1; i < len(f.in); i++ {
 			gap = max(gap, f.in[i].ts-f.in[i-1].ts)
@@ -319,5 +382,14 @@ func summarize(k flowKey, f *flow, now, window int64) Flow {
 	}
 	return fl
 }
+
+// sendOnly reports a stream going out with only acks coming back
+// (measured: ~19 pkt/s out, ~1.9 in). A receive route never qualifies, as
+// its outbound side is the acks, so a stall on it still shows as a gap.
+func sendOnly(in, out float64) bool { return out >= streamPkts && in < out/4 }
+
+// streamPkts is the rate, in packets/s, from which one direction of a flow
+// is a game stream rather than acks or pings.
+const streamPkts = 5
 
 func ticksToMs(t int64) float64 { return float64(t) / float64(ticksPerSecond/1000) }
