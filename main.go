@@ -15,7 +15,7 @@ import (
 var assets embed.FS
 
 // version is overridden at build time: -ldflags "-X main.version=1.2.3".
-var version = "0.1.2-dev"
+var version = "0.1.3-dev"
 
 func main() {
 	overlay := flag.Bool("overlay", false, "run as the in-game overlay window (started by the main app)")
