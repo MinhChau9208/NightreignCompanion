@@ -193,6 +193,99 @@ export namespace gamedata {
 
 }
 
+export namespace gamenet {
+	
+	export class Flow {
+	    proto: string;
+	    remote: string;
+	    ip: string;
+	    kind: string;
+	    pktsInPerSec: number;
+	    pktsOutPerSec: number;
+	    kbpsIn: number;
+	    kbpsOut: number;
+	    maxGapMs: number;
+	    idleMs: number;
+	    ageSec: number;
+	    ping?: netmon.Stats;
+	
+	    static createFrom(source: any = {}) {
+	        return new Flow(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.proto = source["proto"];
+	        this.remote = source["remote"];
+	        this.ip = source["ip"];
+	        this.kind = source["kind"];
+	        this.pktsInPerSec = source["pktsInPerSec"];
+	        this.pktsOutPerSec = source["pktsOutPerSec"];
+	        this.kbpsIn = source["kbpsIn"];
+	        this.kbpsOut = source["kbpsOut"];
+	        this.maxGapMs = source["maxGapMs"];
+	        this.idleMs = source["idleMs"];
+	        this.ageSec = source["ageSec"];
+	        this.ping = this.convertValues(source["ping"], netmon.Stats);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class Status {
+	    state: string;
+	    pid: number;
+	    flows: Flow[];
+	    error?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Status(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.state = source["state"];
+	        this.pid = source["pid"];
+	        this.flows = this.convertValues(source["flows"], Flow);
+	        this.error = source["error"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
 export namespace main {
 	
 	export class AppInfo {

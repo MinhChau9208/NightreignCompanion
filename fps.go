@@ -12,10 +12,13 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
 	"github.com/MinhChau9208/NightreignCompanion/internal/fps"
+	"github.com/MinhChau9208/NightreignCompanion/internal/gamenet"
+	"github.com/MinhChau9208/NightreignCompanion/internal/helper"
 	"github.com/MinhChau9208/NightreignCompanion/internal/ipc"
 )
 
 // fpsHelper tracks the elevated helper process (same exe, --fps-helper).
+// Besides FPS it also watches the game's network connections.
 type fpsHelper struct {
 	mu      sync.Mutex
 	running bool
@@ -71,6 +74,7 @@ func (a *App) setFPSRunning(on bool) {
 	runtime.EventsEmit(a.ctx, "fps:state", on)
 	if !on {
 		a.hub.Publish("fps:state", false)
+		a.clearGameNet()
 	}
 }
 
@@ -82,7 +86,7 @@ func (a *App) StopFPS() error {
 	if a.hub == nil {
 		return a.initErr
 	}
-	return a.hub.Publish(fps.MsgStop, nil)
+	return a.hub.Publish(helper.MsgStop, nil)
 }
 
 func (a *App) FPSRunning() bool {
@@ -93,7 +97,12 @@ func (a *App) FPSRunning() bool {
 
 // onHelperMessage relays helper reports to the window and the overlay.
 func (a *App) onHelperMessage(m ipc.Message) {
-	if m.Type != fps.MsgStats {
+	switch m.Type {
+	case fps.MsgStats:
+	case gamenet.MsgStats:
+		a.onGameNet(m.Data)
+		return
+	default:
 		log.Printf("ipc: ignoring helper message %q", m.Type)
 		return
 	}
@@ -108,5 +117,5 @@ func (a *App) onHelperMessage(m ipc.Message) {
 
 // runFPSHelper is the entry point of the elevated helper process.
 func runFPSHelper(addr, token, process string) error {
-	return fps.RunHelper(context.Background(), fps.HelperConfig{Addr: addr, Token: token, Process: process})
+	return helper.Run(context.Background(), helper.Config{Addr: addr, Token: token, Process: process})
 }

@@ -38,6 +38,8 @@ type Monitor struct {
 	cfg    Config
 	mu     sync.Mutex
 	states []*targetState
+	runCtx context.Context // set once Run starts
+	wg     sync.WaitGroup
 }
 
 type targetState struct {
@@ -47,34 +49,76 @@ type targetState struct {
 	samples   []Sample // oldest first, at most cfg.Window
 	totalSent int
 	totalLost int
+	cancel    context.CancelFunc // stops this target's probe loop
 }
 
 func NewMonitor(cfg Config) *Monitor {
 	cfg.setDefaults()
 	m := &Monitor{cfg: cfg}
-	for _, t := range cfg.Targets {
-		m.states = append(m.states, &targetState{target: t})
-	}
+	m.SetTargets(cfg.Targets)
 	return m
+}
+
+// SetTargets replaces the target list. Targets that stay keep their
+// history; removed ones stop probing. Safe to call while Run is active.
+func (m *Monitor) SetTargets(targets []string) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	old := make(map[string]*targetState, len(m.states))
+	for _, st := range m.states {
+		old[st.target] = st
+	}
+	next := make([]*targetState, 0, len(targets))
+	seen := make(map[string]bool, len(targets))
+	for _, t := range targets {
+		if seen[t] {
+			continue
+		}
+		seen[t] = true
+		if st, ok := old[t]; ok {
+			next = append(next, st)
+			delete(old, t)
+			continue
+		}
+		st := &targetState{target: t}
+		next = append(next, st)
+		if m.runCtx != nil && m.runCtx.Err() == nil {
+			m.startLocked(st)
+		}
+	}
+	for _, st := range old {
+		if st.cancel != nil {
+			st.cancel()
+		}
+	}
+	m.states = next
+}
+
+func (m *Monitor) startLocked(st *targetState) {
+	ctx, cancel := context.WithCancel(m.runCtx)
+	st.cancel = cancel
+	m.wg.Add(1)
+	go func() {
+		defer m.wg.Done()
+		m.probeLoop(ctx, st)
+	}()
 }
 
 // Run probes until ctx is cancelled, calling onUpdate with a fresh
 // snapshot once per interval.
 func (m *Monitor) Run(ctx context.Context, onUpdate func([]Stats)) {
-	var wg sync.WaitGroup
+	m.mu.Lock()
+	m.runCtx = ctx
 	for _, st := range m.states {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			m.probeLoop(ctx, st)
-		}()
+		m.startLocked(st)
 	}
+	m.mu.Unlock()
 	t := time.NewTicker(m.cfg.Interval)
 	defer t.Stop()
 	for {
 		select {
 		case <-ctx.Done():
-			wg.Wait()
+			m.wg.Wait()
 			return
 		case <-t.C:
 			if onUpdate != nil {

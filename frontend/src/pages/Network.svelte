@@ -5,6 +5,7 @@
   import {diagnose, fmtMs, icon, label, netStats, worst} from '../lib/net'
   import Sparkline from '../lib/Sparkline.svelte'
   import FPSCard from './FPSCard.svelte'
+  import GameConns from './GameConns.svelte'
 
   const stats = netStats()
   let pingThreshold = 0
@@ -25,6 +26,10 @@
 </script>
 
 <h1>{$t('nav.network')}</h1>
+
+<div class="game">
+  <GameConns />
+</div>
 
 <section class="card summary level-{overall}">
   <span class="pill level-{overall}">{icon(overall)} {$t(label(overall))}</span>
@@ -157,6 +162,9 @@
     color: var(--danger);
     font-size: 12px;
     word-break: break-word;
+  }
+  .game {
+    margin-bottom: 16px;
   }
   .fps {
     max-width: 460px;

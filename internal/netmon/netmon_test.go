@@ -143,6 +143,67 @@ func TestMonitorRecordsSamplesAndErrors(t *testing.T) {
 	}
 }
 
+func TestMonitorSetTargets(t *testing.T) {
+	var mu sync.Mutex
+	closed := map[string]bool{}
+	m := NewMonitor(Config{
+		Targets:  []string{"a", "b"},
+		Interval: 5 * time.Millisecond,
+		NewPinger: func(ctx context.Context, target string) (Pinger, Probe, error) {
+			return &closingPinger{onClose: func() {
+				mu.Lock()
+				closed[target] = true
+				mu.Unlock()
+			}}, Probe{Method: "icmp", Address: target}, nil
+		},
+	})
+	ctx, cancel := context.WithCancel(context.Background())
+	done := make(chan struct{})
+	go func() { m.Run(ctx, nil); close(done) }()
+	waitFor(t, func() bool { return m.Snapshot()[0].TotalSent >= 2 })
+
+	m.SetTargets([]string{"a", "c", "c"})
+	snap := m.Snapshot()
+	if len(snap) != 2 || snap[0].Target != "a" || snap[1].Target != "c" {
+		t.Fatalf("targets after SetTargets = %+v", snap)
+	}
+	if snap[0].TotalSent < 2 {
+		t.Errorf("kept target lost its history: %+v", snap[0])
+	}
+	waitFor(t, func() bool { return m.Snapshot()[1].TotalSent >= 1 })
+	waitFor(t, func() bool { mu.Lock(); defer mu.Unlock(); return closed["b"] })
+
+	m.SetTargets(nil)
+	if n := len(m.Snapshot()); n != 0 {
+		t.Errorf("%d targets left after clearing", n)
+	}
+	cancel()
+	<-done
+}
+
+// closingPinger always answers and reports when it is closed.
+type closingPinger struct{ onClose func() }
+
+func (p *closingPinger) Ping(ctx context.Context, _ time.Duration) (time.Duration, error) {
+	return ms(5), ctx.Err()
+}
+
+func (p *closingPinger) Close() error {
+	p.onClose()
+	return nil
+}
+
+func waitFor(t *testing.T, cond func() bool) {
+	t.Helper()
+	deadline := time.Now().Add(2 * time.Second)
+	for !cond() {
+		if time.Now().After(deadline) {
+			t.Fatal("condition not met in time")
+		}
+		time.Sleep(2 * time.Millisecond)
+	}
+}
+
 func TestTCPPinger(t *testing.T) {
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
 	if err != nil {

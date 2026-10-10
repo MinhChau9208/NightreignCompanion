@@ -55,21 +55,37 @@ const vi = {
   'net.diagLocal': 'Router phản hồi chậm hoặc mất gói → vấn đề nằm ở mạng nội bộ (Wi-Fi/LAN). Thử cắm dây LAN.',
   'net.diagRemote': 'Router ổn nhưng ra Internet kém → vấn đề ở nhà mạng/đường truyền.',
   'net.footnote':
-    'Nightreign chơi co-op qua P2P/relay nên không có server cố định để ping. Các mục tiêu này đo chất lượng đường truyền của bạn; đo trực tiếp tới người chơi cùng phòng sẽ có ở bước sau.',
+    'Các mục tiêu cố định này đo chất lượng đường truyền của bạn (router, nhà mạng). Kết nối thật của game nằm ở thẻ phía trên.',
   'fps.intro':
-    'Đo FPS bằng sự kiện Present của DirectX qua ETW (giống PresentMon) — không can thiệp vào game, an toàn với Easy Anti-Cheat. Windows sẽ hỏi quyền Administrator (UAC) cho tiến trình đo.',
-  'fps.start': 'Bắt đầu đo FPS',
+    'Đo FPS bằng sự kiện Present của DirectX qua ETW (giống PresentMon) — không can thiệp vào game, an toàn với Easy Anti-Cheat. Windows sẽ hỏi quyền Administrator (UAC) cho tiến trình đo; tiến trình này đo cả kết nối mạng của game.',
   'fps.stop': 'Dừng đo',
   'fps.starting': 'Đang khởi động tiến trình đo…',
   'fps.waiting': 'Đang chờ game chạy:',
   'fps.avg': 'Trung bình (30s)',
   'fps.maxFrametime': 'Frametime tệ nhất (30s)',
-  'settings.fpsProcess': 'Tiến trình game cần đo FPS',
+  'settings.fpsProcess': 'Tiến trình game cần đo (FPS & kết nối)',
   'settings.minFps': 'FPS tối thiểu',
   'settings.network': 'Mạng',
   'settings.targets': 'Mục tiêu đo (mỗi dòng một mục)',
   'settings.targetsHint': '"gateway" = router của bạn · IP/tên miền = ping ICMP · host:port = đo thời gian kết nối TCP',
   'settings.thresholds': 'Ngưỡng cảnh báo',
+  'gnet.title': 'Kết nối của game',
+  'gnet.intro':
+    'Xem Nightreign thật sự đang trao đổi dữ liệu với ai (relay Steam, người chơi khác, server) bằng sự kiện mạng của Windows qua ETW — không đụng vào game. Dùng chung tiến trình đo với FPS (cần quyền Administrator).',
+  'gnet.waiting': 'Đang chờ game chạy.',
+  'gnet.idle': 'Game chưa trao đổi dữ liệu mạng (đang ở menu hoặc chơi offline).',
+  'gnet.relay': 'Relay Steam',
+  'gnet.peer': 'Người chơi / relay',
+  'gnet.server': 'Server (TCP)',
+  'gnet.lan': 'Mạng LAN',
+  'gnet.remote': 'Địa chỉ',
+  'gnet.noReply': 'không trả lời ping',
+  'gnet.pkts': 'Gói/s vào · ra',
+  'gnet.kbps': 'kbps vào · ra',
+  'gnet.gap': 'Khoảng lặng dài nhất',
+  'gnet.footnote':
+    'Số liệu tính trên 10 giây gần nhất. "Khoảng lặng" là lúc lâu nhất không nhận được gói nào từ phía bên kia — tăng vọt khi giật lag. Ping tới relay chỉ đo tới relay, không phải tới người chơi phía sau nó. Địa chỉ IP chỉ hiển thị trên máy bạn, không lưu hay gửi đi, và không hiện trên overlay.',
+  'helper.start': 'Bắt đầu đo trong game',
 }
 
 const en: Record<keyof typeof vi, string> = {
@@ -125,21 +141,37 @@ const en: Record<keyof typeof vi, string> = {
   'net.diagLocal': 'Your router is slow or dropping packets → the problem is your local network (Wi-Fi/LAN). Try a cable.',
   'net.diagRemote': 'Router is fine but the internet path is not → the problem is your ISP/route.',
   'net.footnote':
-    'Nightreign co-op runs over P2P/relays, so there is no fixed game server to ping. These targets measure your own connection; probing your party members directly comes later.',
+    'These fixed targets measure your own line (router, ISP). The real game connections are in the card above.',
   'fps.intro':
-    'Measures FPS from DirectX Present events via ETW (like PresentMon) — nothing touches the game, so it is safe with Easy Anti-Cheat. Windows will ask for Administrator permission (UAC) for the measuring process.',
-  'fps.start': 'Start FPS measurement',
+    'Measures FPS from DirectX Present events via ETW (like PresentMon) — nothing touches the game, so it is safe with Easy Anti-Cheat. Windows will ask for Administrator permission (UAC) for the measuring process, which also watches the game network connections.',
   'fps.stop': 'Stop',
   'fps.starting': 'Starting the measuring process…',
   'fps.waiting': 'Waiting for the game:',
   'fps.avg': 'Average (30s)',
   'fps.maxFrametime': 'Worst frametime (30s)',
-  'settings.fpsProcess': 'Game process to measure',
+  'settings.fpsProcess': 'Game process to measure (FPS & connections)',
   'settings.minFps': 'Minimum FPS',
   'settings.network': 'Network',
   'settings.targets': 'Targets (one per line)',
   'settings.targetsHint': '"gateway" = your router · IP/hostname = ICMP ping · host:port = TCP connect time',
   'settings.thresholds': 'Warning thresholds',
+  'gnet.title': 'Game connections',
+  'gnet.intro':
+    'Shows who Nightreign is actually exchanging data with (Steam relays, other players, servers), from Windows network events via ETW — nothing touches the game. Uses the same measuring process as FPS (needs Administrator).',
+  'gnet.waiting': 'Waiting for the game to start.',
+  'gnet.idle': 'The game is not exchanging network data (in a menu or playing offline).',
+  'gnet.relay': 'Steam relay',
+  'gnet.peer': 'Player / relay',
+  'gnet.server': 'Server (TCP)',
+  'gnet.lan': 'LAN',
+  'gnet.remote': 'Address',
+  'gnet.noReply': 'does not answer ping',
+  'gnet.pkts': 'Packets/s in · out',
+  'gnet.kbps': 'kbps in · out',
+  'gnet.gap': 'Longest silence',
+  'gnet.footnote':
+    'Stats cover the last 10 seconds. "Silence" is the longest time nothing arrived from the other side — it spikes when the game lags. Ping to a relay measures the relay only, not the players behind it. IP addresses are shown on your machine only, never stored or sent, and not shown on the overlay.',
+  'helper.start': 'Start in-game measurement',
 }
 
 export type Key = keyof typeof vi

@@ -15,7 +15,7 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 
 | # | Module | Mô tả ngắn | Trạng thái |
 |---|--------|------------|-----------|
-| M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime | Đang làm (Phase 1) |
+| M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime; kết nối thật của game | ✅ Phase 1 |
 | M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 |
 | M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 |
 | M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 |
@@ -62,8 +62,11 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 └───────────────────────────────▲───────────────────────────────────────────┘
                                 │ Wails bindings + event bus
 ┌───────────────────────────────┴──────────── Go backend ───────────────────┐
-│ internal/netmon    ── ping/jitter/loss, (sau) phát hiện kết nối của game    │
-│ internal/fps       ── ETW consumer, tính FPS/frametime/1% low               │
+│ internal/netmon    ── ping/jitter/loss (ICMP, TCP connect)                  │
+│ internal/etw       ── phiên ETW real-time dùng chung (chỉ trong helper)     │
+│ internal/fps       ── sự kiện Present → FPS/frametime/1% low                │
+│ internal/gamenet   ── sự kiện Kernel-Network → kết nối của game             │
+│ internal/helper    ── tiến trình helper Admin: FPS + kết nối game           │
 │ internal/boss      ── thống kê, mô hình dự đoán Bayes                       │
 │ internal/relic     ── tra cứu & tính tổng chỉ số, luật cộng dồn             │
 │ internal/timer     ── state machine chu kỳ ngày/đêm, hotkey, (opt) OCR       │
@@ -80,7 +83,7 @@ NightreignCompanion/
 ├── main.go, app.go,      # entry Wails app (Wails yêu cầu package main ở thư mục gốc)
 │   overlay.go
 ├── cmd/
-│   └── nrc-cli/          # CLI tiện ích: validate data, ping test (sau: import run)
+│   └── nrc-cli/          # CLI tiện ích: validate data, ping, fps, conns (sau: import run)
 ├── internal/             # các package ở mục 2.2 + internal/ipc
 ├── data/                 # data pack gốc (Go package, embed vào binary)
 │   ├── manifest.json     # version data, version game tương ứng
@@ -103,7 +106,7 @@ nightreign-companion.exe            (process chính — giữ toàn bộ state, 
    │  internal/ipc: SSE trên 127.0.0.1:<port ngẫu nhiên>, xác thực bằng token ngẫu nhiên
    │  (địa chỉ + token truyền qua biến môi trường, không lộ trên command line)
    ├──► nightreign-companion.exe --overlay   (frameless, always-on-top, nền trong suốt)
-   └──► nightreign-companion.exe --fps-helper   (chạy Admin qua UAC; đọc ETW, POST FPS về process chính)
+   └──► nightreign-companion.exe --fps-helper   (chạy Admin qua UAC; đọc ETW, POST FPS + kết nối game về process chính)
 ```
 - Overlay tự thoát khi mất kết nối với process chính quá 3 lần liên tiếp.
 - Helper FPS dùng cùng file exe (1 file duy nhất để phát hành), chỉ helper chạy quyền Admin — app chính không cần.
@@ -121,9 +124,9 @@ Các module được trình bày theo **thứ tự làm**: M1 → M5 → M3 → 
 **Bài toán:** Nightreign dùng server của FromSoftware/Bandai Namco cho matchmaking, còn phiên co-op là P2P (có thể đi qua relay của Steam). Vì vậy "ping tới game" thực chất là ping tới **peer** hoặc **relay**, không phải 1 server cố định.
 
 **Hiện trạng (2026-10-10):**
-- ✅ Đã đo: ping/jitter/loss tới các mục tiêu cố định (mặc định `gateway`, `1.1.1.1`, `8.8.8.8`, tối đa 6 mục tiêu) — tức là **chất lượng mạng của máy/nhà mạng**, chưa phải kết nối thực của Nightreign.
-- ✅ Đã đo: FPS / frametime / 1% low của `nightreign.exe` qua ETW (helper Admin), hiện cả trên overlay.
-- ❌ Chưa làm: phát hiện và đo kết nối thực của game (peer / relay / server matchmaking).
+- ✅ Ping/jitter/loss tới các mục tiêu cố định (mặc định `gateway`, `1.1.1.1`, `8.8.8.8`, tối đa 6) — đo **chất lượng đường truyền của máy/nhà mạng**.
+- ✅ FPS / frametime / 1% low của `nightreign.exe` qua ETW (helper Admin), hiện cả trên overlay.
+- ✅ Kết nối thật của game: các endpoint `nightreign.exe` đang trao đổi dữ liệu (relay Steam / peer / server TCP), gói/s, kbps, **khoảng lặng dài nhất** và ping tới peer/relay. ⚠️ Chưa kiểm chứng trong trận thật — xác minh bằng `nrc-cli conns` (terminal Admin) khi đang chơi.
 
 **Tính năng:**
 | Tính năng | Cách làm | Ưu tiên |
@@ -131,8 +134,10 @@ Các module được trình bày theo **thứ tự làm**: M1 → M5 → M3 → 
 | ✅ Ping/jitter/loss tới các endpoint cố định (gateway, DNS, host tuỳ chọn) | ICMP qua `IcmpSendEcho` (iphlpapi — không cần Admin), TCP connect time cho mục tiêu `host:port`; cửa sổ trượt 60 mẫu + tổng phiên | P0 |
 | ✅ **FPS / frametime / 1% low** | Sự kiện `Present_Start` (ID 42) của provider Microsoft-Windows-DXGI qua phiên ETW real-time — giống PresentMon; lọc theo PID của `nightreign.exe`; cửa sổ 30s (FPS 1s, trung bình, 1% low, frametime tệ nhất) | **P0** (D3) |
 | ✅ Overlay mini | Góc màn hình: ping/loss từng mục tiêu + FPS | P1 |
-| Phát hiện kết nối của game | **TCP:** `GetExtendedTcpTable` cho ra địa chỉ remote (server matchmaking). **UDP:** `GetExtendedUdpTable` **chỉ có cổng local, không có địa chỉ remote** (UDP không có kết nối) → để thấy peer/relay phải dùng ETW provider `Microsoft-Windows-Kernel-Network` (sự kiện gửi/nhận UDP kèm PID + địa chỉ đích), chạy trong helper Admin đã có. Chỉ đọc dữ liệu của OS, không đụng vào game | P1 |
-| Đo latency tới peer/relay | Ping IP phát hiện được ở trên. Nhiều peer/relay chặn ICMP → hiển thị "không đo được" thay vì số sai | P1 |
+| ✅ Phát hiện kết nối của game | ETW provider `Microsoft-Windows-Kernel-Network` (event 10/11/26/27 TCP, 42/43/58/59 UDP; PID lấy từ payload) trong helper Admin đã có. Không dùng `GetExtendedUdpTable` vì UDP **chỉ có cổng local, không có địa chỉ remote**. Phía remote xác định bằng cách so với địa chỉ của máy. Phân loại: relay Steam (dải IP của Valve, AS32590), peer, server TCP, LAN. Chỉ đọc dữ liệu của OS, không đụng vào game | P1 |
+| ✅ Chất lượng kết nối game | Gói/s, kbps vào/ra, và **khoảng lặng dài nhất** (thời gian lâu nhất không nhận gói nào từ phía bên kia trong 10s, kể cả lúc mình vẫn gửi mà không có hồi đáp) — đo thụ động, có số kể cả khi peer chặn ping. Ngưỡng tạm: ≥ 400 ms cảnh báo, ≥ 1000 ms kém | P1 |
+| ✅ Ping tới peer/relay | Process chính ping tối đa 4 endpoint UDP bận nhất (IPv4, không cần Admin). Peer/relay chặn ICMP → hiển thị "không trả lời ping" thay vì 100% mất gói | P1 |
+| ✅ Overlay: dòng kết nối game | Loại kết nối + ping (hoặc khoảng lặng nếu không ping được). **Không hiện IP** trên overlay (tránh lộ IP người chơi khác khi stream) | P1 |
 | Đánh giá chất lượng mạng nhà | Bufferbloat test, packet loss dài hạn, gợi ý (Wi-Fi vs LAN, NAT type) | P2 |
 | Lịch sử & biểu đồ | Lưu vào SQLite, xem lại khi run bị lag | P2 |
 
@@ -141,7 +146,9 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 **Chẩn đoán:** so sánh mục tiêu `gateway` (router) với các mục tiêu Internet để phân biệt lỗi mạng nội bộ (Wi-Fi/LAN) với lỗi nhà mạng.
 
 ⚠️ Lưu ý: Nightreign khoá 60 FPS — FPS chủ yếu để phát hiện tụt khung hình, không phải benchmark.
-⚠️ Cần xác minh: Nightreign đi P2P trực tiếp hay qua Steam Datagram Relay; nếu qua relay thì "ping tới game" = ping tới relay của Valve, và relay có trả lời ICMP hay không.
+⚠️ Cần xác minh trong trận thật: Nightreign đi P2P trực tiếp hay qua Steam Datagram Relay; relay có trả lời ICMP hay không; ngưỡng khoảng lặng 400/1000 ms có hợp lý không.
+
+**Quyền riêng tư:** địa chỉ IP của peer chỉ hiện trong cửa sổ chính trên máy người dùng (như `netstat`), không lưu vào DB, không gửi đi (kể cả M6), không hiện trên overlay.
 
 ---
 
@@ -310,11 +317,11 @@ App (queue local trong SQLite, gửi batch khi có mạng)
 | Phase | Nội dung | Kết quả |
 |-------|----------|---------|
 | **0 — Nền móng** ✅ | Khung Wails + Svelte, cửa sổ chính + cửa sổ overlay, `gamedata`, `store`, `config`, `ipc`, CI (lint, test, validate data), workflow release | App rỗng chạy được |
-| **1 — Connection** 🟡 | ✅ M1 ping/jitter/loss tới mục tiêu cố định · ✅ FPS qua ETW (helper Admin) · ✅ overlay | Dùng được trong game |
+| **1 — Connection** ✅ | M1 ping/jitter/loss tới mục tiêu cố định · FPS qua ETW (helper Admin) · kết nối thật của game (ETW Kernel-Network) + ping peer/relay · overlay | Dùng được trong game |
 | **2 — Boss** | M5: xác minh `bosses`/`boss_priors`, form ghi run (local), thống kê, dự đoán Bayes, weakness cheat sheet trên overlay | Dự đoán Nightlord |
 | **3 — Relic** | M3: xác minh `relic_effects`, tra cứu/lọc, Relic Calculator, curse của Deep relic, lưu bộ relic cá nhân | Tra cứu relic |
 | **4 — Timer** | M2: hotkey toàn cục + state machine + overlay đếm ngược + cảnh báo âm thanh; tự điền thời gian vào run của M5 | Bản 1.0 (base game) |
-| **5 — Nâng cao** | M1: phát hiện kết nối game (TCP table + ETW Kernel-Network) & đo peer/relay, biểu đồ lịch sử · M2: OCR auto-sync | Bản 1.x |
+| **5 — Nâng cao** | M1: biểu đồ lịch sử (SQLite), bufferbloat test, ping IPv6 · M2: OCR auto-sync | Bản 1.x |
 | **6 — Cộng đồng** | M6 Community Data opt-in (server + aggregates) | Bản 1.x |
 | **7 — DLC** | Data cho *The Forsaken Hollows* (nhân vật, Nightlord, relic, boss mới) | Milestone kế tiếp |
 
@@ -356,8 +363,8 @@ App (queue local trong SQLite, gửi batch khi có mạng)
 | D7 | 2026-10-09 | Quyền Admin | App chính chạy quyền thường; chỉ helper `--fps-helper` (cùng exe) chạy Admin qua UAC khi bật FPS |
 | D8 | 2026-10-10 | Builds | **Bỏ module M4** — không có nguồn dữ liệu build dùng được |
 | D9 | 2026-10-10 | Thứ tự | Sau M1: **Boss (M5) → Relic (M3) → Timer (M2)** |
+| D10 | 2026-10-10 | Kết nối game | Làm ngay trong Phase 1 bằng ETW Kernel-Network trong helper Admin sẵn có; IP peer không hiện trên overlay |
 
 ### Còn mở
 1. **Tên hiển thị / branding** — giữ "Nightreign Companion"? (lưu ý tránh dùng logo chính thức của game).
 2. **Phát hành** — open-source trên GitHub? (có lợi cho việc cộng đồng đóng góp data pack).
-3. **Phát hiện kết nối game** — có nên kéo lên sớm hơn Phase 5 không, vì hiện M1 mới đo mạng nhà chứ chưa đo kết nối thực của Nightreign?

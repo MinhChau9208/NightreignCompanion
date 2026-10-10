@@ -1,17 +1,6 @@
 package fps
 
-import "time"
-
-// SessionName is the ETW session owned by the helper.
-const SessionName = "NightreignCompanion-FPS"
-
-// Message types exchanged with the main process over internal/ipc.
-const (
-	MsgStats = "fps:stats" // helper → main: Status, once per second
-	MsgStop  = "fps:stop"  // main → helper: exit
-)
-
-// Helper states.
+// Helper states, shared by the FPS and game-network reports.
 const (
 	StateStarting = "starting"
 	StateWaiting  = "waiting" // target process not running
@@ -19,8 +8,8 @@ const (
 	StateError    = "error"
 )
 
-// historyLen is how many per-second FPS samples the helper keeps.
-const historyLen = 60
+// MsgStats is the helper → main message carrying a Status once per second.
+const MsgStats = "fps:stats"
 
 // Status is what the helper reports once per second.
 type Status struct {
@@ -30,10 +19,4 @@ type Status struct {
 	FrameStats
 	History []float64 `json:"history"` // FPS per second, oldest first
 	Error   string    `json:"error,omitempty"`
-}
-
-type HelperConfig struct {
-	Addr, Token string // main process IPC endpoint
-	Process     string // image name to measure, e.g. nightreign.exe
-	Window      time.Duration
 }
