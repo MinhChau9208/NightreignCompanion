@@ -21,13 +21,13 @@ func classify(proto string, a netip.Addr) string {
 	if a.IsPrivate() || a.IsLinkLocalUnicast() {
 		return KindLAN
 	}
+	if proto == "tcp" {
+		return KindServer // Steam relays carry UDP; TCP to Valve is Steam's own services
+	}
 	for _, p := range valveRanges {
 		if p.Contains(a) {
 			return KindRelay
 		}
-	}
-	if proto == "tcp" {
-		return KindServer
 	}
 	return KindPeer
 }

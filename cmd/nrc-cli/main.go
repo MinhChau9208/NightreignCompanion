@@ -8,10 +8,14 @@ package main
 
 import (
 	"context"
+	"encoding/binary"
 	"encoding/json"
 	"flag"
 	"fmt"
+	"maps"
 	"os"
+	"slices"
+	"sync"
 	"time"
 
 	"github.com/MinhChau9208/NightreignCompanion/internal/config"
@@ -133,6 +137,7 @@ func measureFPS(args []string) {
 func measureConns(args []string) {
 	fs := flag.NewFlagSet("conns", flag.ExitOnError)
 	seconds := fs.Int("n", 20, "seconds to watch")
+	raw := fs.Bool("raw", false, "also dump raw Kernel-Network events (for debugging the parser)")
 	fs.Parse(args)
 	process := config.Defaults().FPS.Process
 	if fs.NArg() > 0 {
@@ -148,7 +153,11 @@ func measureConns(args []string) {
 	if addrs, err := gamenet.LocalAddrs(); err == nil {
 		tr.SetLocal(addrs)
 	}
+	dump := &rawDump{target: pid}
 	sess, err := etw.StartSession(helper.SessionName+"-CLI", func(e *etw.Event) {
+		if *raw {
+			dump.add(e)
+		}
 		if p, ok := gamenet.ParseEvent(e); ok && p.PID == pid {
 			tr.Add(p)
 		}
@@ -174,7 +183,60 @@ func measureConns(args []string) {
 				f.Proto, f.Kind, f.Remote, f.PktsInPerSec, f.PktsOutPerSec, f.KbpsIn, f.KbpsOut, f.MaxGapMs)
 		}
 	}
+	if *raw {
+		dump.print()
+	}
 }
 
 // nowFiletime is the current time in FILETIME ticks, the clock ETW uses.
 func nowFiletime() int64 { return time.Now().UnixNano()/100 + 116444736000000000 }
+
+// rawDump collects Kernel-Network events to check the parser against.
+type rawDump struct {
+	target uint32
+	mu     sync.Mutex
+	all    map[uint16]int // events per ID, every process
+	mine   map[uint16]int // events per ID whose payload PID is the target
+	header map[uint16]int // events per ID whose header PID is the target
+	sample []string
+}
+
+func (d *rawDump) add(e *etw.Event) {
+	if !gamenet.FromProvider(e) {
+		return
+	}
+	data := e.UserData()
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	if d.all == nil {
+		d.all, d.mine, d.header = map[uint16]int{}, map[uint16]int{}, map[uint16]int{}
+	}
+	d.all[e.ID()]++
+	if e.ProcessID() == d.target {
+		d.header[e.ID()]++
+	}
+	if len(data) < 4 || binary.LittleEndian.Uint32(data) != d.target {
+		return
+	}
+	d.mine[e.ID()]++
+	if len(d.sample) < 40 {
+		line := fmt.Sprintf("id=%-3d hdrpid=%-6d len=%-3d % x", e.ID(), e.ProcessID(), len(data), data[:min(len(data), 44)])
+		if p, ok := gamenet.ParseEvent(e); ok {
+			line += fmt.Sprintf("\n       -> %s out=%v size=%d src=%v dst=%v", p.Proto, p.Out, p.Size, p.Src, p.Dst)
+		}
+		d.sample = append(d.sample, line)
+	}
+}
+
+func (d *rawDump) print() {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	fmt.Printf("\nKernel-Network events by ID (all processes / payload PID = target / header PID = target):\n")
+	for _, id := range slices.Sorted(maps.Keys(d.all)) {
+		fmt.Printf("  id %-3d %8d %8d %8d\n", id, d.all[id], d.mine[id], d.header[id])
+	}
+	fmt.Printf("\nfirst %d events of the target:\n", len(d.sample))
+	for _, l := range d.sample {
+		fmt.Println("  " + l)
+	}
+}

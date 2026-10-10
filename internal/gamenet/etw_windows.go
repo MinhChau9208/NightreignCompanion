@@ -32,6 +32,9 @@ func ParseEvent(e *etw.Event) (Packet, bool) {
 	return parse(e.ID(), e.UserData(), e.TimeStamp())
 }
 
+// FromProvider reports whether e comes from Kernel-Network, whatever its ID.
+func FromProvider(e *etw.Event) bool { return e.Provider() == kernelNetwork.GUID }
+
 // LocalAddrs lists this machine's interface addresses.
 func LocalAddrs() ([]netip.Addr, error) {
 	addrs, err := net.InterfaceAddrs()

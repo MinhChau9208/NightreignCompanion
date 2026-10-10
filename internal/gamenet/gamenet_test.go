@@ -151,15 +151,16 @@ func TestFlowLimit(t *testing.T) {
 }
 
 func TestClassify(t *testing.T) {
-	cases := map[string]struct{ proto, ip string }{
-		KindRelay:  {"udp", "162.254.193.6"},
-		KindPeer:   {"udp", "203.0.113.7"},
-		KindServer: {"tcp", "203.0.113.7"},
-		KindLAN:    {"udp", "10.0.0.5"},
+	cases := []struct{ proto, ip, want string }{
+		{"udp", "162.254.193.6", KindRelay},
+		{"udp", "203.0.113.7", KindPeer},
+		{"tcp", "203.0.113.7", KindServer},
+		{"udp", "10.0.0.5", KindLAN},
+		{"tcp", "103.28.54.100", KindServer}, // Valve range, but TCP: Steam services, not a relay
 	}
-	for want, c := range cases {
-		if got := classify(c.proto, netip.MustParseAddr(c.ip)); got != want {
-			t.Errorf("classify(%s %s) = %s, want %s", c.proto, c.ip, got, want)
+	for _, c := range cases {
+		if got := classify(c.proto, netip.MustParseAddr(c.ip)); got != c.want {
+			t.Errorf("classify(%s %s) = %s, want %s", c.proto, c.ip, got, c.want)
 		}
 	}
 }
