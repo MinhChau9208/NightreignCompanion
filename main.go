@@ -15,16 +15,23 @@ import (
 var assets embed.FS
 
 // version is overridden at build time: -ldflags "-X main.version=1.2.3".
-var version = "0.1.0-dev"
+var version = "0.1.1-dev"
 
 func main() {
 	overlay := flag.Bool("overlay", false, "run as the in-game overlay window (started by the main app)")
+	fpsHelper := flag.Bool("fps-helper", false, "run as the elevated FPS helper (started by the main app)")
+	ipcAddr := flag.String("ipc-addr", "", "main process IPC address (fps helper)")
+	ipcToken := flag.String("ipc-token", "", "main process IPC token (fps helper)")
+	process := flag.String("process", "nightreign.exe", "process to measure (fps helper)")
 	flag.Parse()
 
 	var err error
-	if *overlay {
+	switch {
+	case *fpsHelper:
+		err = runFPSHelper(*ipcAddr, *ipcToken, *process)
+	case *overlay:
 		err = runOverlay()
-	} else {
+	default:
 		err = runMain()
 	}
 	if err != nil {
@@ -57,7 +64,7 @@ func runOverlay() error {
 	return wails.Run(&options.App{
 		Title:            "Nightreign Companion Overlay",
 		Width:            300,
-		Height:           110,
+		Height:           170,
 		DisableResize:    true,
 		Frameless:        true,
 		AlwaysOnTop:      true,

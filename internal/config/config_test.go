@@ -72,3 +72,43 @@ func TestOpenPartialFileKeepsDefaults(t *testing.T) {
 		t.Errorf("partial file not merged onto defaults: %+v", got)
 	}
 }
+
+func TestValidatePingTargets(t *testing.T) {
+	cases := []struct {
+		name    string
+		targets []string
+		ok      bool
+	}{
+		{"defaults", Defaults().Network.PingTargets, true},
+		{"tcp target", []string{"example.com:443"}, true},
+		{"empty list", nil, false},
+		{"blank entry", []string{"1.1.1.1", " "}, false},
+		{"duplicate", []string{"1.1.1.1", "1.1.1.1"}, false},
+		{"too many", []string{"a", "b", "c", "d", "e", "f", "g"}, false},
+	}
+	for _, tc := range cases {
+		s := Defaults()
+		s.Network.PingTargets = tc.targets
+		if err := s.Validate(); (err == nil) != tc.ok {
+			t.Errorf("%s: err = %v, want ok=%v", tc.name, err, tc.ok)
+		}
+	}
+}
+
+func TestValidateFPSProcess(t *testing.T) {
+	for name, ok := range map[string]bool{
+		"nightreign.exe":       true,
+		"eldenring_v2-x.EXE":   true,
+		"":                     false,
+		"nightreign":           false,
+		`C:\Games\x.exe`:       false,
+		"a b.exe":              false,
+		`x.exe" --evil "y.exe`: false,
+	} {
+		s := Defaults()
+		s.FPS.Process = name
+		if err := s.Validate(); (err == nil) != ok {
+			t.Errorf("%q: err = %v, want ok=%v", name, err, ok)
+		}
+	}
+}

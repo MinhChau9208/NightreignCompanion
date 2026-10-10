@@ -8,7 +8,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
+
+	"github.com/MinhChau9208/NightreignCompanion/internal/netmon"
 )
 
 // AppDirName is the folder created under the OS user config directory.
@@ -22,7 +25,13 @@ type Settings struct {
 	Overlay  OverlaySettings `json:"overlay"`
 	Hotkeys  Hotkeys         `json:"hotkeys"`
 	Network  NetworkSettings `json:"network"`
+	FPS      FPSSettings     `json:"fps"`
 	Sharing  Sharing         `json:"sharing"`
+}
+
+// FPSSettings configures the elevated FPS helper.
+type FPSSettings struct {
+	Process string `json:"process"` // image name, e.g. nightreign.exe
 }
 
 type OverlaySettings struct {
@@ -72,11 +81,15 @@ func Defaults() Settings {
 			Overlay:    "Ctrl+Shift+O",
 		},
 		Network: NetworkSettings{
-			PingTargets: []string{"1.1.1.1", "8.8.8.8"},
+			PingTargets: []string{"gateway", "1.1.1.1", "8.8.8.8"},
 			Thresholds:  Thresholds{PingMs: 150, JitterMs: 30, LossPct: 2, MinFPS: 50},
 		},
+		FPS: FPSSettings{Process: "nightreign.exe"},
 	}
 }
+
+// MaxPingTargets caps how many targets are probed at once (1 probe/s each).
+const MaxPingTargets = 6
 
 // Validate reports settings that the app cannot work with.
 func (s Settings) Validate() error {
@@ -87,11 +100,42 @@ func (s Settings) Validate() error {
 	if s.Overlay.Opacity < 0.2 || s.Overlay.Opacity > 1 {
 		errs = append(errs, fmt.Errorf("overlay opacity %v: must be between 0.2 and 1", s.Overlay.Opacity))
 	}
+	if n := len(s.Network.PingTargets); n == 0 || n > MaxPingTargets {
+		errs = append(errs, fmt.Errorf("ping targets: need 1 to %d, got %d", MaxPingTargets, n))
+	}
+	seen := map[string]bool{}
+	for _, tgt := range s.Network.PingTargets {
+		if _, _, _, err := netmon.ParseTarget(tgt); err != nil {
+			errs = append(errs, err)
+		}
+		if seen[tgt] {
+			errs = append(errs, fmt.Errorf("ping target %q listed twice", tgt))
+		}
+		seen[tgt] = true
+	}
+	if !validExeName(s.FPS.Process) {
+		errs = append(errs, fmt.Errorf("fps process %q: must be a file name like nightreign.exe", s.FPS.Process))
+	}
 	t := s.Network.Thresholds
 	if t.PingMs <= 0 || t.JitterMs <= 0 || t.LossPct < 0 || t.MinFPS <= 0 {
 		errs = append(errs, errors.New("network thresholds must be positive"))
 	}
 	return errors.Join(errs...)
+}
+
+// validExeName accepts a bare image name. It ends up on the elevated
+// helper's command line, so anything beyond [A-Za-z0-9._-] is refused.
+func validExeName(name string) bool {
+	if len(name) < 5 || len(name) > 64 || !strings.HasSuffix(strings.ToLower(name), ".exe") {
+		return false
+	}
+	for _, r := range name {
+		ok := r >= 'a' && r <= 'z' || r >= 'A' && r <= 'Z' || r >= '0' && r <= '9' || r == '.' || r == '_' || r == '-'
+		if !ok {
+			return false
+		}
+	}
+	return true
 }
 
 // Store reads and writes Settings to a single JSON file.

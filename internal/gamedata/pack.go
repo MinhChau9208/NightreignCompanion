@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io/fs"
 
-	"github.com/Chau9208/nightreign-companion/data"
+	"github.com/MinhChau9208/NightreignCompanion/data"
 )
 
 // Pack is a fully loaded and validated data pack.

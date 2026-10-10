@@ -1,5 +1,17 @@
 export namespace config {
 	
+	export class FPSSettings {
+	    process: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new FPSSettings(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.process = source["process"];
+	    }
+	}
 	export class Hotkeys {
 	    timerStart: string;
 	    timerSync: string;
@@ -107,6 +119,7 @@ export namespace config {
 	    overlay: OverlaySettings;
 	    hotkeys: Hotkeys;
 	    network: NetworkSettings;
+	    fps: FPSSettings;
 	    sharing: Sharing;
 	
 	    static createFrom(source: any = {}) {
@@ -119,6 +132,7 @@ export namespace config {
 	        this.overlay = this.convertValues(source["overlay"], OverlaySettings);
 	        this.hotkeys = this.convertValues(source["hotkeys"], Hotkeys);
 	        this.network = this.convertValues(source["network"], NetworkSettings);
+	        this.fps = this.convertValues(source["fps"], FPSSettings);
 	        this.sharing = this.convertValues(source["sharing"], Sharing);
 	    }
 	
@@ -198,6 +212,85 @@ export namespace main {
 	        this.mode = source["mode"];
 	        this.configDir = source["configDir"];
 	        this.data = this.convertValues(source["data"], gamedata.Stats);
+	        this.error = source["error"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
+export namespace netmon {
+	
+	export class Probe {
+	    method: string;
+	    address: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Probe(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.method = source["method"];
+	        this.address = source["address"];
+	    }
+	}
+	export class Stats {
+	    target: string;
+	    probe: Probe;
+	    lastMs: number;
+	    lastLost: boolean;
+	    avgMs: number;
+	    minMs: number;
+	    maxMs: number;
+	    jitterMs: number;
+	    lossPct: number;
+	    sent: number;
+	    received: number;
+	    totalSent: number;
+	    totalLost: number;
+	    history: number[];
+	    level: string;
+	    error?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Stats(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.target = source["target"];
+	        this.probe = this.convertValues(source["probe"], Probe);
+	        this.lastMs = source["lastMs"];
+	        this.lastLost = source["lastLost"];
+	        this.avgMs = source["avgMs"];
+	        this.minMs = source["minMs"];
+	        this.maxMs = source["maxMs"];
+	        this.jitterMs = source["jitterMs"];
+	        this.lossPct = source["lossPct"];
+	        this.sent = source["sent"];
+	        this.received = source["received"];
+	        this.totalSent = source["totalSent"];
+	        this.totalLost = source["totalLost"];
+	        this.history = source["history"];
+	        this.level = source["level"];
 	        this.error = source["error"];
 	    }
 	

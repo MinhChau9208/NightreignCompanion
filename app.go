@@ -12,10 +12,10 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 
-	"github.com/Chau9208/nightreign-companion/internal/config"
-	"github.com/Chau9208/nightreign-companion/internal/gamedata"
-	"github.com/Chau9208/nightreign-companion/internal/ipc"
-	"github.com/Chau9208/nightreign-companion/internal/store"
+	"github.com/MinhChau9208/NightreignCompanion/internal/config"
+	"github.com/MinhChau9208/NightreignCompanion/internal/gamedata"
+	"github.com/MinhChau9208/NightreignCompanion/internal/ipc"
+	"github.com/MinhChau9208/NightreignCompanion/internal/store"
 )
 
 type Mode string
@@ -39,6 +39,8 @@ type App struct {
 	db     *store.DB
 	hub    *ipc.Server
 	ovl    overlayProc
+	net    netWatcher
+	fps    fpsHelper
 
 	initErr error
 }
@@ -79,7 +81,9 @@ func (a *App) init() error {
 	if a.hub, err = ipc.Listen(); err != nil {
 		return fmt.Errorf("ipc: %w", err)
 	}
+	a.hub.OnMessage(a.onHelperMessage)
 	go a.publishStatus()
+	a.startNet(a.cfg.Get().Network)
 	return nil
 }
 
@@ -92,8 +96,9 @@ func (a *App) domReady(ctx context.Context) {
 
 func (a *App) shutdown(context.Context) {
 	a.cancel()
-	if a.mode == ModeMain {
+	if a.mode == ModeMain && a.hub != nil {
 		a.ovl.stop(a.hub)
+		a.hub.Publish("fps:stop", nil)
 	}
 	if a.hub != nil {
 		a.hub.Close()
@@ -197,6 +202,7 @@ func (a *App) SaveSettings(s config.Settings) error {
 	if err := a.cfg.Save(s); err != nil {
 		return err
 	}
+	a.startNet(s.Network)
 	return a.hub.Publish("settings", s)
 }
 
