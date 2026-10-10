@@ -15,7 +15,7 @@ func TestOpenMissingFileUsesDefaults(t *testing.T) {
 	if got.Language != "vi" {
 		t.Errorf("language = %q, want vi", got.Language)
 	}
-	if got.Sharing.Bosses || got.Sharing.Builds || got.Sharing.ClearTimes || got.Sharing.Asked {
+	if got.Sharing.Bosses || got.Sharing.Relics || got.Sharing.ClearTimes || got.Sharing.Asked {
 		t.Errorf("sharing must default to off, got %+v", got.Sharing)
 	}
 }
@@ -38,7 +38,7 @@ func TestSaveRoundTrip(t *testing.T) {
 		t.Fatal(err)
 	}
 	got := reopened.Get()
-	if got.Language != "en" || !got.Sharing.Bosses || got.Sharing.Builds {
+	if got.Language != "en" || !got.Sharing.Bosses || got.Sharing.Relics {
 		t.Errorf("round trip mismatch: %+v", got)
 	}
 }

@@ -88,7 +88,7 @@
       <h2>{$t('settings.sharing')}</h2>
       <p>{$t('settings.sharingBody')}</p>
       <label class="check"><input type="checkbox" bind:checked={s.sharing.bosses} /> {$t('settings.shareBosses')}</label>
-      <label class="check"><input type="checkbox" bind:checked={s.sharing.builds} /> {$t('settings.shareBuilds')}</label>
+      <label class="check"><input type="checkbox" bind:checked={s.sharing.relics} /> {$t('settings.shareRelics')}</label>
       <label class="check"><input type="checkbox" bind:checked={s.sharing.clearTimes} /> {$t('settings.shareClear')}</label>
       <p class="muted">{$t('settings.sharingPending')}</p>
     </section>

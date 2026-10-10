@@ -99,7 +99,7 @@ export namespace config {
 	export class Sharing {
 	    asked: boolean;
 	    bosses: boolean;
-	    builds: boolean;
+	    relics: boolean;
 	    clearTimes: boolean;
 	
 	    static createFrom(source: any = {}) {
@@ -110,7 +110,7 @@ export namespace config {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.asked = source["asked"];
 	        this.bosses = source["bosses"];
-	        this.builds = source["builds"];
+	        this.relics = source["relics"];
 	        this.clearTimes = source["clearTimes"];
 	    }
 	}

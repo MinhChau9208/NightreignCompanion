@@ -65,7 +65,7 @@ type Thresholds struct {
 type Sharing struct {
 	Asked      bool `json:"asked"`
 	Bosses     bool `json:"bosses"`
-	Builds     bool `json:"builds"`
+	Relics     bool `json:"relics"`
 	ClearTimes bool `json:"clearTimes"`
 }
 
