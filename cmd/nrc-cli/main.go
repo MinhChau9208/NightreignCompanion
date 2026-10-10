@@ -4,6 +4,7 @@
 //	nrc-cli ping [-n count] [target ...]   measure ping/jitter/loss (default: gateway 1.1.1.1 8.8.8.8)
 //	nrc-cli fps [-n seconds] [process]     measure FPS via ETW (run from an Administrator terminal)
 //	nrc-cli conns [-n seconds] [process]   list the game's network connections via ETW (Administrator)
+//	nrc-cli udp [-n seconds]               UDP traffic per process, to see who carries co-op data (Administrator)
 package main
 
 import (
@@ -40,13 +41,15 @@ func main() {
 		measureFPS(os.Args[2:])
 	case "conns":
 		measureConns(os.Args[2:])
+	case "udp":
+		measureUDP(os.Args[2:])
 	default:
 		usage()
 	}
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [process]")
+	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [process] | udp [-n seconds]")
 	os.Exit(2)
 }
 
