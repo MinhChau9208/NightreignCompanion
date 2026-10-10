@@ -10,11 +10,10 @@
   type Page = {id: string; label: Key; phase?: string}
   const pages: Page[] = [
     {id: 'dashboard', label: 'nav.dashboard'},
-    {id: 'timer', label: 'nav.timer', phase: 'Phase 1'},
-    {id: 'relics', label: 'nav.relics', phase: 'Phase 1'},
     {id: 'network', label: 'nav.network'},
-    {id: 'builds', label: 'nav.builds', phase: 'Phase 2'},
     {id: 'bosses', label: 'nav.bosses', phase: 'Phase 2'},
+    {id: 'relics', label: 'nav.relics', phase: 'Phase 3'},
+    {id: 'timer', label: 'nav.timer', phase: 'Phase 4'},
     {id: 'settings', label: 'nav.settings'},
   ]
   let current = pages[0]

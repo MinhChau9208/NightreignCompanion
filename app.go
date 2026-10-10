@@ -14,6 +14,7 @@ import (
 
 	"github.com/MinhChau9208/NightreignCompanion/internal/config"
 	"github.com/MinhChau9208/NightreignCompanion/internal/gamedata"
+	"github.com/MinhChau9208/NightreignCompanion/internal/helper"
 	"github.com/MinhChau9208/NightreignCompanion/internal/ipc"
 	"github.com/MinhChau9208/NightreignCompanion/internal/store"
 )
@@ -41,6 +42,7 @@ type App struct {
 	ovl    overlayProc
 	net    netWatcher
 	fps    fpsHelper
+	gnet   gameNetWatcher
 
 	initErr error
 }
@@ -98,7 +100,7 @@ func (a *App) shutdown(context.Context) {
 	a.cancel()
 	if a.mode == ModeMain && a.hub != nil {
 		a.ovl.stop(a.hub)
-		a.hub.Publish("fps:stop", nil)
+		a.hub.Publish(helper.MsgStop, nil)
 	}
 	if a.hub != nil {
 		a.hub.Close()

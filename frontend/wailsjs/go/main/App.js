@@ -6,6 +6,10 @@ export function FPSRunning() {
   return window['go']['main']['App']['FPSRunning']();
 }
 
+export function GameNet() {
+  return window['go']['main']['App']['GameNet']();
+}
+
 export function GetSettings() {
   return window['go']['main']['App']['GetSettings']();
 }

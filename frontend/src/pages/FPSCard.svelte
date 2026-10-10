@@ -51,7 +51,7 @@
 
   {#if !$running}
     <p class="muted">{$t('fps.intro')}</p>
-    <button class="primary" disabled={busy} on:click={start}>{$t('fps.start')}</button>
+    <button class="primary" disabled={busy} on:click={start}>{$t('helper.start')}</button>
     {#if startError}<p class="err">{startError}</p>{/if}
     {#if s?.state === 'error'}<p class="err">{s.error}</p>{/if}
   {:else}

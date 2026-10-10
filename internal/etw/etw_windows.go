@@ -1,4 +1,8 @@
-package fps
+// Package etw runs real-time ETW sessions: the OS event stream that tools
+// like PresentMon read. Consuming ETW never touches the game process, so it
+// is safe with Easy Anti-Cheat, but creating a session needs Administrator
+// rights; that is why it runs in the elevated helper (docs/SCOPE.md §2.4).
+package etw
 
 import (
 	"errors"
@@ -8,15 +12,6 @@ import (
 
 	"golang.org/x/sys/windows"
 )
-
-// Microsoft-Windows-DXGI. Present_Start (event 42) fires for every
-// IDXGISwapChain::Present call — D3D10/11/12 games, including Nightreign (DX12).
-var dxgiProvider = windows.GUID{
-	Data1: 0xCA11C036, Data2: 0x0102, Data3: 0x4A2D,
-	Data4: [8]byte{0xA6, 0xAD, 0xF0, 0x3C, 0xFE, 0xD5, 0xD3, 0xC9},
-}
-
-const presentStartID = 42
 
 var (
 	advapi32           = windows.NewLazySystemDLL("advapi32.dll")
@@ -33,7 +28,6 @@ const (
 	eventTraceRealTimeMode       = 0x00000100
 	eventTraceControlStop        = 1
 	eventControlCodeEnable       = 1
-	traceLevelVerbose            = 5
 	processTraceModeRealTime     = 0x00000100
 	processTraceModeEventRecord  = 0x10000000
 	invalidProcessTraceHandle    = ^uint64(0)
@@ -47,7 +41,7 @@ const (
 
 // ErrNeedsAdmin is returned when the ETW session cannot be created because
 // the process is not elevated.
-var ErrNeedsAdmin = errors.New("FPS measurement needs Administrator rights")
+var ErrNeedsAdmin = errors.New("ETW tracing needs Administrator rights")
 
 // The structs below mirror the Win32 x64 layouts (sizes asserted in tests).
 
@@ -179,26 +173,63 @@ type eventHeader struct {
 	ActivityID      windows.GUID
 }
 
-// eventRecord is the prefix of EVENT_RECORD we read.
+// eventRecord mirrors EVENT_RECORD.
 type eventRecord struct {
-	EventHeader eventHeader
+	EventHeader       eventHeader
+	BufferContext     uint32
+	ExtendedDataCount uint16
+	UserDataLength    uint16
+	ExtendedData      uintptr
+	UserDataPtr       unsafe.Pointer
+	UserContext       uintptr
 }
+
+// Event is one event as delivered to a Handler. It points into ETW's
+// buffer and is only valid during the call.
+type Event eventRecord
+
+func (e *Event) Provider() windows.GUID { return e.EventHeader.ProviderID }
+func (e *Event) ID() uint16             { return e.EventHeader.EventDescriptor.ID }
+
+// ProcessID is the process that was running when the event was logged. For
+// kernel providers this is often not the process the event is about; those
+// carry the PID in their payload.
+func (e *Event) ProcessID() uint32 { return e.EventHeader.ProcessID }
+
+// TimeStamp is in FILETIME ticks (100 ns since 1601).
+func (e *Event) TimeStamp() int64 { return e.EventHeader.TimeStamp }
+
+// UserData is the event payload; copy anything kept past the call.
+func (e *Event) UserData() []byte {
+	if e.UserDataPtr == nil || e.UserDataLength == 0 {
+		return nil
+	}
+	return unsafe.Slice((*byte)(e.UserDataPtr), e.UserDataLength)
+}
+
+// Handler is called on the ProcessTrace thread for every event; it must be
+// quick, since ETW drops events while the consumer falls behind.
+type Handler func(*Event)
 
 // ETW calls back on the ProcessTrace thread through a single C callback, so
 // the handler lives in a package variable; only one session runs per process.
-var presentHandler atomic.Pointer[func(pid uint32, ts int64)]
+var handler atomic.Pointer[Handler]
 
 var eventCallback = windows.NewCallback(func(r *eventRecord) uintptr {
-	h := &r.EventHeader
-	if h.EventDescriptor.ID == presentStartID && h.ProviderID == dxgiProvider {
-		if fn := presentHandler.Load(); fn != nil {
-			(*fn)(h.ProcessID, h.TimeStamp)
-		}
+	if h := handler.Load(); h != nil {
+		(*h)((*Event)(r))
 	}
 	return 0
 })
 
-// Session is a real-time ETW session subscribed to DXGI Present events.
+// Provider is an ETW provider to enable on a session.
+type Provider struct {
+	GUID     windows.GUID
+	Level    uint8  // 5 = verbose
+	MatchAny uint64 // keyword mask; all ones enables every keyword
+}
+
+// Session is a real-time ETW session.
 type Session struct {
 	name    *uint16
 	props   []uint64 // backing store, 8-byte aligned
@@ -223,9 +254,9 @@ func newProperties() []uint64 {
 	return buf
 }
 
-// StartSession creates (or takes over a leftover) session called name and
-// calls onPresent for every Present from any process.
-func StartSession(name string, onPresent func(pid uint32, ts int64)) (*Session, error) {
+// StartSession creates (or takes over a leftover) session called name that
+// delivers events to h once Process runs. Enable providers before Process.
+func StartSession(name string, h Handler) (*Session, error) {
 	n, err := windows.UTF16PtrFromString(name)
 	if err != nil {
 		return nil, err
@@ -248,22 +279,7 @@ func StartSession(name string, onPresent func(pid uint32, ts int64)) (*Session, 
 		return nil, fmt.Errorf("StartTrace: %w", windows.Errno(r))
 	}
 
-	r, _, _ = procEnableTraceEx2.Call(
-		uintptr(s.session),
-		uintptr(unsafe.Pointer(&dxgiProvider)),
-		eventControlCodeEnable,
-		traceLevelVerbose,
-		uintptr(^uint64(0)), // MatchAnyKeyword: all keywords (Present is on the Analytic channel)
-		0,                   // MatchAllKeyword
-		0,                   // Timeout: asynchronous
-		0,
-	)
-	if r != 0 {
-		s.stop()
-		return nil, fmt.Errorf("EnableTraceEx2: %w", windows.Errno(r))
-	}
-
-	presentHandler.Store(&onPresent)
+	handler.Store(&h)
 	logfile := eventTraceLogfile{
 		LoggerName:       n,
 		ProcessTraceMode: processTraceModeRealTime | processTraceModeEventRecord,
@@ -276,6 +292,24 @@ func StartSession(name string, onPresent func(pid uint32, ts int64)) (*Session, 
 	}
 	s.trace = uint64(t)
 	return s, nil
+}
+
+// Enable subscribes the session to p.
+func (s *Session) Enable(p Provider) error {
+	r, _, _ := procEnableTraceEx2.Call(
+		uintptr(s.session),
+		uintptr(unsafe.Pointer(&p.GUID)),
+		eventControlCodeEnable,
+		uintptr(p.Level),
+		uintptr(p.MatchAny),
+		0, // MatchAllKeyword
+		0, // Timeout: asynchronous
+		0,
+	)
+	if r != 0 {
+		return fmt.Errorf("EnableTraceEx2: %w", windows.Errno(r))
+	}
+	return nil
 }
 
 // Process delivers events until Close is called. It blocks.
@@ -297,7 +331,7 @@ func (s *Session) Process() error {
 
 // Close stops the session; Process returns shortly after.
 func (s *Session) Close() error {
-	presentHandler.Store(nil)
+	handler.Store(nil)
 	s.closed.Store(true)
 	if s.trace != 0 {
 		procCloseTrace.Call(uintptr(s.trace))

@@ -5,9 +5,11 @@
   import {lang, t} from './lib/i18n'
   import {fmtMs, icon, netStats} from './lib/net'
   import {fpsLevel, fpsStatus} from './lib/fps'
+  import {flowLevel, gameNet, hasPing, kind, mainFlow} from './lib/gamenet'
 
   const net = netStats()
   const fps = fpsStatus()
+  const game = gameNet()
   let minFps = 50
 
   type Status = {uptimeSec: number; dataVersion: string; phase: string}
@@ -40,6 +42,8 @@
     }
   })
 
+  $: gf = mainFlow($game)
+
   function fmt(sec: number) {
     const m = Math.floor(sec / 60)
     const s = sec % 60
@@ -63,7 +67,20 @@
         <span class="num loss">{Math.round($fps.low1Fps)}</span>
       </li>
     {/if}
-    {#each $net.slice(0, 3) as n (n.target)}
+    {#if gf}
+      <li class="level-{flowLevel(gf)}">
+        <span class="icon">{icon(flowLevel(gf))}</span>
+        <span class="name">{$t(kind(gf.kind))}</span>
+        {#if gf.ping && hasPing(gf)}
+          <span class="num">{gf.ping.lastLost ? $t('net.lost') : `${gf.pingAddr ? '≈' : ''}${fmtMs(gf.ping.lastMs)} ms`}</span>
+          <span class="num loss">{gf.ping.lossPct.toFixed(0)}%</span>
+        {:else}
+          <span class="num">{gf.pktsInPerSec > 0 ? `${Math.round(gf.maxGapMs)} ms` : '—'}</span>
+          <span class="num loss">gap</span>
+        {/if}
+      </li>
+    {/if}
+    {#each $net.slice(0, gf ? 2 : 3) as n (n.target)}
       <li class="level-{n.level}">
         <span class="icon">{icon(n.level)}</span>
         <span class="name">{n.target === 'gateway' ? 'Router' : n.target}</span>
