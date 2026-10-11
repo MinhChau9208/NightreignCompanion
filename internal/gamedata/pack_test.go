@@ -59,7 +59,20 @@ func TestValidateRejects(t *testing.T) {
 		{
 			"prior references unknown boss", "boss_priors.json",
 			`{"verified":false,"pools":[{"nightlord":"gladius","night1":["nobody"],"night2":[]}]}`,
-			`"nobody" is not a night boss`,
+			`"nobody" is not a night 1 boss`,
+		},
+		{
+			"night 2 boss in night 1 pool", "boss_priors.json",
+			`{"verified":false,"pools":[{"nightlord":"gladius","night1":["fell_omen"],"night2":[]}]}`,
+			`"fell_omen" is not a night 1 boss`,
+		},
+		{
+			"status both resisted and immune", "bosses.json",
+			`[{"id":"x","kind":"nightlord","name":{"en":"a","vi":"a"},"verified":false,"stats":{"everdark":[],"normal":[
+			   {"name":"a","gameIds":[1],"health":null,"poise":[1,2,3],
+			    "negation":{"standard":0,"strike":0,"slash":0,"pierce":0,"magic":0,"fire":0,"lightning":0,"holy":0},
+			    "resist":{"poison":1,"rot":1,"bleed":1,"frost":1,"sleep":1,"madness":1},"immune":["madness","blight"]}]}}]`,
+			"status madness must be in exactly one",
 		},
 		{
 			"relic for unknown character", "relic_effects.json",

@@ -10,6 +10,10 @@ export function GameNet() {
   return window['go']['main']['App']['GameNet']();
 }
 
+export function GetBossData() {
+  return window['go']['main']['App']['GetBossData']();
+}
+
 export function GetSettings() {
   return window['go']['main']['App']['GetSettings']();
 }
@@ -28,6 +32,10 @@ export function NetStats() {
 
 export function OverlayRunning() {
   return window['go']['main']['App']['OverlayRunning']();
+}
+
+export function PredictNightlord(arg1) {
+  return window['go']['main']['App']['PredictNightlord'](arg1);
 }
 
 export function SaveSettings(arg1) {

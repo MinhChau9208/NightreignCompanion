@@ -65,8 +65,33 @@ type Boss struct {
 	Kind       string     `json:"kind"` // night_boss | nightlord
 	Name       Localized  `json:"name"`
 	Expedition *Localized `json:"expedition,omitempty"`
-	Weaknesses []string   `json:"weaknesses"`
+	Night      int        `json:"night,omitempty"` // night_boss: 1 or 2
+	DLC        bool       `json:"dlc,omitempty"`
+	Stats      *BossStats `json:"stats,omitempty"` // nightlord only
 	Verified   bool       `json:"verified"`
+}
+
+// BossStats holds a Nightlord's fight forms in normal expeditions and as an
+// Everdark Sovereign (empty when that version does not exist).
+type BossStats struct {
+	Normal   []BossForm `json:"normal"`
+	Everdark []BossForm `json:"everdark"`
+}
+
+// BossForm is one enemy of a Nightlord fight (a phase or a second boss)
+// with the stats shared by its game params.
+type BossForm struct {
+	Name    string    `json:"name"`
+	GameIDs []int     `json:"gameIds"`
+	Health  []int     `json:"health"` // solo, duo, trio; nil when unknown
+	Poise   []float64 `json:"poise"`  // solo, duo, trio
+	// Negation is damage absorption in percent per type (see damageTypes):
+	// negative means the boss takes extra damage.
+	Negation map[string]float64 `json:"negation"`
+	// Resist is the status buildup needed to proc (see statusTypes); a
+	// status is listed in either Resist or Immune.
+	Resist map[string]int `json:"resist"`
+	Immune []string       `json:"immune"`
 }
 
 // BossPriors lists which night bosses can appear for each Nightlord; the
@@ -88,4 +113,6 @@ var (
 	tierUnits     = map[string]bool{"multiplier": true, "flat": true, "percent": true}
 	phaseKinds    = map[string]bool{"explore": true, "shrink": true, "boss": true}
 	bossKinds     = map[string]bool{"night_boss": true, "nightlord": true}
+	damageTypes   = []string{"standard", "strike", "slash", "pierce", "magic", "fire", "lightning", "holy"}
+	statusTypes   = []string{"poison", "rot", "bleed", "frost", "sleep", "madness", "blight"}
 )

@@ -5,13 +5,14 @@
   import Dashboard from './pages/Dashboard.svelte'
   import Settings from './pages/Settings.svelte'
   import Network from './pages/Network.svelte'
+  import Bosses from './pages/Bosses.svelte'
   import ComingSoon from './pages/ComingSoon.svelte'
 
   type Page = {id: string; label: Key; phase?: string}
   const pages: Page[] = [
     {id: 'dashboard', label: 'nav.dashboard'},
     {id: 'network', label: 'nav.network'},
-    {id: 'bosses', label: 'nav.bosses', phase: 'Phase 2'},
+    {id: 'bosses', label: 'nav.bosses'},
     {id: 'relics', label: 'nav.relics', phase: 'Phase 3'},
     {id: 'timer', label: 'nav.timer', phase: 'Phase 4'},
     {id: 'settings', label: 'nav.settings'},
@@ -50,6 +51,8 @@
       <Dashboard />
     {:else if current.id === 'network'}
       <Network />
+    {:else if current.id === 'bosses'}
+      <Bosses />
     {:else if current.id === 'settings'}
       <Settings />
     {:else}

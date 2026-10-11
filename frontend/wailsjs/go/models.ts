@@ -1,3 +1,92 @@
+export namespace boss {
+	
+	export class Candidate {
+	    nightlord: string;
+	    probability: number;
+	    excluded: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new Candidate(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.nightlord = source["nightlord"];
+	        this.probability = source["probability"];
+	        this.excluded = source["excluded"];
+	    }
+	}
+	export class Chance {
+	    boss: string;
+	    probability: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Chance(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.boss = source["boss"];
+	        this.probability = source["probability"];
+	    }
+	}
+	export class Query {
+	    night1: string;
+	    night2: string;
+	    exclude: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Query(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.night1 = source["night1"];
+	        this.night2 = source["night2"];
+	        this.exclude = source["exclude"];
+	    }
+	}
+	export class Result {
+	    ranking: Candidate[];
+	    signal: boolean;
+	    impossible: boolean;
+	    night1: Chance[];
+	    night2: Chance[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Result(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.ranking = this.convertValues(source["ranking"], Candidate);
+	        this.signal = source["signal"];
+	        this.impossible = source["impossible"];
+	        this.night1 = this.convertValues(source["night1"], Chance);
+	        this.night2 = this.convertValues(source["night2"], Chance);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
 export namespace config {
 	
 	export class FPSSettings {
@@ -160,6 +249,139 @@ export namespace config {
 
 export namespace gamedata {
 	
+	export class BossForm {
+	    name: string;
+	    gameIds: number[];
+	    health: number[];
+	    poise: number[];
+	    negation: Record<string, number>;
+	    resist: Record<string, number>;
+	    immune: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new BossForm(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.name = source["name"];
+	        this.gameIds = source["gameIds"];
+	        this.health = source["health"];
+	        this.poise = source["poise"];
+	        this.negation = source["negation"];
+	        this.resist = source["resist"];
+	        this.immune = source["immune"];
+	    }
+	}
+	export class BossStats {
+	    normal: BossForm[];
+	    everdark: BossForm[];
+	
+	    static createFrom(source: any = {}) {
+	        return new BossStats(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.normal = this.convertValues(source["normal"], BossForm);
+	        this.everdark = this.convertValues(source["everdark"], BossForm);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class Localized {
+	    en: string;
+	    vi: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Localized(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.en = source["en"];
+	        this.vi = source["vi"];
+	    }
+	}
+	export class Boss {
+	    id: string;
+	    kind: string;
+	    name: Localized;
+	    expedition?: Localized;
+	    night?: number;
+	    dlc?: boolean;
+	    stats?: BossStats;
+	    verified: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new Boss(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.kind = source["kind"];
+	        this.name = this.convertValues(source["name"], Localized);
+	        this.expedition = this.convertValues(source["expedition"], Localized);
+	        this.night = source["night"];
+	        this.dlc = source["dlc"];
+	        this.stats = this.convertValues(source["stats"], BossStats);
+	        this.verified = source["verified"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	
+	export class BossPool {
+	    nightlord: string;
+	    night1: string[];
+	    night2: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new BossPool(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.nightlord = source["nightlord"];
+	        this.night1 = source["night1"];
+	        this.night2 = source["night2"];
+	    }
+	}
+	
+	
 	export class Stats {
 	    dataVersion: string;
 	    gameVersion: string;
@@ -312,6 +534,40 @@ export namespace main {
 	        this.configDir = source["configDir"];
 	        this.data = this.convertValues(source["data"], gamedata.Stats);
 	        this.error = source["error"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class BossData {
+	    bosses: gamedata.Boss[];
+	    pools: gamedata.BossPool[];
+	    poolsVerified: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new BossData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.bosses = this.convertValues(source["bosses"], gamedata.Boss);
+	        this.pools = this.convertValues(source["pools"], gamedata.BossPool);
+	        this.poolsVerified = source["poolsVerified"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
