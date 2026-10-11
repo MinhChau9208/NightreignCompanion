@@ -18,29 +18,24 @@ type Manifest struct {
 type Character struct {
 	ID   string    `json:"id"`
 	Name Localized `json:"name"`
+	DLC  bool      `json:"dlc,omitempty"`
 }
 
-// RelicEffect is one relic effect line, e.g. "Physical Attack Up +2".
+// RelicEffect is one effect line as found on relics, deep relics, or as a
+// dormant power picked up during an expedition. Values are described in
+// text (Effect) because many effects are conditional; a future calculator
+// will add structured modifiers for the ones that can be summed.
 type RelicEffect struct {
-	ID         string      `json:"id"`
-	Name       Localized   `json:"name"`
-	Category   string      `json:"category"`
-	Tiers      []RelicTier `json:"tiers"`
-	Stacking   string      `json:"stacking"`   // see stackingModes
-	Characters []string    `json:"characters"` // empty = all characters
-	DeepOnly   bool        `json:"deepOnly"`
-	Negative   bool        `json:"negative"`
-	Source     string      `json:"source"`
-	Verified   bool        `json:"verified"`
-	VerifiedOn string      `json:"verifiedOn,omitempty"`
-}
-
-// RelicTier is the effect at a given "+N" level. Value is nil while the
-// real number is still unknown.
-type RelicTier struct {
-	Level int      `json:"level"`
-	Value *float64 `json:"value"`
-	Unit  string   `json:"unit"` // see tierUnits
+	ID         string     `json:"id"`
+	Kind       string     `json:"kind"`       // see relicKinds
+	Categories []string   `json:"categories"` // see relicCategories
+	Name       Localized  `json:"name"`       // in-game wording (English in both)
+	InGame     string     `json:"inGame,omitempty"`
+	Effect     *Localized `json:"effect,omitempty"` // nil: the name says it all
+	Stacking   string     `json:"stacking"`         // with itself; see stackingModes
+	Notes      *Localized `json:"notes,omitempty"`
+	Character  string     `json:"character,omitempty"` // empty = any character
+	Verified   bool       `json:"verified"`
 }
 
 type TimerProfile struct {
@@ -109,10 +104,14 @@ type BossPool struct {
 }
 
 var (
-	stackingModes = map[string]bool{"additive": true, "multiplicative": true, "none": true, "unknown": true}
-	tierUnits     = map[string]bool{"multiplier": true, "flat": true, "percent": true}
-	phaseKinds    = map[string]bool{"explore": true, "shrink": true, "boss": true}
-	bossKinds     = map[string]bool{"night_boss": true, "nightlord": true}
-	damageTypes   = []string{"standard", "strike", "slash", "pierce", "magic", "fire", "lightning", "holy"}
-	statusTypes   = []string{"poison", "rot", "bleed", "frost", "sleep", "madness", "blight"}
+	relicKinds      = map[string]bool{"relic": true, "deep": true, "dormant": true}
+	stackingModes   = map[string]bool{"yes": true, "no": true, "na": true, "varies": true, "unknown": true}
+	relicCategories = map[string]bool{
+		"stat": true, "start": true, "exploration": true, "offensive": true,
+		"defensive": true, "regen": true, "character": true, "curse": true,
+	}
+	phaseKinds  = map[string]bool{"explore": true, "shrink": true, "boss": true}
+	bossKinds   = map[string]bool{"night_boss": true, "nightlord": true}
+	damageTypes = []string{"standard", "strike", "slash", "pierce", "magic", "fire", "lightning", "holy"}
+	statusTypes = []string{"poison", "rot", "bleed", "frost", "sleep", "madness", "blight"}
 )

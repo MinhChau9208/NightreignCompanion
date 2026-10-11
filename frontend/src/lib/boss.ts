@@ -1,12 +1,10 @@
 import type {gamedata} from '../../wailsjs/go/models'
-import type {Key, Lang} from './i18n'
+import type {Key} from './i18n'
 
 export const damageTypes = ['standard', 'strike', 'slash', 'pierce', 'magic', 'fire', 'lightning', 'holy'] as const
 export const statusTypes = ['poison', 'rot', 'bleed', 'frost', 'sleep', 'madness', 'blight'] as const
 
 export type Version = 'normal' | 'everdark'
-
-export const loc = (n: gamedata.Localized | undefined, l: Lang) => (n ? (l === 'en' ? n.en : n.vi) : '')
 
 export const damageKey = (d: string) => `boss.dmg.${d}` as Key
 export const statusKey = (s: string) => `boss.status.${s}` as Key

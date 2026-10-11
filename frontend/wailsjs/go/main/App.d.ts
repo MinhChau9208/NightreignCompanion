@@ -12,6 +12,8 @@ export function GameNet():Promise<gamenet.Status>;
 
 export function GetBossData():Promise<main.BossData>;
 
+export function GetRelicData():Promise<main.RelicData>;
+
 export function GetSettings():Promise<config.Settings>;
 
 export function Info():Promise<main.AppInfo>;

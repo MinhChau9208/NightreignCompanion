@@ -14,6 +14,10 @@ export function GetBossData() {
   return window['go']['main']['App']['GetBossData']();
 }
 
+export function GetRelicData() {
+  return window['go']['main']['App']['GetRelicData']();
+}
+
 export function GetSettings() {
   return window['go']['main']['App']['GetSettings']();
 }

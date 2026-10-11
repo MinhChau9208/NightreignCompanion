@@ -1,18 +1,4606 @@
 [
   {
-    "id": "phys_atk_up",
-    "name": { "en": "Physical Attack Up", "vi": "Tăng sát thương vật lý" },
-    "category": "attack",
-    "tiers": [
-      { "level": 0, "value": null, "unit": "multiplier" },
-      { "level": 1, "value": null, "unit": "multiplier" },
-      { "level": 2, "value": null, "unit": "multiplier" }
+    "id": "relic_vigor_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "stat"
     ],
+    "name": {
+      "en": "Vigor +1/2/3",
+      "vi": "Vigor +1/2/3"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "+20 / +40 / +60 Max HP",
+      "vi": "+20 / +40 / +60 HP tối đa"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_mind_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Mind +1/2/3",
+      "vi": "Mind +1/2/3"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "+5 / +10 / +15 Max FP",
+      "vi": "+5 / +10 / +15 FP tối đa"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_endurance_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Endurance +1/2/3",
+      "vi": "Endurance +1/2/3"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "+2 / +4 / +6 Max Stamina",
+      "vi": "+2 / +4 / +6 Stamina tối đa"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_strength_dexterity_intelligence_faith_arcane_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Strength/Dexterity/Intelligence/Faith/Arcane +1/2/3",
+      "vi": "Strength/Dexterity/Intelligence/Faith/Arcane +1/2/3"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "3 Arc adds ~5.4% of base bleed",
+      "vi": "+3 Arcane tăng thêm ~5,4% bleed gốc"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_poise_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Poise +1/2/3",
+      "vi": "Poise +1/2/3"
+    },
+    "effect": {
+      "en": "Reduces incoming poise damage by 0.95x/0.9x/0.85x",
+      "vi": "Giảm sát thương poise phải nhận còn 0,95x/0,9x/0,85x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_increased_maximum_hp_fp_stamina",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased maximum HP/FP/Stamina",
+      "vi": "Increased maximum HP/FP/Stamina"
+    },
+    "effect": {
+      "en": "Increases vigor/mind/endurance by 5",
+      "vi": "Tăng Vigor/Mind/Endurance thêm 5"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+100 Max HP / 25 Max FP / 10 Max Stamina. Exclusive to (Dark) Night of the Fathom, Wise, Champion respectively",
+      "vi": "+100 HP / 25 FP / 10 Stamina tối đa. Lần lượt chỉ có trên (Dark) Night of the Fathom, Wise, Champion"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_status_resistance",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Improved [Status] Resistance",
+      "vi": "Improved [Status] Resistance"
+    },
+    "effect": {
+      "en": "Increases specified status resistance by 75",
+      "vi": "Tăng kháng hiệu ứng tương ứng thêm 75"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_max_fp_up_with_3_staves_sacred_seals_equipped",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Max FP Up with 3+ Staves/Sacred Seals Equipped",
+      "vi": "Max FP Up with 3+ Staves/Sacred Seals Equipped"
+    },
+    "effect": {
+      "en": "Increases mind by 10",
+      "vi": "Tăng Mind thêm 10"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+50 Max FP",
+      "vi": "+50 FP tối đa"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_max_hp_up_with_3_small_medium_greatshields_equipped",
+    "kind": "relic",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Max HP Up with 3+ Small/Medium/Greatshields Equipped",
+      "vi": "Max HP Up with 3+ Small/Medium/Greatshields Equipped"
+    },
+    "effect": {
+      "en": "Increases vigor by 10",
+      "vi": "Tăng Vigor thêm 10"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+200 Max HP",
+      "vi": "+200 HP tối đa"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_starting_weapon_deals_element_damage",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "Starting Weapon deals [element] Damage",
+      "vi": "Starting Weapon deals [element] Damage"
+    },
+    "effect": {
+      "en": "Decreases starting weapon's physical AP by 30/40/50/60 and adds 33/44/55/66 elemental AP",
+      "vi": "Giảm 30/40/50/60 AP vật lý của vũ khí khởi đầu và thêm 33/44/55/66 AP nguyên tố"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "The amount of damage taken away and added depends on weapon type. Does not affect weapon scaling. Does not stack with \"Stating armament inflicts \"x\" status\"",
+      "vi": "Lượng sát thương bị trừ và được cộng tuỳ loại vũ khí. Không ảnh hưởng scaling của vũ khí. Không stack với \"Stating armament inflicts \"x\" status\""
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_stating_armament_inflicts_x_status",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "Stating armament inflicts \"x\" status",
+      "vi": "Stating armament inflicts \"x\" status"
+    },
+    "effect": {
+      "en": "Decreases starting weapon's damage by 0.85x and adds 25 (blood) or 35 (poison/frost) buildup",
+      "vi": "Giảm sát thương vũ khí khởi đầu còn 0,85x và thêm 25 (chảy máu) hoặc 35 (độc/băng giá) buildup"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Does not stack with \"Starting Weapon deals [element] Damage\"",
+      "vi": "Không stack với \"Starting Weapon deals [element] Damage\""
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_change_compatible_armament_skill_to_xxx_at_start_of_expedition",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "Change compatible armament skill to [xxx] at start of expedition",
+      "vi": "Change compatible armament skill to [xxx] at start of expedition"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_consumable_in_possession_at_start_of_expedition",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "[Consumable] in possession at start of expedition",
+      "vi": "[Consumable] in possession at start of expedition"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_small_pouch_in_possession_at_start_of_expedition",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "Small pouch in possession at start of expedition",
+      "vi": "Small pouch in possession at start of expedition"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_stonesword_in_possession_at_start_of_expedition",
+    "kind": "relic",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "Stonesword in possession at start of expedition",
+      "vi": "Stonesword in possession at start of expedition"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_flask_also_heals_allies",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Flask Also Heals Allies",
+      "vi": "Flask Also Heals Allies"
+    },
+    "effect": {
+      "en": "Heals allies for 50% of flask HP in a radius",
+      "vi": "Hồi cho đồng đội xung quanh 50% lượng HP của bình máu"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Currently bugged; sometimes has a chance to not heal the wearer. Will not heal teammates in iframes.",
+      "vi": "Đang bị lỗi: đôi khi không hồi cho chính người đeo. Không hồi cho đồng đội đang trong iframe."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_item_confer_effect_to_all_nearby_allies",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Item confer effect to all nearby allies",
+      "vi": "Item confer effect to all nearby allies"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_increase_rune_acquisition_for_self_and_allies",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Increase rune acquisition for self and allies",
+      "vi": "Increase rune acquisition for self and allies"
+    },
+    "effect": {
+      "en": "1.035x rune gain for self and allies",
+      "vi": "Bản thân và đồng đội nhận 1,035x rune"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_critical_hits_earn_runes",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Critical Hits Earn Runes",
+      "vi": "Critical Hits Earn Runes"
+    },
+    "effect": {
+      "en": "Gain 600 runes on critical hits",
+      "vi": "Nhận 600 rune mỗi đòn chí mạng (critical)"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_attack_power_permanently_increased_for_each_evergaol_prisoner_defeated",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Attack power permanently increased for each evergaol prisoner defeated",
+      "vi": "Attack power permanently increased for each evergaol prisoner defeated"
+    },
+    "effect": {
+      "en": "Increases damage by 1.05x per Evergaol boss",
+      "vi": "Tăng sát thương 1,05x cho mỗi boss Evergaol đã hạ"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_max_fp_increased_for_each_sorcerers_rise_unlocked",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Max FP increased for each Sorcerer's Rise unlocked",
+      "vi": "Max FP increased for each Sorcerer's Rise unlocked"
+    },
+    "effect": {
+      "en": "Increases max FP by 1.18x for each Sorcerer's Rise unlocked",
+      "vi": "Tăng FP tối đa 1,18x cho mỗi Sorcerer's Rise đã mở"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_attack_power_up_after_defeating_a_night_invader",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Attack power up after defeating a Night Invader",
+      "vi": "Attack power up after defeating a Night Invader"
+    },
+    "effect": {
+      "en": "Increases damage by 1.07x per invader",
+      "vi": "Tăng sát thương 1,07x cho mỗi Night Invader đã hạ"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_huge_rune_discount_for_shop_purchases_while_on_expedition",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "(Huge) Rune discount for shop purchases while on expedition",
+      "vi": "(Huge) Rune discount for shop purchases while on expedition"
+    },
+    "effect": {
+      "en": "Provides a 10/20% discount at merchants",
+      "vi": "Giảm 10/20% giá khi mua ở thương nhân"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Different versions stack together. The same version does not stack with itself. \"Huge\" exclusive to Night of the Demon",
+      "vi": "Hai phiên bản khác nhau stack với nhau. Cùng phiên bản thì không stack. Bản \"Huge\" chỉ có trên Night of the Demon"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_treasure_marked_upon_map",
+    "kind": "relic",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Treasure marked upon map",
+      "vi": "Treasure marked upon map"
+    },
+    "effect": {
+      "en": "Reveals hidden chest locations",
+      "vi": "Hiện vị trí rương ẩn trên bản đồ"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_taking_attacks_improves_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Taking attacks improves attack power",
+      "vi": "Taking attacks improves attack power"
+    },
+    "effect": {
+      "en": "15% damage buff after taking a hit, for 10s. Duration refresh when getting hit again. Does not work if blocked",
+      "vi": "Tăng 15% sát thương trong 10 giây sau khi trúng đòn. Trúng đòn tiếp sẽ làm mới thời gian. Không kích hoạt nếu đỡ (block)"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_physical_attack_up_0_1_2",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Physical Attack Up +0/1/2",
+      "vi": "Physical Attack Up +0/1/2"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.04x/1.05x/1.06x",
+      "vi": "Tăng sát thương vật lý 1,04x/1,05x/1,06x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_improved_melee_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Melee Attack Power",
+      "vi": "Improved Melee Attack Power"
+    },
+    "effect": {
+      "en": "Increases all attack power by 1.05x. Affects both weapon and skills.",
+      "vi": "Tăng toàn bộ AP 1,05x. Áp dụng cho cả vũ khí lẫn skill."
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Exclusive to Will of the Balancers and Will of Balance",
+      "vi": "Chỉ có trên Will of the Balancers và Will of Balance"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_skill_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Skill Attack Power",
+      "vi": "Improved Skill Attack Power"
+    },
+    "effect": {
+      "en": "Increases skill attack power by 1.15x",
+      "vi": "Tăng AP của skill 1,15x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Exclusive to Will of the Balancers and Will of Balance",
+      "vi": "Chỉ có trên Will of the Balancers và Will of Balance"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_magic_fire_lightning_holy_attack_up_0_1_2",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Magic/Fire/Lightning/Holy Attack Up +0/1/2",
+      "vi": "Magic/Fire/Lightning/Holy Attack Up +0/1/2"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy damage by 1.045x/1.055x/1.065x",
+      "vi": "Tăng sát thương phép/lửa/sét/thánh 1,045x/1,055x/1,065x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_improved_stance_breaking_when_two_handing",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved stance breaking when two handing",
+      "vi": "Improved stance breaking when two handing"
+    },
+    "effect": {
+      "en": "Increases poise damage by 1.05x when 2 handing the weapon",
+      "vi": "Tăng sát thương poise 1,05x khi cầm vũ khí bằng hai tay"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Does not apply to bows.",
+      "vi": "Không áp dụng cho cung."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_stance_breaking_while_wielding_two_armaments",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved stance breaking while wielding two armaments",
+      "vi": "Improved stance breaking while wielding two armaments"
+    },
+    "effect": {
+      "en": "Increases poise damage by 1.05x when powerstancing (dual wielding 2 weapons of the same type)",
+      "vi": "Tăng sát thương poise 1,05x khi powerstance (cầm 2 vũ khí cùng loại)"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Can confirm applies to ground L1 attack and jump L1.",
+      "vi": "Đã xác nhận áp dụng cho đòn L1 dưới đất và L1 khi nhảy."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_switching_weapons_adds_an_affinity_attack",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Switching Weapons Adds an Affinity Attack",
+      "vi": "Switching Weapons Adds an Affinity Attack"
+    },
+    "effect": {
+      "en": "Adds 12 magic/fire/lightning/holy AP for 10 seconds",
+      "vi": "Thêm 12 AP phép/lửa/sét/thánh trong 10 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "The element that is chosen is random. Exclusive to Night of the Lord.",
+      "vi": "Nguyên tố được chọn ngẫu nhiên. Chỉ có trên Night of the Lord."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_boosts_attack_power_of_added_affinity_attacks",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Boosts Attack Power of Added Affinity Attacks",
+      "vi": "Boosts Attack Power of Added Affinity Attacks"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy AP by 1.1x",
+      "vi": "Tăng AP phép/lửa/sét/thánh 1,1x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Rounds up. Exclusive to Night of the Lord, Golden Dew, and Dark Night of the Champion. Does not affect sorceries/incants. Works for any elemental damage on weapon, not just weapon buffs",
+      "vi": "Làm tròn lên. Chỉ có trên Night of the Lord, Golden Dew và Dark Night of the Champion. Không ảnh hưởng phép (sorcery/incantation). Áp dụng cho mọi sát thương nguyên tố trên vũ khí, không chỉ buff vũ khí"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_switching_weapons_boosts_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Switching Weapons Boosts Attack Power",
+      "vi": "Switching Weapons Boosts Attack Power"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.1x for 10 seconds",
+      "vi": "Tăng sát thương vật lý 1,1x trong 10 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to Night of the Lord and Fell Omen Fetish.",
+      "vi": "Chỉ có trên Night of the Lord và Fell Omen Fetish."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_successive_attacks_boosts_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Successive Attacks Boosts Attack Power",
+      "vi": "Successive Attacks Boosts Attack Power"
+    },
+    "effect": {
+      "en": "Increases damage by 1.05x / 1.065x / 1.09x on successive attacks",
+      "vi": "Tăng sát thương 1,05x / 1,065x / 1,09x khi đánh liên tiếp"
+    },
+    "stacking": "na",
+    "notes": {
+      "en": "Exclusive to Glass Necklace",
+      "vi": "Chỉ có trên Glass Necklace"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_attack_power_increases_after_using_grease_items",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack power increases after using grease items",
+      "vi": "Attack power increases after using grease items"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.1x for 30 seconds",
+      "vi": "Tăng sát thương vật lý 1,1x trong 30 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Same duration as grease",
+      "vi": "Thời gian bằng thời gian của grease"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_initial_standard_attack",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Initial Standard Attack",
+      "vi": "Improved Initial Standard Attack"
+    },
+    "effect": {
+      "en": "Increases the damage of the first light attack by 1.15x",
+      "vi": "Tăng sát thương đòn đánh nhẹ đầu tiên 1,15x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Applies to 1H/2H R1 chain or paired weapon L1. Does not work for shield poke / rolling attack / jump attack",
+      "vi": "Áp dụng cho chuỗi R1 một tay/hai tay hoặc L1 của vũ khí đôi. Không áp dụng cho đâm khiên / đòn lăn / đòn nhảy"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_guard_counters",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Guard Counters",
+      "vi": "Improved Guard Counters"
+    },
+    "effect": {
+      "en": "Increases guard counter damage by 1.17x",
+      "vi": "Tăng sát thương guard counter 1,17x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_guard_counter_is_given_a_boost_based_on_current_hp",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Guard counter is given a boost based on current HP",
+      "vi": "Guard counter is given a boost based on current HP"
+    },
+    "effect": {
+      "en": "Damage boost varies with HP remaining, and affected by hp boosts.",
+      "vi": "Lượng sát thương cộng thêm tuỳ HP còn lại, và tăng theo các buff HP."
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Add a flat damage = hp/20 to each guard counter hit. benefit from buffs and other damage bonuses",
+      "vi": "Cộng sát thương cố định = HP/20 vào mỗi đòn guard counter, được hưởng buff và các bonus sát thương khác"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_critical_hits_0_1",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Critical Hits +0/1",
+      "vi": "Improved Critical Hits +0/1"
+    },
+    "effect": {
+      "en": "Increases critical hit damage by 1.18x/1.23x",
+      "vi": "Tăng sát thương chí mạng (critical) 1,18x/1,23x"
+    },
+    "stacking": "varies",
+    "notes": {
+      "en": "Only applies to certain parts of critical hit. E.g. on colossal weapon, it only buffs the (stronger) second hit.\n +0 stack with +1 and +0 can stack with another +0 but +1 can not stack with itself as +1 exclusive to (Dark) Night of the Baron",
+      "vi": "Chỉ áp dụng cho một phần của đòn chí mạng. Ví dụ với vũ khí colossal, chỉ tăng đòn thứ hai (mạnh hơn).\n+0 stack với +1, và +0 stack với +0 khác, nhưng +1 không stack với chính nó vì +1 chỉ có trên (Dark) Night of the Baron"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_throwing_pot_knife_stone_perfuming_arts_damage",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Throwing Pot/Knife/Stone/Perfuming Arts Damage",
+      "vi": "Improved Throwing Pot/Knife/Stone/Perfuming Arts Damage"
+    },
+    "effect": {
+      "en": "Increases pot/knife/stone/Perfuming Arts damage by 1.15x",
+      "vi": "Tăng sát thương bình ném/dao ném/đá ném/Perfuming Arts 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_improved_spell_school_sorcery_incantation",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved [Spell School] Sorcery/Incantation",
+      "vi": "Improved [Spell School] Sorcery/Incantation"
+    },
+    "effect": {
+      "en": "Increases damage of specified school by 1.12x",
+      "vi": "Tăng sát thương của trường phái phép tương ứng 1,12x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_improves_roar_and_breath_attacks",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improves Roar and Breath attacks",
+      "vi": "Improves Roar and Breath attacks"
+    },
+    "effect": {
+      "en": "Increases roar / breath damage by 1.15x.",
+      "vi": "Tăng sát thương roar / breath 1,15x."
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Does not work for Raider character skill.",
+      "vi": "Không áp dụng cho Character Skill của Raider."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improve_weapon_type_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improve [Weapon Type] attack power",
+      "vi": "Improve [Weapon Type] attack power"
+    },
+    "effect": {
+      "en": "Increase damage dealt by the specified weapon type by 1.09x (1.06x for bows)",
+      "vi": "Tăng sát thương của loại vũ khí tương ứng 1,09x (cung 1,06x)"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Applies to weapon hit AoW (using said weapon). Does not apply to projectile AoW like thunderbolt, even when cast with said weapon type.",
+      "vi": "Áp dụng cho AoW đánh bằng vũ khí đó. Không áp dụng cho AoW dạng bắn ra như thunderbolt, kể cả khi dùng loại vũ khí đó."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_attack_power_with_3_weapon_type_equipped",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Attack Power with 3 [Weapon Type] Equipped",
+      "vi": "Improved Attack Power with 3 [Weapon Type] Equipped"
+    },
+    "effect": {
+      "en": "Increases damage by the specified weapon type by 1.2x (1.1x for bows)",
+      "vi": "Tăng sát thương của loại vũ khí tương ứng 1,2x (cung 1,1x)"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Works for damage from all sources. E.g. spells",
+      "vi": "Áp dụng cho sát thương từ mọi nguồn, ví dụ phép"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_attack_power_up_when_facing_frostbite_poison_rot_afflicted_enemy",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack power up when facing frostbite/poison/rot afflicted enemy",
+      "vi": "Attack power up when facing frostbite/poison/rot afflicted enemy"
+    },
+    "effect": {
+      "en": "Increases damage by 1.1x towards targets suffering specified status effect",
+      "vi": "Tăng sát thương 1,1x lên mục tiêu đang dính hiệu ứng tương ứng"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_frostbite_in_vicinity_conceals_self",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Frostbite in Vicinity Conceals Self",
+      "vi": "Frostbite in Vicinity Conceals Self"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to (Dark) Night of the Miasma",
+      "vi": "Chỉ có trên (Dark) Night of the Miasma"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_poison_rot_in_vicinity_increases_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Poison & Rot in Vicinity Increases Attack Power",
+      "vi": "Poison & Rot in Vicinity Increases Attack Power"
+    },
+    "effect": {
+      "en": "Increases damage by 1.12x for 20 seconds when poison or rot is triggered in the vicinity",
+      "vi": "Tăng sát thương 1,12x trong 20 giây khi độc hoặc thối rữa kích hoạt ở gần"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to Night of the Wise",
+      "vi": "Chỉ có trên Night of the Wise"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_status_ailment_gauges_slowly_increase_attack_power",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Status Ailment Gauges Slowly Increase Attack Power",
+      "vi": "Status Ailment Gauges Slowly Increase Attack Power"
+    },
+    "effect": {
+      "en": "Having any amount of status ailment gauge increases damage by 1.04x every 20 seconds (10 stacks). Resets after 20s of no status gauge.",
+      "vi": "Khi có bất kỳ thanh tích luỹ hiệu ứng nào, tăng sát thương 1,04x mỗi 20 giây (tối đa 10 lần). Mất hết sau 20 giây không có thanh hiệu ứng."
+    },
+    "stacking": "na",
+    "notes": {
+      "en": "Exclusive to Night of Dregs. Buff checks status gauge at fixed 20s intervals: at each 20s mark, if a status gauge is present, it grants an additional buff stack; if guage is not present, all stacks are lost. This means buff can expire <20s after depletion of status gauge.",
+      "vi": "Chỉ có trên Night of Dregs. Buff kiểm tra thanh hiệu ứng mỗi 20 giây cố định: đến mốc 20 giây, nếu có thanh hiệu ứng thì cộng thêm một lần stack; nếu không có thì mất hết stack. Vì vậy buff có thể hết chưa tới 20 giây sau khi thanh hiệu ứng cạn."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_attacks_inflict_rot_when_damage_is_taken",
+    "kind": "relic",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attacks Inflict Rot When Damage Is Taken",
+      "vi": "Attacks Inflict Rot When Damage Is Taken"
+    },
+    "effect": {
+      "en": "Adds 25 rot buildup to the weapon for 12 seconds after taking damage",
+      "vi": "Thêm 25 buildup thối rữa cho vũ khí trong 12 giây sau khi trúng đòn"
+    },
+    "stacking": "na",
+    "notes": {
+      "en": "Exclusive to Night of Dregs",
+      "vi": "Chỉ có trên Night of Dregs"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_physical_damage_negation",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Physical Damage Negation",
+      "vi": "Improved Physical Damage Negation"
+    },
+    "effect": {
+      "en": "Increases physical damage negation by 10%",
+      "vi": "Tăng hấp thụ sát thương vật lý 10%"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Exclusive to Dark Night of the Miasma",
+      "vi": "Chỉ có trên Dark Night of the Miasma"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_magic_fire_lightning_holy_damage_negation_up",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Magic/Fire/Lightning/Holy Damage Negation Up",
+      "vi": "Magic/Fire/Lightning/Holy Damage Negation Up"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy damage negation by 10%",
+      "vi": "Tăng hấp thụ sát thương phép/lửa/sét/thánh 10%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_improved_damage_negation_at_low_hp",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Damage Negation at Low HP",
+      "vi": "Improved Damage Negation at Low HP"
+    },
+    "effect": {
+      "en": "Increases damage negation by 16% when HP is below 40%",
+      "vi": "Tăng hấp thụ sát thương 16% khi HP dưới 40%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_draw_enemy_attention_while_guarding",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Draw enemy attention while guarding",
+      "vi": "Draw enemy attention while guarding"
+    },
+    "effect": {
+      "en": "Increases aggro when holding the block button",
+      "vi": "Tăng aggro khi giữ nút đỡ"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Does not guarantee aggro",
+      "vi": "Không đảm bảo kéo được aggro"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_improved_poise_damage_negation_when_knocked_back_by_damage",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Poise & Damage Negation When Knocked Back by Damage",
+      "vi": "Improved Poise & Damage Negation When Knocked Back by Damage"
+    },
+    "effect": {
+      "en": "Increases damage negation by 20% and reduces incoming poise damage by 0.8x for 20 seconds",
+      "vi": "Tăng hấp thụ sát thương 20% và giảm sát thương poise phải nhận còn 0,8x trong 20 giây"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_occasionally_nullify_attacks_when_damage_negation_is_lowered",
+    "kind": "relic",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Occasionally Nullify Attacks When Damage Negation is Lowered",
+      "vi": "Occasionally Nullify Attacks When Damage Negation is Lowered"
+    },
+    "effect": {
+      "en": "Self explanatory. Chance of activation currently unknown",
+      "vi": "Như tên gọi. Chưa rõ tỉ lệ kích hoạt"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to the Will of Balance (ED Balancer relic, unreleased)",
+      "vi": "Chỉ có trên Will of Balance (relic Balancer của ED, chưa phát hành)"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_character_skill_cooldown_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Character Skill Cooldown +1/2/3",
+      "vi": "Character Skill Cooldown +1/2/3"
+    },
+    "effect": {
+      "en": "Reduces skill cooldown by 0.95x/0.925x/0.9x",
+      "vi": "Giảm thời gian hồi Character Skill còn 0,95x/0,925x/0,9x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_ultimate_art_gauge_1_2_3",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Ultimate Art Gauge +1/2/3",
+      "vi": "Ultimate Art Gauge +1/2/3"
+    },
+    "effect": {
+      "en": "Increases ultimate gauge gain by 1.05x/1.075x/1.1x",
+      "vi": "Tăng tốc nạp thanh Ultimate Art 1,05x/1,075x/1,1x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Only affects passive Ultimate gauge gain during combat",
+      "vi": "Chỉ ảnh hưởng phần thanh Ultimate tự nạp khi đang chiến đấu"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_partial_hp_restoration_upon_post_damage_attacks",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Partial HP Restoration upon Post-Damage Attacks",
+      "vi": "Partial HP Restoration upon Post-Damage Attacks"
+    },
+    "effect": {
+      "en": "Replenishes HP on hit for a short period of time after taking damage",
+      "vi": "Hồi HP mỗi đòn trúng trong một khoảng ngắn sau khi bị trúng đòn"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Much stronger healing than other heal on hit effects. Amount of healing varies by attack performed. Does not stack with Hand of Malenia (which will take priority and has great healing effects).",
+      "vi": "Hồi mạnh hơn nhiều so với các hiệu ứng hồi máu khi đánh khác. Lượng hồi tuỳ đòn đánh. Không stack với Hand of Malenia (Hand of Malenia được ưu tiên và hồi rất mạnh)."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_slowly_restore_hp_for_self_and_nearby_allies_when_hp_is_low",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Slowly restore HP for self and nearby allies when HP is low",
+      "vi": "Slowly restore HP for self and nearby allies when HP is low"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.005] + 1 HP/s for 50 seconds when HP is below 20%",
+      "vi": "Hồi [HP tối đa × 0,005] + 1 HP/giây trong 50 giây khi HP dưới 20%"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Regen stays even after you go above 20% HP",
+      "vi": "Vẫn tiếp tục hồi kể cả khi HP đã lên trên 20%"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_art_gauge_fills_moderately_upon_critical_hit",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Art gauge fills moderately upon critical hit",
+      "vi": "Art gauge fills moderately upon critical hit"
+    },
+    "effect": {
+      "en": "Increases Ultimate Art Gauge by 5",
+      "vi": "Tăng thanh Ultimate Art thêm 5"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_hp_restored_when_using_cured_meats_medicinal_boluses_etc",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP restored when using cured meats, medicinal boluses, etc.",
+      "vi": "HP restored when using cured meats, medicinal boluses, etc."
+    },
+    "effect": {
+      "en": "Restores 50 HP on consumption",
+      "vi": "Hồi 50 HP khi dùng"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_art_gauge_charged_from_successful_guarding",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Art gauge charged from successful guarding",
+      "vi": "Art gauge charged from successful guarding"
+    },
+    "effect": {
+      "en": "Increases Ultimate Art Gauge by 1",
+      "vi": "Tăng thanh Ultimate Art thêm 1"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_critical_hit_boosts_stamina_recovery_speed",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Critical Hit Boosts Stamina Recovery Speed",
+      "vi": "Critical Hit Boosts Stamina Recovery Speed"
+    },
+    "effect": {
+      "en": "Increases stamina recovery by 10/s for 15 seconds",
+      "vi": "Tăng tốc hồi Stamina thêm 10/giây trong 15 giây"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_gesture_crossed_legs_builds_up_madness",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Gesture \"Crossed Legs\" Builds Up Madness",
+      "vi": "Gesture \"Crossed Legs\" Builds Up Madness"
+    },
+    "effect": {
+      "en": "Inflicts 10 madness buildup every 2 seconds",
+      "vi": "Gây 10 buildup điên loạn mỗi 2 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to (Dark) Night of the Demon",
+      "vi": "Chỉ có trên (Dark) Night of the Demon"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_madness_continually_recovers_fp",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Madness Continually Recovers FP",
+      "vi": "Madness Continually Recovers FP"
+    },
+    "effect": {
+      "en": "Recovers 2 FP/s for 25 seconds",
+      "vi": "Hồi 2 FP/giây trong 25 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Exclusive to (Dark) Night of the Demon",
+      "vi": "Chỉ có trên (Dark) Night of the Demon"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_continuous_hp_recovery",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Continuous HP recovery",
+      "vi": "Continuous HP recovery"
+    },
+    "effect": {
+      "en": "Recovers 2 HP/s",
+      "vi": "Hồi 2 HP/giây"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Exclusive to Blessed Iron Coin and Dark Night of the Fathom",
+      "vi": "Chỉ có trên Blessed Iron Coin và Dark Night of the Fathom"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_continuous_fp_recovery",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Continuous FP Recovery",
+      "vi": "Continuous FP Recovery"
+    },
+    "effect": {
+      "en": "Recovers 1 FP/5s",
+      "vi": "Hồi 1 FP mỗi 5 giây"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Exclusive to Will of the Balancers",
+      "vi": "Chỉ có trên Will of the Balancers"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_rot_in_vicinity_causes_continuous_hp_recovery",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Rot in Vicinity Causes Continuous HP Recovery",
+      "vi": "Rot in Vicinity Causes Continuous HP Recovery"
+    },
+    "effect": {
+      "en": "Recovers 0.15% of max HP + 15 HP/s for 15 seconds after rot procs",
+      "vi": "Hồi 0,15% HP tối đa + 15 HP/giây trong 15 giây sau khi thối rữa kích hoạt"
+    },
+    "stacking": "na",
+    "notes": {
+      "en": "Exclusive to Night of Dregs",
+      "vi": "Chỉ có trên Night of Dregs"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_raised_stamina_recovery_for_nearby_allies_but_not_for_self",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Raised stamina recovery for nearby allies, but not for self",
+      "vi": "Raised stamina recovery for nearby allies, but not for self"
+    },
+    "effect": {
+      "en": "Increases allies' stamina recovery speed by 4/s",
+      "vi": "Tăng tốc hồi Stamina của đồng đội thêm 4/giây"
+    },
     "stacking": "unknown",
-    "characters": [],
-    "deepOnly": false,
-    "negative": false,
-    "source": "",
-    "verified": false
+    "verified": true
+  },
+  {
+    "id": "relic_fp_restoration_upon_successive_attacks",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "FP Restoration upon Successive Attacks",
+      "vi": "FP Restoration upon Successive Attacks"
+    },
+    "effect": {
+      "en": "Recovers [MaxFP * 0.05] with continuous attacks",
+      "vi": "Hồi [FP tối đa × 0,05] khi đánh liên tiếp"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "relic_hp_recovery_from_successful_guarding",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP Recovery From Successful Guarding",
+      "vi": "HP Recovery From Successful Guarding"
+    },
+    "effect": {
+      "en": "Recovers 16 HP after blocking an attack",
+      "vi": "Hồi 16 HP sau khi đỡ được đòn"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_defeating_enemies_fills_more_of_the_art_gauge",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Defeating enemies fills more of the Art gauge",
+      "vi": "Defeating enemies fills more of the Art gauge"
+    },
+    "effect": {
+      "en": "Increases Ultimate Art Gauge by 5 on each enemy kill",
+      "vi": "Tăng thanh Ultimate Art thêm 5 mỗi lần hạ kẻ địch"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_defeating_enemies_restores_hp_for_allies_but_not_for_self",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Defeating enemies restores HP for allies but not for self",
+      "vi": "Defeating enemies restores HP for allies but not for self"
+    },
+    "effect": {
+      "en": "Allies recover 20 HP on each enemy kill",
+      "vi": "Đồng đội hồi 20 HP mỗi lần hạ kẻ địch"
+    },
+    "stacking": "unknown",
+    "verified": true
+  },
+  {
+    "id": "relic_stamina_recovery_upon_landing_attacks_0_1",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Stamina Recovery upon Landing Attacks +0/+1",
+      "vi": "Stamina Recovery upon Landing Attacks +0/+1"
+    },
+    "effect": {
+      "en": "Restores 2/3 stamina with continuous attacks",
+      "vi": "Hồi 2/3 Stamina khi đánh liên tiếp"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Stack with the weaker version. +1 Exclusive to (Dark) Night of the Beast",
+      "vi": "Stack với bản yếu hơn. +1 chỉ có trên (Dark) Night of the Beast"
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_hp_restoration_after_weapon_type_attacks",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP restoration after [Weapon type] attacks",
+      "vi": "HP restoration after [Weapon type] attacks"
+    },
+    "effect": {
+      "en": "Restores 15 HP with continuous attacks",
+      "vi": "Hồi 15 HP khi đánh liên tiếp"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Amount of healing doesn't seem to change based on attack / weapon type.",
+      "vi": "Lượng hồi có vẻ không đổi theo đòn đánh / loại vũ khí."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_fp_restoration_after_weapon_type_attacks",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "FP restoration after [Weapon type] attacks",
+      "vi": "FP restoration after [Weapon type] attacks"
+    },
+    "effect": {
+      "en": "Restores 2 FP with continuous attacks",
+      "vi": "Hồi 2 FP khi đánh liên tiếp"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Amount of healing doesn't seem to change based on attack / weapon type.",
+      "vi": "Lượng hồi có vẻ không đổi theo đòn đánh / loại vũ khí."
+    },
+    "verified": true
+  },
+  {
+    "id": "relic_hp_restoration_upon_thrusting_counterattack",
+    "kind": "relic",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP Restoration upon Thrusting Counterattack",
+      "vi": "HP Restoration upon Thrusting Counterattack"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.025] HP on counterhits",
+      "vi": "Hồi [HP tối đa × 0,025] HP khi đánh counter"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "relic_wylder_art_gauge_is_greatly_filled_when_ability_is_activated",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Art gauge is greatly filled when ability is activated",
+      "vi": "[Wylder] Art gauge is greatly filled when ability is activated"
+    },
+    "effect": {
+      "en": "Increased characterSkillGauge by 18",
+      "vi": "Tăng thanh Character Skill thêm 18"
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "relic_wylder_art_activation_spreads_fire_in_the_area",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Art activation spreads fire in the area",
+      "vi": "[Wylder] Art activation spreads fire in the area"
+    },
+    "effect": {
+      "en": "Ultimate art leaves behind a small area of fire that does DoT.",
+      "vi": "Ultimate Art để lại một vùng lửa nhỏ gây sát thương theo thời gian (DoT)."
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "relic_wylder_standard_attacks_enhanced_with_fiery_follow_ups_when_using_character_skill_greatsword_only",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Standard attacks enhanced with fiery follow-ups when using Character Skill (greatsword only)",
+      "vi": "[Wylder] Standard attacks enhanced with fiery follow-ups when using Character Skill (greatsword only)"
+    },
+    "effect": {
+      "en": "Allows you to perform a light attack follow up after using claw shot. Adds 12 fire AP to the weapon",
+      "vi": "Cho phép đánh nhẹ nối tiếp sau khi dùng claw shot. Thêm 12 AP lửa cho vũ khí"
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "relic_wylder_1_additional_character_skill_use",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] +1 additional character skill use",
+      "vi": "[Wylder] +1 additional character skill use"
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "relic_guardian_increased_skill_duration",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Increased skill duration",
+      "vi": "[Guardian] Increased skill duration"
+    },
+    "effect": {
+      "en": "Allows you to briefly charge this skill to trigger a much bigger AoE and longer lasting tornado. Can block projectile attacks.",
+      "vi": "Cho phép gồng skill một chút để tạo lốc xoáy lớn hơn và lâu hơn nhiều. Chặn được đòn bắn từ xa."
+    },
+    "stacking": "no",
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "relic_guardian_slowly_restores_nearby_allies_hp_while_art_is_active",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Slowly restores nearby allies HP while Art is active",
+      "vi": "[Guardian] Slowly restores nearby allies HP while Art is active"
+    },
+    "effect": {
+      "en": "Allies restore [MaxHP * 0.1] + 12 HP/0.5s when ultimate is held",
+      "vi": "Đồng đội hồi [HP tối đa × 0,1] + 12 HP mỗi 0,5 giây khi giữ Ultimate"
+    },
+    "stacking": "no",
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "relic_guardian_creates_whirlwind_when_charging_halberd_attacks",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Creates whirlwind when charging halberd attacks",
+      "vi": "[Guardian] Creates whirlwind when charging halberd attacks"
+    },
+    "effect": {
+      "en": "Performs a whirlwind attack after using halberd charged heavies",
+      "vi": "Tạo đòn lốc xoáy sau đòn đánh nặng gồng của halberd"
+    },
+    "stacking": "no",
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "relic_guardian_successful_guards_send_out_shockwaves_while_ability_is_active",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Successful guards send out shockwaves while ability is active",
+      "vi": "[Guardian] Successful guards send out shockwaves while ability is active"
+    },
+    "effect": {
+      "en": "Sends out a shockwave when blocking an attack in the Iron Guard stance. 100 base physical attack",
+      "vi": "Phát sóng xung kích khi đỡ đòn trong thế Iron Guard. 100 AP vật lý gốc"
+    },
+    "stacking": "no",
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "relic_ironeye_art_charge_activation_adds_poison_effect",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Art Charge Activation Adds Poison Effect",
+      "vi": "[Ironeye] Art Charge Activation Adds Poison Effect"
+    },
+    "effect": {
+      "en": "Charged ultimate deals 300 poison buildup",
+      "vi": "Ultimate gồng gây 300 buildup độc"
+    },
+    "stacking": "no",
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "relic_ironeye_boosts_thrusting_counterattacks_after_executing_art",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Boosts thrusting counterattacks after executing Art",
+      "vi": "[Ironeye] Boosts thrusting counterattacks after executing Art"
+    },
+    "effect": {
+      "en": "Increases counterhit damage by 1.2x for 30 seconds",
+      "vi": "Tăng sát thương counter 1,2x trong 30 giây"
+    },
+    "stacking": "no",
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "relic_ironeye_extends_duration_of_weak_point",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Extends duration of weak point",
+      "vi": "[Ironeye] Extends duration of weak point"
+    },
+    "effect": {
+      "en": "Extends weak point duration from 17.5s to 22s",
+      "vi": "Kéo dài thời gian điểm yếu từ 17,5 giây lên 22 giây"
+    },
+    "stacking": "no",
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "relic_ironeye_1_additional_character_skill_use",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] +1 additional character skill use",
+      "vi": "[Ironeye] +1 additional character skill use"
+    },
+    "stacking": "no",
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "relic_duchess_defeating_enemies_while_art_is_active_ups_attack_power",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Defeating enemies while Art is active ups attack power",
+      "vi": "[Duchess] Defeating enemies while Art is active ups attack power"
+    },
+    "effect": {
+      "en": "Increases damage by 1.15x for 30 seconds for each enemy killed while Ultimate is active",
+      "vi": "Tăng sát thương 1,15x trong 30 giây cho mỗi kẻ địch bị hạ khi Ultimate đang hoạt động"
+    },
+    "stacking": "no",
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "relic_duchess_improved_character_skill_attack_power",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Improved Character Skill Attack Power",
+      "vi": "[Duchess] Improved Character Skill Attack Power"
+    },
+    "effect": {
+      "en": "Duchess' Restage does 60% of total damage instead of 50%",
+      "vi": "Restage của Duchess gây 60% tổng sát thương thay vì 50%"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "In game testing suggest 20% damage increase",
+      "vi": "Thử trong game cho thấy tăng khoảng 20% sát thương"
+    },
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "relic_duchess_become_difficult_to_spot_and_silence_footsteps_after_landing_critical_from_behind",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Become difficult to spot and silence footsteps after landing critical from behind",
+      "vi": "[Duchess] Become difficult to spot and silence footsteps after landing critical from behind"
+    },
+    "stacking": "no",
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "relic_duchess_successive_dagger_attack_reprises_event_upon_nearby_enemies",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Successive dagger attack reprises event upon nearby enemies",
+      "vi": "[Duchess] Successive dagger attack reprises event upon nearby enemies"
+    },
+    "effect": {
+      "en": "Deals extra DoT damage after completing a full light attack chain.",
+      "vi": "Gây thêm sát thương theo thời gian sau khi đánh hết một chuỗi đòn nhẹ."
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "~36/39/39% extra damage from 1h/ 2h/ powerstance attack chain",
+      "vi": "Thêm ~36/39/39% sát thương với chuỗi đòn một tay / hai tay / powerstance"
+    },
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "relic_raider_duration_of_ultimate_art_extended",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Raider] Duration of Ultimate Art extended",
+      "vi": "[Raider] Duration of Ultimate Art extended"
+    },
+    "effect": {
+      "en": "Increases duration of the ultimate from 20 to 30 seconds",
+      "vi": "Kéo dài Ultimate từ 20 lên 30 giây"
+    },
+    "stacking": "no",
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "relic_raider_damage_taken_while_using_character_skill_improves_attack_power_and_stamina",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Raider] Damage taken while using Character Skill improves attack power and stamina",
+      "vi": "[Raider] Damage taken while using Character Skill improves attack power and stamina"
+    },
+    "effect": {
+      "en": "Increases damage by 1.1x and maximum stamina by 1.2x for 20 seconds",
+      "vi": "Tăng sát thương 1,1x và Stamina tối đa 1,2x trong 20 giây"
+    },
+    "stacking": "no",
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "relic_defeating_enemies_near_totem_stela_restores_hp",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "Defeating enemies near Totem Stela restores HP",
+      "vi": "Defeating enemies near Totem Stela restores HP"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.5] on each enemy kill in the vicinity of Raider's ultimate",
+      "vi": "Hồi [HP tối đa × 0,5] mỗi lần hạ kẻ địch gần Ultimate của Raider"
+    },
+    "stacking": "no",
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "relic_improved_poise_near_totem_stela",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "Improved Poise Near Totem Stela",
+      "vi": "Improved Poise Near Totem Stela"
+    },
+    "effect": {
+      "en": "Reduces incoming poise damage by 0.1x while in the vicinity of Raider's ultimate",
+      "vi": "Giảm 0,1x sát thương poise phải nhận khi ở gần Ultimate của Raider"
+    },
+    "stacking": "no",
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "relic_revenant_expend_own_hp_to_fully_heal_nearby_allies_when_activating_art",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Expend own HP to fully heal nearby allies when activating Art",
+      "vi": "[Revenant] Expend own HP to fully heal nearby allies when activating Art"
+    },
+    "effect": {
+      "en": "Decreases current HP by 50% on ultimate usage to fully heal allies' HP",
+      "vi": "Mất 50% HP hiện tại khi dùng Ultimate để hồi đầy HP cho đồng đội"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "relic_revenant_trigger_ghostflame_explosion_during_ultimate_art_activation",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Trigger ghostflame explosion during Ultimate Art activation",
+      "vi": "[Revenant] Trigger ghostflame explosion during Ultimate Art activation"
+    },
+    "effect": {
+      "en": "Performs a ghostflame explosion on ultimate. 20 base magic damage",
+      "vi": "Tạo vụ nổ ghostflame khi dùng Ultimate. 20 sát thương phép gốc"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "relic_revenant_strengthens_family_and_allies_when_ultimate_art_is_activated",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Strengthens family and allies when Ultimate Art is activated",
+      "vi": "[Revenant] Strengthens family and allies when Ultimate Art is activated"
+    },
+    "effect": {
+      "en": "Increases ally damage by 1.25x for 30 seconds after ultimate art usage",
+      "vi": "Tăng sát thương của đồng đội 1,25x trong 30 giây sau khi dùng Ultimate Art"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "relic_revenant_power_up_while_fighting_alongside_family",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Power up while fighting alongside family",
+      "vi": "[Revenant] Power up while fighting alongside family"
+    },
+    "effect": {
+      "en": "Helen provides 1 HP/s, Frederick provides 1.1x damage, and Sebastian provides 20% elemental damage negation",
+      "vi": "Helen hồi 1 HP/giây, Frederick tăng 1,1x sát thương, Sebastian tăng 20% hấp thụ sát thương nguyên tố"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "relic_recluse_collecting_affinity_residue_activates_terra_magica",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Collecting affinity residue activates Terra Magica",
+      "vi": "[Recluse] Collecting affinity residue activates Terra Magica"
+    },
+    "effect": {
+      "en": "Creates a sigil that increases magic damage by 1.15x when standing inside, lasts 30 seconds",
+      "vi": "Tạo một ấn phép tăng sát thương phép 1,15x khi đứng bên trong, kéo dài 30 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Cannot spawn a new terra magica while previous one is still active",
+      "vi": "Không tạo được Terra Magica mới khi cái cũ còn hiệu lực"
+    },
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "relic_recluse_suffer_blood_loss_and_increase_attack_power_upon_art_activation",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Suffer blood loss and increase attack power upon Art activation",
+      "vi": "[Recluse] Suffer blood loss and increase attack power upon Art activation"
+    },
+    "effect": {
+      "en": "Ultimate deals [MaxHP * 0.2] damage to the player and increases damage by 1.16x for 30s",
+      "vi": "Ultimate gây [HP tối đa × 0,2] sát thương lên bản thân và tăng sát thương 1,16x trong 30 giây"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Applies on top of the built in ~15% damage increase from her Ultimate art",
+      "vi": "Cộng dồn trên mức ~15% sát thương có sẵn từ Ultimate Art của Recluse"
+    },
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "relic_recluse_activating_ultimate_art_raises_max_hp",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Activating Ultimate Art raises Max HP",
+      "vi": "[Recluse] Activating Ultimate Art raises Max HP"
+    },
+    "effect": {
+      "en": "Increases maximum HP by 1.5x for 30 seconds. After 30 seconds, buff stays until hit",
+      "vi": "Tăng HP tối đa 1,5x trong 30 giây. Sau 30 giây, buff vẫn giữ đến khi bị trúng đòn"
+    },
+    "stacking": "no",
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "relic_executor_character_skill_boosts_attack_but_lowers_damage_negation_while_attacking",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] Character Skill Boosts Attack but Lowers Damage Negation While Attacking",
+      "vi": "[Executor] Character Skill Boosts Attack but Lowers Damage Negation While Attacking"
+    },
+    "effect": {
+      "en": "Increases damage by 1.35x for 6 seconds and lowers damage negation by 40% for 5 seconds",
+      "vi": "Tăng sát thương 1,35x trong 6 giây và giảm hấp thụ sát thương 40% trong 5 giây"
+    },
+    "stacking": "no",
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "relic_executor_while_character_skill_is_active_unlocking_use_of_cursed_sword_restores_hp",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] While Character Skill is active, unlocking use of cursed sword restores HP",
+      "vi": "[Executor] While Character Skill is active, unlocking use of cursed sword restores HP"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.05] + 100 HP",
+      "vi": "Hồi [HP tối đa × 0,05] + 100 HP"
+    },
+    "stacking": "no",
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "relic_executor_roaring_restores_hp_while_art_is_active",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] Roaring restores HP while art is active",
+      "vi": "[Executor] Roaring restores HP while art is active"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.15] after using the roar attack in the ultimate",
+      "vi": "Hồi [HP tối đa × 0,15] sau khi dùng đòn gầm (roar) trong Ultimate"
+    },
+    "stacking": "no",
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "relic_scholar_prevent_slowing_of_character_skill",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Prevent slowing of Character Skill",
+      "vi": "[Scholar] Prevent slowing of Character Skill"
+    },
+    "effect": {
+      "en": "Slows the decay rate of the Analyze meter",
+      "vi": "Làm chậm tốc độ giảm của thanh Analyze"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "relic_scholar_allies_targeted_by_character_skill_gain_boosted_attack",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Allies targeted by Character Skill gain boosted attack",
+      "vi": "[Scholar] Allies targeted by Character Skill gain boosted attack"
+    },
+    "effect": {
+      "en": "Upon usage of the skill, allies targeted will gain 1.2x (physical) / 1.15x (elemental) damage for 30 seconds",
+      "vi": "Khi dùng skill, đồng đội được chọn tăng 1,2x (vật lý) / 1,15x (nguyên tố) sát thương trong 30 giây"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "relic_scholar_continuous_damage_inflicted_on_targets_threaded_by_ultimate_art",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Continuous damage inflicted on targets threaded by Ultimate Art",
+      "vi": "[Scholar] Continuous damage inflicted on targets threaded by Ultimate Art"
+    },
+    "effect": {
+      "en": "Enemies affected by the ultimate takes 15 dps for 20 seconds",
+      "vi": "Kẻ địch dính Ultimate nhận 15 sát thương/giây trong 20 giây"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "relic_scholar_earn_runes_for_each_additional_specimen_acquired_with_character_skill",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Earn runes for each additional specimen acquired with Character Skill",
+      "vi": "[Scholar] Earn runes for each additional specimen acquired with Character Skill"
+    },
+    "effect": {
+      "en": "Gain 1300 runes when analyzing a new enemy type (works like a bestiary). Scanning the same enemy type at a different location will not provide the runes. (needs additional confirmation)",
+      "vi": "Nhận 1300 rune khi phân tích một loại kẻ địch mới (giống bách khoa sinh vật). Quét cùng loại kẻ địch ở chỗ khác không được thêm rune. (cần xác nhận thêm)"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "relic_undertaker_activating_ultimate_art_increases_attack_power",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Activating Ultimate Art increases attack power",
+      "vi": "[Undertaker] Activating Ultimate Art increases attack power"
+    },
+    "effect": {
+      "en": "Increases damage by 1.18x for 40 seconds after activating ultimate",
+      "vi": "Tăng sát thương 1,18x trong 40 giây sau khi kích hoạt Ultimate"
+    },
+    "stacking": "no",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "relic_undertaker_attack_power_increases_by_landing_the_final_blow_of_a_chain_attack",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Attack power increases by landing the final blow of a chain attack",
+      "vi": "[Undertaker] Attack power increases by landing the final blow of a chain attack"
+    },
+    "effect": {
+      "en": "Increases damage by 1.16x for 20 seconds after hitting final hit of R1/L1 chain",
+      "vi": "Tăng sát thương 1,16x trong 20 giây sau khi trúng đòn cuối của chuỗi R1/L1"
+    },
+    "stacking": "unknown",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "relic_undertaker_physical_attacks_boosted_while_assist_effect_from_incantation_is_active_for_self",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Physical attacks boosted while assist effect from incantation is active for self",
+      "vi": "[Undertaker] Physical attacks boosted while assist effect from incantation is active for self"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.19x for 60 seconds after applying an incant buff",
+      "vi": "Tăng sát thương vật lý 1,19x trong 60 giây sau khi dùng buff incantation"
+    },
+    "stacking": "unknown",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "relic_undertaker_contact_with_allies_restores_their_hp_while_ultimate_art_is_activated",
+    "kind": "relic",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Contact with allies restores their HP while Ultimate Art is activated",
+      "vi": "[Undertaker] Contact with allies restores their HP while Ultimate Art is activated"
+    },
+    "effect": {
+      "en": "Allies restore 30% of max HP + 100 HP if they make contact with the ultimate",
+      "vi": "Đồng đội hồi 30% HP tối đa + 100 HP khi chạm vào Ultimate"
+    },
+    "stacking": "unknown",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "deep_increased_maximum_hp",
+    "kind": "deep",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum HP",
+      "vi": "Increased Maximum HP"
+    },
+    "effect": {
+      "en": "Increases maximum HP by 1.1x",
+      "vi": "Tăng HP tối đa 1,1x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_increased_maximum_fp",
+    "kind": "deep",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum FP",
+      "vi": "Increased Maximum FP"
+    },
+    "effect": {
+      "en": "Increases maximum FP by 1.15x",
+      "vi": "Tăng FP tối đa 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_increased_maximum_stamina",
+    "kind": "deep",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum Stamina",
+      "vi": "Increased Maximum Stamina"
+    },
+    "effect": {
+      "en": "Increases maximum stamina by 1.12x",
+      "vi": "Tăng Stamina tối đa 1,12x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_item_in_possession_at_start_of_expedition",
+    "kind": "deep",
+    "categories": [
+      "start"
+    ],
+    "name": {
+      "en": "[Item] in possession at start of expedition",
+      "vi": "[Item] in possession at start of expedition"
+    },
+    "effect": {
+      "en": "Starts the game with the specified item",
+      "vi": "Bắt đầu với vật phẩm tương ứng"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Lists contains all crystal tears and perfume items",
+      "vi": "Danh sách gồm mọi crystal tear và vật phẩm perfume"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_max_hp_increased_for_each_great_enemy_defeated_at_a_great_church",
+    "kind": "deep",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Max HP increased for each great enemy defeated at a Great Church",
+      "vi": "Max HP increased for each great enemy defeated at a Great Church"
+    },
+    "effect": {
+      "en": "Increases maximum HP by 1.05x for each boss killed at a great church",
+      "vi": "Tăng HP tối đa 1,05x cho mỗi boss hạ ở Great Church"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "deep_runes_and_item_discovery_increased_for_each_great_enemy_defeated_at_a_fort",
+    "kind": "deep",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Runes and Item Discovery increased for each great enemy defeated at a Fort",
+      "vi": "Runes and Item Discovery increased for each great enemy defeated at a Fort"
+    },
+    "effect": {
+      "en": "Increases discovery by 16 and rune gain by 1.055x for each boss killed at a fort",
+      "vi": "Tăng discovery thêm 16 và rune nhận được 1,055x cho mỗi boss hạ ở Fort"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "deep_arcane_increased_for_each_great_enemy_defeated_at_a_ruin",
+    "kind": "deep",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Arcane increased for each great enemy defeated at a Ruin",
+      "vi": "Arcane increased for each great enemy defeated at a Ruin"
+    },
+    "effect": {
+      "en": "Increases arcane by 4 for each boss killed at a ruin",
+      "vi": "Tăng Arcane thêm 4 cho mỗi boss hạ ở Ruin"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "deep_max_stamina_increased_for_each_great_enemy_defeated_at_a_great_encampment",
+    "kind": "deep",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Max stamina increased for each great enemy defeated at a Great Encampment",
+      "vi": "Max stamina increased for each great enemy defeated at a Great Encampment"
+    },
+    "effect": {
+      "en": "Increases maximum stamina by 1.075x for each boss killed at a camp",
+      "vi": "Tăng Stamina tối đa 1,075x cho mỗi boss hạ ở Great Encampment"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "deep_dormant_power_helps_discover_weapon_class",
+    "kind": "deep",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Dormant Power Helps Discover [Weapon Class]",
+      "vi": "Dormant Power Helps Discover [Weapon Class]"
+    },
+    "effect": {
+      "en": "Changes the preferred weapon class to the specified class, making it more likely to obtain it",
+      "vi": "Đổi loại vũ khí ưu tiên sang loại tương ứng, dễ nhặt được loại đó hơn"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Priority is given to first one in order. Does not stack with character's preferred weapon type",
+      "vi": "Ưu tiên cái đứng trước. Không stack với loại vũ khí ưu tiên của nhân vật"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_physical_attack_up_3_4",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Physical Attack Up +3/4",
+      "vi": "Physical Attack Up +3/4"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.105x / 1.12x",
+      "vi": "Tăng sát thương vật lý 1,105x / 1,12x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_magic_fire_lightning_holy_attack_up_3_4",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Magic/Fire/Lightning/Holy Attack Up +3/4",
+      "vi": "Magic/Fire/Lightning/Holy Attack Up +3/4"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy damage by 1.105x/1.12x",
+      "vi": "Tăng sát thương phép/lửa/sét/thánh 1,105x/1,12x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_improved_affinity_attack_power_0_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Affinity Attack Power +0/1/2",
+      "vi": "Improved Affinity Attack Power +0/1/2"
+    },
+    "effect": {
+      "en": "Increases magic, fire, lightning, and holy damage by 1.05x/1.08x/1.1x",
+      "vi": "Tăng sát thương phép, lửa, sét và thánh 1,05x/1,08x/1,1x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Affects spells",
+      "vi": "Áp dụng cho phép"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_physical_attack_power_increases_after_using_grease_items_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Physical attack power increases after using grease items +1/2",
+      "vi": "Physical attack power increases after using grease items +1/2"
+    },
+    "effect": {
+      "en": "Increases physical damage by 1.17x/1.2x for 30 seconds after using grease",
+      "vi": "Tăng sát thương vật lý 1,17x/1,2x trong 30 giây sau khi dùng grease"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Different levels stack (ex. +1 stacks with +2)",
+      "vi": "Các cấp khác nhau stack với nhau (vd +1 stack với +2)"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_attack_power_up_when_facing_poison_scarlet_rot_frostbite_afflicted_enemy_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack power up when facing poison/scarlet rot/frostbite-afflicted enemy +1/2",
+      "vi": "Attack power up when facing poison/scarlet rot/frostbite-afflicted enemy +1/2"
+    },
+    "effect": {
+      "en": "Increases damage by 1.16x/1.2x when attacking an enemy suffering from the specified status",
+      "vi": "Tăng sát thương 1,16x/1,2x khi đánh kẻ địch đang dính hiệu ứng tương ứng"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Different levels stack (ex. +1 stacks with +2)",
+      "vi": "Các cấp khác nhau stack với nhau (vd +1 stack với +2)"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_sleep_madness_in_vicinity_improves_attack_power_0_1",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Sleep/Madness in Vicinity Improves Attack Power +0/+1",
+      "vi": "Sleep/Madness in Vicinity Improves Attack Power +0/+1"
+    },
+    "effect": {
+      "en": "Increases damage by 1.12x/1.22x after sleep/madness procs",
+      "vi": "Tăng sát thương 1,12x/1,22x sau khi ngủ/điên loạn kích hoạt"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+0 stacks with +1",
+      "vi": "+0 stack với +1"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_improved_guard_counters_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Guard Counters +1/2",
+      "vi": "Improved Guard Counters +1/2"
+    },
+    "effect": {
+      "en": "Increases guard counter damage by 1.25x/1.29x",
+      "vi": "Tăng sát thương guard counter 1,25x/1,29x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_improved_consumable_damage_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved [Consumable] Damage +1/2",
+      "vi": "Improved [Consumable] Damage +1/2"
+    },
+    "effect": {
+      "en": "Increases pot/knife/stone/perfume damage by 1.3x/1.35x",
+      "vi": "Tăng sát thương bình ném/dao ném/đá ném/perfume 1,3x/1,35x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_art_gauge_charged_from_successful_guarding_1",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Art gauge charged from successful guarding +1",
+      "vi": "Art gauge charged from successful guarding +1"
+    },
+    "effect": {
+      "en": "Increases characterSkillGauge by 1.5 upon blocking an attack",
+      "vi": "Tăng thanh Character Skill thêm 1,5 khi đỡ được đòn"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+0 stacks with +1",
+      "vi": "+0 stack với +1"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_art_gauge_fills_moderately_upon_critical_hit_1",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Art gauge fills moderately upon critical hit +1",
+      "vi": "Art gauge fills moderately upon critical hit +1"
+    },
+    "effect": {
+      "en": "Increases characterSkillGauge by 6.5 upon riposte",
+      "vi": "Tăng thanh Character Skill thêm 6,5 khi riposte"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+0 stacks with +1",
+      "vi": "+0 stack với +1"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_defeating_enemies_fills_more_of_the_art_gauge_1",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Defeating enemies fills more of the Art gauge +1",
+      "vi": "Defeating enemies fills more of the Art gauge +1"
+    },
+    "effect": {
+      "en": "Increases characterSkillGauge by 6.5 upon killing enemies",
+      "vi": "Tăng thanh Character Skill thêm 6,5 khi hạ kẻ địch"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+0 stacks with +1",
+      "vi": "+0 stack với +1"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_improved_sorceries_incantations_0_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Sorceries/Incantations +0/1/2",
+      "vi": "Improved Sorceries/Incantations +0/1/2"
+    },
+    "effect": {
+      "en": "Increases sorcery/incant damage by 1.05x/1.085x/1.1x",
+      "vi": "Tăng sát thương sorcery/incantation 1,05x/1,085x/1,1x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_fp_consumption_0_1_2",
+    "kind": "deep",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Reduced FP Consumption +0/1/2",
+      "vi": "Reduced FP Consumption +0/1/2"
+    },
+    "effect": {
+      "en": "Reduces FP consumption by 0.92x/0.87x/0.84x",
+      "vi": "Giảm lượng FP tiêu hao còn 0,92x/0,87x/0,84x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Higher tier (+1/2) does not seem to appear on random relics",
+      "vi": "Cấp cao hơn (+1/2) có vẻ không xuất hiện trên relic ngẫu nhiên"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_improved_physical_damage_negation_1_2",
+    "kind": "deep",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Physical Damage Negation +1/2",
+      "vi": "Improved Physical Damage Negation +1/2"
+    },
+    "effect": {
+      "en": "Increases physical damage negation by 10.5%/12%",
+      "vi": "Tăng hấp thụ sát thương vật lý 10,5%/12%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_improved_element_damage_negation_1_2",
+    "kind": "deep",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved [Element] Damage Negation +1/2",
+      "vi": "Improved [Element] Damage Negation +1/2"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy damage negation by 15%/16%",
+      "vi": "Tăng hấp thụ sát thương phép/lửa/sét/thánh 15%/16%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_improved_affinity_damage_negation_0_1_2",
+    "kind": "deep",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Affinity Damage Negation +0/1/2",
+      "vi": "Improved Affinity Damage Negation +0/1/2"
+    },
+    "effect": {
+      "en": "Increases magic, fire, lightning, and holy damage negation by 6/10.5/12%",
+      "vi": "Tăng hấp thụ sát thương phép, lửa, sét và thánh 6/10,5/12%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_improved_status_resistance_1_2",
+    "kind": "deep",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved [Status] Resistance +1/2",
+      "vi": "Improved [Status] Resistance +1/2"
+    },
+    "effect": {
+      "en": "Increases specified status resistance by 110/130",
+      "vi": "Tăng kháng hiệu ứng tương ứng thêm 110/130"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_partial_hp_restoration_upon_post_damage_attacks_1_2",
+    "kind": "deep",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Partial HP Restoration upon Post-Damage Attacks +1/2",
+      "vi": "Partial HP Restoration upon Post-Damage Attacks +1/2"
+    },
+    "effect": {
+      "en": "Same as original, but increases HP gained per hit by 25%/35%",
+      "vi": "Giống bản gốc, nhưng tăng lượng HP hồi mỗi đòn thêm 25%/35%"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+1 stacks with +2, but neither stack with +0",
+      "vi": "+1 stack với +2, nhưng cả hai không stack với +0"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_hp_restoration_upon_thrusting_counterattack_1",
+    "kind": "deep",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP Restoration upon Thrusting Counterattack +1",
+      "vi": "HP Restoration upon Thrusting Counterattack +1"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.033] on counterhits",
+      "vi": "Hồi [HP tối đa × 0,033] khi đánh counter"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Different levels stack (ex. +1 stacks with +2)",
+      "vi": "Các cấp khác nhau stack với nhau (vd +1 stack với +2)"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_hp_restored_when_using_medicinal_boluses_etc_1",
+    "kind": "deep",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP restored when using medicinal boluses, etc. +1",
+      "vi": "HP restored when using medicinal boluses, etc. +1"
+    },
+    "effect": {
+      "en": "Replenish 80 HP from certain consumables",
+      "vi": "Hồi 80 HP từ một số vật phẩm tiêu hao"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+0 stacks with +1",
+      "vi": "+0 stack với +1"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_improved_flask_hp_restoration",
+    "kind": "deep",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Improved Flask HP Restoration",
+      "vi": "Improved Flask HP Restoration"
+    },
+    "effect": {
+      "en": "Increases HP gained from flasks by 1.1x",
+      "vi": "Tăng lượng HP hồi từ bình máu 1,1x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_wylder_character_skill_inflicts_blood_loss",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Character Skill inflicts Blood Loss",
+      "vi": "[Wylder] Character Skill inflicts Blood Loss"
+    },
+    "effect": {
+      "en": "Skill inflicts 60 (impact) / 55 (pull) bleed on hit",
+      "vi": "Skill gây 60 (va chạm) / 55 (kéo) buildup chảy máu khi trúng"
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "deep_guardian_character_skill_boosts_damage_negation_of_nearby_allies",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Character Skill Boosts Damage Negation of Nearby Allies",
+      "vi": "[Guardian] Character Skill Boosts Damage Negation of Nearby Allies"
+    },
+    "effect": {
+      "en": "Increases damage negation for self and allies by 12% for 30 seconds after using skill",
+      "vi": "Tăng hấp thụ sát thương cho bản thân và đồng đội 12% trong 30 giây sau khi dùng skill"
+    },
+    "stacking": "no",
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "deep_ironeye_character_skill_inflicts_heavy_poison_damage_on_poisoned_enemies",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Character Skill Inflicts Heavy Poison Damage on Poisoned Enemies",
+      "vi": "[Ironeye] Character Skill Inflicts Heavy Poison Damage on Poisoned Enemies"
+    },
+    "effect": {
+      "en": "Skill inflicts 70 poison. Deals [MaxHP * 0.0025] + 250 damage on poison-afflicted enemies",
+      "vi": "Skill gây 70 buildup độc. Gây [HP tối đa × 0,0025] + 250 sát thương lên kẻ địch đang trúng độc"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Testing suggests its still based on max HP",
+      "vi": "Thử nghiệm cho thấy vẫn tính theo HP tối đa"
+    },
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "deep_duchess_use_character_skill_for_brief_invulnerability",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Use Character Skill for Brief Invulnerability",
+      "vi": "[Duchess] Use Character Skill for Brief Invulnerability"
+    },
+    "effect": {
+      "en": "Makes you immune to damage for 0.4 seconds after using skill",
+      "vi": "Miễn nhiễm sát thương trong 0,4 giây sau khi dùng skill"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Translates to 24 iframes at 60FPS",
+      "vi": "Tương đương 24 iframe ở 60 FPS"
+    },
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "deep_raider_hit_with_character_skill_to_reduce_enemy_attack_power",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Raider] Hit With Character Skill to Reduce Enemy Attack Power",
+      "vi": "[Raider] Hit With Character Skill to Reduce Enemy Attack Power"
+    },
+    "effect": {
+      "en": "Decreases enemy damage dealt by 0.87x after hitting them with skill for 13 seconds",
+      "vi": "Giảm sát thương gây ra của kẻ địch còn 0,87x trong 13 giây sau khi trúng skill"
+    },
+    "stacking": "no",
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "deep_revenant_increases_max_fp_upon_ability_activation",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Increases Max FP upon Ability Activation",
+      "vi": "[Revenant] Increases Max FP upon Ability Activation"
+    },
+    "effect": {
+      "en": "Permanently increases maximum FP by 1.0075x from 0 to 20 stacks\nPermanently increases maximum FP by 1.0085x from 21 to 40 stacks\nPermanently increases maximum FP by 1.0095x from 41 to 60 stacks (cap, total 51% increased max FP)",
+      "vi": "Tăng vĩnh viễn FP tối đa 1,0075x mỗi stack từ 0 đến 20\nTăng vĩnh viễn FP tối đa 1,0085x mỗi stack từ 21 đến 40\nTăng vĩnh viễn FP tối đa 1,0095x mỗi stack từ 41 đến 60 (tối đa, tổng cộng +51% FP tối đa)"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "deep_recluse_collect_affinity_residues_to_negate_affinity",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Collect Affinity Residues to Negate Affinity",
+      "vi": "[Recluse] Collect Affinity Residues to Negate Affinity"
+    },
+    "effect": {
+      "en": "Increases magic/fire/lightning/holy damage negation by 20% upon absorbing respective residue for 30 seconds",
+      "vi": "Tăng hấp thụ sát thương phép/lửa/sét/thánh 20% trong 30 giây khi hấp thụ residue tương ứng"
+    },
+    "stacking": "no",
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "deep_executor_slowly_restore_hp_upon_ability_activation",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] Slowly Restore HP upon Ability Activation",
+      "vi": "[Executor] Slowly Restore HP upon Ability Activation"
+    },
+    "effect": {
+      "en": "Restores [MaxHP * 0.0027] + 3 for 30 seconds after passive activates (recovering from status effect)",
+      "vi": "Hồi [HP tối đa × 0,0027] + 3 trong 30 giây sau khi nội tại kích hoạt (khi hồi phục khỏi hiệu ứng)"
+    },
+    "stacking": "no",
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "deep_scholar_reduced_fp_consumption_when_using_character_skill_on_self",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Reduced FP consumption when using Character Skill on self",
+      "vi": "[Scholar] Reduced FP consumption when using Character Skill on self"
+    },
+    "effect": {
+      "en": "Reduces FP consumption by 0.85x for 40 seconds after using character skill self buff",
+      "vi": "Giảm FP tiêu hao còn 0,85x trong 40 giây sau khi dùng Character Skill buff bản thân"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "deep_undertaker_executing_art_readies_character_skill",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Executing Art readies Character Skill",
+      "vi": "[Undertaker] Executing Art readies Character Skill"
+    },
+    "effect": {
+      "en": "Allows you to perform Trance immediately after activating ultimate. Works with temporary ultimate use.",
+      "vi": "Cho phép dùng Trance ngay sau khi kích hoạt Ultimate. Có tác dụng với cả lần dùng Ultimate tạm thời."
+    },
+    "stacking": "no",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "deep_wylder_improved_mind_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Improved Mind, Reduced Vigor",
+      "vi": "[Wylder] Improved Mind, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 5, increases mind by 10",
+      "vi": "Giảm Vigor 5, tăng Mind 10"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Stat changes assumes level 15 (same applies to the effects below); -100 HP, +50 FP",
+      "vi": "Thay đổi chỉ số tính ở level 15 (áp dụng cho cả các hiệu ứng bên dưới); -100 HP, +50 FP"
+    },
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "deep_wylder_improved_intelligence_and_faith_reduced_strength_and_dexterity",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Wylder] Improved Intelligence and Faith, Reduced Strength and Dexterity",
+      "vi": "[Wylder] Improved Intelligence and Faith, Reduced Strength and Dexterity"
+    },
+    "effect": {
+      "en": "Decreases strength by 7 and dexterity by 5, increases intelligence and faith by 15",
+      "vi": "Giảm Strength 7 và Dexterity 5, tăng Intelligence và Faith 15"
+    },
+    "stacking": "no",
+    "character": "wylder",
+    "verified": true
+  },
+  {
+    "id": "deep_guardian_improved_strength_and_dexterity_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Improved Strength and Dexterity, Reduced Vigor",
+      "vi": "[Guardian] Improved Strength and Dexterity, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 8, increases strength by 9 and dexterity by 19",
+      "vi": "Giảm Vigor 8, tăng Strength 9 và Dexterity 19"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "~16% AP increase for halberds, ~20% increase for heavy thrusting swords; -160 HP",
+      "vi": "Tăng ~16% AP cho halberd, ~20% cho heavy thrusting sword; -160 HP"
+    },
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "deep_guardian_improved_mind_and_faith_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Guardian] Improved Mind and Faith, Reduced Vigor",
+      "vi": "[Guardian] Improved Mind and Faith, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 6, increases mind by 8 and faith by 17",
+      "vi": "Giảm Vigor 6, tăng Mind 8 và Faith 17"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-120 HP, +40 FP",
+      "vi": "-120 HP, +40 FP"
+    },
+    "character": "guardian",
+    "verified": true
+  },
+  {
+    "id": "deep_ironeye_improved_arcane_reduced_dexterity",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Improved Arcane, Reduced Dexterity",
+      "vi": "[Ironeye] Improved Arcane, Reduced Dexterity"
+    },
+    "effect": {
+      "en": "Decreases dexterity by 9, increases arcane by 15",
+      "vi": "Giảm Dexterity 9, tăng Arcane 15"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "~26% increase in status build up, ~ -6% reduction to bow attack",
+      "vi": "Tăng ~26% buildup hiệu ứng, giảm ~6% sát thương cung"
+    },
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "deep_ironeye_improved_vigor_and_strength_reduced_dexterity",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Ironeye] Improved Vigor and Strength, Reduced Dexterity",
+      "vi": "[Ironeye] Improved Vigor and Strength, Reduced Dexterity"
+    },
+    "effect": {
+      "en": "Decreases dexterity by 13, increases strength by 20 and vigor by 5",
+      "vi": "Giảm Dexterity 13, tăng Strength 20 và Vigor 5"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+100 HP",
+      "vi": "+100 HP"
+    },
+    "character": "ironeye",
+    "verified": true
+  },
+  {
+    "id": "deep_duchess_improved_vigor_and_strength_reduced_mind",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Improved Vigor and Strength, Reduced Mind",
+      "vi": "[Duchess] Improved Vigor and Strength, Reduced Mind"
+    },
+    "effect": {
+      "en": "Decreases mind by 14, increases strength by 24 and vigor by 3",
+      "vi": "Giảm Mind 14, tăng Strength 24 và Vigor 3"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-70 FP, +60 HP",
+      "vi": "-70 FP, +60 HP"
+    },
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "deep_duchess_improved_mind_and_faith_reduced_intelligence",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Duchess] Improved Mind and Faith, Reduced Intelligence",
+      "vi": "[Duchess] Improved Mind and Faith, Reduced Intelligence"
+    },
+    "effect": {
+      "en": "Decreases intelligence by 5, increases faith by 13 and mind by 3",
+      "vi": "Giảm Intelligence 5, tăng Faith 13 và Mind 3"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+15 FP; 14% increase to incant damage vs base duchess, but still 10% lower than Revenant",
+      "vi": "+15 FP; tăng 14% sát thương incantation so với Duchess gốc, nhưng vẫn thấp hơn Revenant 10%"
+    },
+    "character": "duchess",
+    "verified": true
+  },
+  {
+    "id": "deep_raider_improved_mind_and_intelligence_reduced_vigor_and_endurance",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Raider] Improved Mind and Intelligence, Reduced Vigor and Endurance",
+      "vi": "[Raider] Improved Mind and Intelligence, Reduced Vigor and Endurance"
+    },
+    "effect": {
+      "en": "Decreases vigor by 8 and endurance by 4, increases intelligence by 35 and mind by 9",
+      "vi": "Giảm Vigor 8 và Endurance 4, tăng Intelligence 35 và Mind 9"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-160 HP, +45 FP",
+      "vi": "-160 HP, +45 FP"
+    },
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "deep_raider_improved_arcane_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Raider] Improved Arcane, Reduced Vigor",
+      "vi": "[Raider] Improved Arcane, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 4, increases arcane by 17",
+      "vi": "Giảm Vigor 4, tăng Arcane 17"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-80 HP",
+      "vi": "-80 HP"
+    },
+    "character": "raider",
+    "verified": true
+  },
+  {
+    "id": "deep_revenant_improved_vigor_and_endurance_reduced_mind",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Improved Vigor and Endurance, Reduced Mind",
+      "vi": "[Revenant] Improved Vigor and Endurance, Reduced Mind"
+    },
+    "effect": {
+      "en": "Decreases mind by 11, increases vigor by 5 and endurance by 5",
+      "vi": "Giảm Mind 11, tăng Vigor 5 và Endurance 5"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-55 FP, +100 HP",
+      "vi": "-55 FP, +100 HP"
+    },
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "deep_revenant_improved_strength_reduced_faith",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Revenant] Improved Strength, Reduced Faith",
+      "vi": "[Revenant] Improved Strength, Reduced Faith"
+    },
+    "effect": {
+      "en": "Decreases faith by 6, increases strength by 25",
+      "vi": "Giảm Faith 6, tăng Strength 25"
+    },
+    "stacking": "no",
+    "character": "revenant",
+    "verified": true
+  },
+  {
+    "id": "deep_recluse_improved_vigor_endurance_and_dexterity_reduced_intelligence_and_faith",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Improved Vigor, Endurance, and Dexterity, Reduced Intelligence and Faith",
+      "vi": "[Recluse] Improved Vigor, Endurance, and Dexterity, Reduced Intelligence and Faith"
+    },
+    "effect": {
+      "en": "Decreases intelligence and faith by 10, increases dexterity by 20, endurance by 5, and vigor by 4",
+      "vi": "Giảm Intelligence và Faith 10, tăng Dexterity 20, Endurance 5 và Vigor 4"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+80 HP",
+      "vi": "+80 HP"
+    },
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "deep_recluse_improved_intelligence_and_faith_reduced_mind",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Recluse] Improved Intelligence and Faith, Reduced Mind",
+      "vi": "[Recluse] Improved Intelligence and Faith, Reduced Mind"
+    },
+    "effect": {
+      "en": "Decreases mind by 13, increases intelligence and faith by 12",
+      "vi": "Giảm Mind 13, tăng Intelligence và Faith 12"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-65 FP, ~10% increase in spell damage",
+      "vi": "-65 FP, tăng ~10% sát thương phép"
+    },
+    "character": "recluse",
+    "verified": true
+  },
+  {
+    "id": "deep_executor_improved_vigor_and_endurance_reduced_arcane",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] Improved Vigor and Endurance, Reduced Arcane",
+      "vi": "[Executor] Improved Vigor and Endurance, Reduced Arcane"
+    },
+    "effect": {
+      "en": "Decreases arcane by 13, increases vigor by 5 and endurance by 6",
+      "vi": "Giảm Arcane 13, tăng Vigor 5 và Endurance 6"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "+100 HP",
+      "vi": "+100 HP"
+    },
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "deep_executor_improved_dexterity_and_arcane_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Executor] Improved Dexterity and Arcane, Reduced Vigor",
+      "vi": "[Executor] Improved Dexterity and Arcane, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 7, increases arcane by 9 and dexterity by 12",
+      "vi": "Giảm Vigor 7, tăng Arcane 9 và Dexterity 12"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "-140 HP, ~11% increase in status build up, ~6.3% increase in AP for katana",
+      "vi": "-140 HP, tăng ~11% buildup hiệu ứng, tăng ~6,3% AP cho katana"
+    },
+    "character": "executor",
+    "verified": true
+  },
+  {
+    "id": "deep_scholar_improved_mind_reduced_vigor",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Improved Mind, Reduced Vigor",
+      "vi": "[Scholar] Improved Mind, Reduced Vigor"
+    },
+    "effect": {
+      "en": "Decreases vigor by 3, increases mind by 9",
+      "vi": "Giảm Vigor 3, tăng Mind 9"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "deep_scholar_improved_endurance_and_dexterity_reduced_intelligence_and_arcane",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Scholar] Improved Endurance and Dexterity, Reduced Intelligence and Arcane",
+      "vi": "[Scholar] Improved Endurance and Dexterity, Reduced Intelligence and Arcane"
+    },
+    "effect": {
+      "en": "Decreases intelligence by 4 and arcane by 20, increases endurance by 6 and dexterity by 40",
+      "vi": "Giảm Intelligence 4 và Arcane 20, tăng Endurance 6 và Dexterity 40"
+    },
+    "stacking": "no",
+    "character": "scholar",
+    "verified": true
+  },
+  {
+    "id": "deep_undertaker_improved_dexterity_reduced_vigor_and_faith",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Improved Dexterity, Reduced Vigor and Faith",
+      "vi": "[Undertaker] Improved Dexterity, Reduced Vigor and Faith"
+    },
+    "effect": {
+      "en": "Decreases vigor by 5 and faith by 13, increases dexterity by 19",
+      "vi": "Giảm Vigor 5 và Faith 13, tăng Dexterity 19"
+    },
+    "stacking": "no",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "deep_undertaker_improved_mind_and_faith_reduced_strength",
+    "kind": "deep",
+    "categories": [
+      "character"
+    ],
+    "name": {
+      "en": "[Undertaker] Improved Mind and Faith, Reduced Strength",
+      "vi": "[Undertaker] Improved Mind and Faith, Reduced Strength"
+    },
+    "effect": {
+      "en": "Decreases strength by 15, increases mind by 9 and faith by 12",
+      "vi": "Giảm Strength 15, tăng Mind 9 và Faith 12"
+    },
+    "stacking": "no",
+    "character": "undertaker",
+    "verified": true
+  },
+  {
+    "id": "deep_taking_damage_causes_status_buildup",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Taking Damage Causes [Status] Buildup",
+      "vi": "Taking Damage Causes [Status] Buildup"
+    },
+    "effect": {
+      "en": "Taking damage inflicts 32 (deathblight) / 40 (madness, sleep) / 44 (bleed, rot, frostbite) / 52 (poison) buildup on the user",
+      "vi": "Trúng đòn sẽ tự nhận 32 (tử khí) / 40 (điên loạn, ngủ) / 44 (chảy máu, thối rữa, băng giá) / 52 (độc) buildup"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Poison / Rot / Frost does not trigger executor ability Tenacity until the status is recovered",
+      "vi": "Độc / Thối rữa / Băng giá không kích hoạt nội tại Tenacity của Executor cho đến khi hết hiệu ứng"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_strength_and_intelligence",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Strength and Intelligence",
+      "vi": "Reduced Strength and Intelligence"
+    },
+    "effect": {
+      "en": "Decreases strength and intelligence by 3",
+      "vi": "Giảm Strength và Intelligence 3"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_dexterity_and_faith",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Dexterity and Faith",
+      "vi": "Reduced Dexterity and Faith"
+    },
+    "effect": {
+      "en": "Decreases dexterity and faith by 3",
+      "vi": "Giảm Dexterity và Faith 3"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_dexterity_and_intelligence",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Dexterity and Intelligence",
+      "vi": "Reduced Dexterity and Intelligence"
+    },
+    "effect": {
+      "en": "Decreases dexterity and intelligence by 3",
+      "vi": "Giảm Dexterity và Intelligence 3"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_strength_and_faith",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Strength and Faith",
+      "vi": "Reduced Strength and Faith"
+    },
+    "effect": {
+      "en": "Decreases strength and faith by 3",
+      "vi": "Giảm Strength và Faith 3"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_vigor_and_arcane",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Vigor and Arcane",
+      "vi": "Reduced Vigor and Arcane"
+    },
+    "effect": {
+      "en": "Decreases vigor and arcane by 3",
+      "vi": "Giảm Vigor và Arcane 3"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "-60 HP",
+      "vi": "-60 HP"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_rune_acquisition",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Rune Acquisition",
+      "vi": "Reduced Rune Acquisition"
+    },
+    "effect": {
+      "en": "Decreases rune gain by 0.9x",
+      "vi": "Giảm rune nhận được còn 0,9x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_flask_hp_restoration",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Flask HP Restoration",
+      "vi": "Reduced Flask HP Restoration"
+    },
+    "effect": {
+      "en": "Reduces HP gained from flasks by 0.85x",
+      "vi": "Giảm lượng HP hồi từ bình máu còn 0,85x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_ultimate_art_charging_impaired",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Ultimate Art Charging Impaired",
+      "vi": "Ultimate Art Charging Impaired"
+    },
+    "effect": {
+      "en": "Decreases ultimate gauge gain by 0.85x",
+      "vi": "Giảm tốc nạp thanh Ultimate còn 0,85x"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Unlike Ultimate Art Gauge, affects both passive ult gain and ult gain from attacking",
+      "vi": "Khác với Ultimate Art Gauge, ảnh hưởng cả phần tự nạp lẫn phần nạp khi đánh"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_all_resistances_down",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "All Resistances Down",
+      "vi": "All Resistances Down"
+    },
+    "effect": {
+      "en": "Decreases all status resist by 80",
+      "vi": "Giảm toàn bộ kháng hiệu ứng 80"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_continuous_hp_loss",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Continuous HP Loss",
+      "vi": "Continuous HP Loss"
+    },
+    "effect": {
+      "en": "Decreases HP by 2/s",
+      "vi": "Mất 2 HP/giây"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_more_damage_taken_after_evasion",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "More Damage Taken After Evasion",
+      "vi": "More Damage Taken After Evasion"
+    },
+    "effect": {
+      "en": "Decreases damage negations by 45% right after rolling",
+      "vi": "Giảm hấp thụ sát thương 45% ngay sau khi lăn"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_repeated_evasions_lower_damage_negation",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Repeated Evasions Lower Damage Negation",
+      "vi": "Repeated Evasions Lower Damage Negation"
+    },
+    "effect": {
+      "en": "Decreases damage negations by 23% / 35% for 15 seconds on repeat rolls",
+      "vi": "Giảm hấp thụ sát thương 23% / 35% trong 15 giây khi lăn liên tục"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_reduced_damage_negation_for_flask_usages",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Reduced Damage Negation for Flask Usages",
+      "vi": "Reduced Damage Negation for Flask Usages"
+    },
+    "effect": {
+      "en": "Decreases damage negations by 45% while using flasks",
+      "vi": "Giảm hấp thụ sát thương 45% khi đang dùng bình máu"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_lower_attack_when_below_max_hp",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Lower Attack When Below Max HP",
+      "vi": "Lower Attack When Below Max HP"
+    },
+    "effect": {
+      "en": "Decreases damage by 0.915x when HP is below 85%",
+      "vi": "Giảm sát thương còn 0,915x khi HP dưới 85%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "deep_poison_buildup_when_below_max_hp",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Poison Buildup When Below Max HP",
+      "vi": "Poison Buildup When Below Max HP"
+    },
+    "effect": {
+      "en": "Inflicts the user with 2 poison buildup per 0.22s when HP is below 85%",
+      "vi": "Tự nhận 2 buildup độc mỗi 0,22 giây khi HP dưới 85%"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Does not trigger executor ability Tenacity until the status is recovered",
+      "vi": "Không kích hoạt nội tại Tenacity của Executor cho đến khi hết hiệu ứng"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_rot_buildup_when_below_max_hp",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Rot Buildup When Below Max HP",
+      "vi": "Rot Buildup When Below Max HP"
+    },
+    "effect": {
+      "en": "Inflicts the user with 2 rot buildup per 0.24s when HP is below 85%",
+      "vi": "Tự nhận 2 buildup thối rữa mỗi 0,24 giây khi HP dưới 85%"
+    },
+    "stacking": "yes",
+    "notes": {
+      "en": "Does not trigger executor ability Tenacity until the status is recovered",
+      "vi": "Không kích hoạt nội tại Tenacity của Executor cho đến khi hết hiệu ứng"
+    },
+    "verified": true
+  },
+  {
+    "id": "deep_near_death_reduces_max_hp",
+    "kind": "deep",
+    "categories": [
+      "curse"
+    ],
+    "name": {
+      "en": "Near Death Reduces Max HP",
+      "vi": "Near Death Reduces Max HP"
+    },
+    "effect": {
+      "en": "Reduces maximum HP by 0.75x for 60 seconds after being downed",
+      "vi": "Giảm HP tối đa còn 0,75x trong 60 giây sau khi bị gục"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_increased_maximum_hp",
+    "kind": "dormant",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum HP",
+      "vi": "Increased Maximum HP"
+    },
+    "inGame": "Maximum HP raised",
+    "effect": {
+      "en": "Increases maximum HP by 1.1x / 1.15x",
+      "vi": "Tăng HP tối đa 1,1x / 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_increased_maximum_fp",
+    "kind": "dormant",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum FP",
+      "vi": "Increased Maximum FP"
+    },
+    "inGame": "Maximum FP raised",
+    "effect": {
+      "en": "Increases maximum FP by 1.1x / 1.15x",
+      "vi": "Tăng FP tối đa 1,1x / 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_reduced_fp_consumption",
+    "kind": "dormant",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Reduced FP Consumption",
+      "vi": "Reduced FP Consumption"
+    },
+    "inGame": "Lowers FP consumption",
+    "effect": {
+      "en": "Lowers FP cost of skills, spells, and consumables by 0.9x / 0.85x",
+      "vi": "Giảm FP tiêu hao của skill, phép và vật phẩm còn 0,9x / 0,85x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_increased_maximum_stamina",
+    "kind": "dormant",
+    "categories": [
+      "stat"
+    ],
+    "name": {
+      "en": "Increased Maximum Stamina",
+      "vi": "Increased Maximum Stamina"
+    },
+    "inGame": "Maximum stamina raised",
+    "effect": {
+      "en": "Increases maximum stamina by 1.1x / 1.15x",
+      "vi": "Tăng Stamina tối đa 1,1x / 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_more_runes_from_defeated_enemies",
+    "kind": "dormant",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "More Runes From Defeated Enemies",
+      "vi": "More Runes From Defeated Enemies"
+    },
+    "inGame": "Increases runes obtained from defeated enemies",
+    "effect": {
+      "en": "Increases rune gain by 1.1x",
+      "vi": "Tăng rune nhận được 1,1x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_integration_of_intelligence",
+    "kind": "dormant",
+    "categories": [
+      "exploration"
+    ],
+    "name": {
+      "en": "Integration of Intelligence",
+      "vi": "Integration of Intelligence"
+    },
+    "inGame": "Attacks obtain a great amount of runes from enemies on rare occasions",
+    "effect": {
+      "en": "Has a chance to gain 10,000 runes from killing enemies",
+      "vi": "Có tỉ lệ nhận 10.000 rune khi hạ kẻ địch"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_physical_attack_power",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Physical Attack Power",
+      "vi": "Improved Physical Attack Power"
+    },
+    "inGame": "Raises physical attack",
+    "effect": {
+      "en": "Increases physical damage by 1.06x / 1.09x",
+      "vi": "Tăng sát thương vật lý 1,06x / 1,09x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_affinity_attack_power",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Affinity Attack Power",
+      "vi": "Improved Affinity Attack Power"
+    },
+    "inGame": "Raises attacks of magic, fire, lightning, holy affinities",
+    "effect": {
+      "en": "Increases magic, fire, lightning, and holy damage by 1.05x / 1.08x",
+      "vi": "Tăng sát thương phép, lửa, sét và thánh 1,05x / 1,08x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_perfuming_arts",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Perfuming Arts",
+      "vi": "Improved Perfuming Arts"
+    },
+    "inGame": "Raises potency of items employing perfume",
+    "effect": {
+      "en": "Increases the damage of perfume items by 1.2x",
+      "vi": "Tăng sát thương vật phẩm perfume 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_throwing_pots",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Throwing Pots",
+      "vi": "Improved Throwing Pots"
+    },
+    "inGame": "Raises potency of throwing pots",
+    "effect": {
+      "en": "Increases the damage of pot items by 1.2x",
+      "vi": "Tăng sát thương bình ném 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_roar_breath_attacks",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Roar & Breath Attacks",
+      "vi": "Improved Roar & Breath Attacks"
+    },
+    "inGame": "Enhances roars and breath attacks",
+    "effect": {
+      "en": "Increases the damage of roar and breath attacks by 1.2x",
+      "vi": "Tăng sát thương đòn roar và breath 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_sorceries_incantations",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Sorceries & Incantations",
+      "vi": "Improved Sorceries & Incantations"
+    },
+    "inGame": "Raises potency of sorceries and incantations",
+    "effect": {
+      "en": "Increases the damage of sorceries and incantations by 1.07x",
+      "vi": "Tăng sát thương sorcery và incantation 1,07x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_sudden_enemy_death_upon_attacks_that_land",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Sudden Enemy Death upon Attacks that Land",
+      "vi": "Sudden Enemy Death upon Attacks that Land"
+    },
+    "inGame": "Attacked enemies die regardless of remaining HP on rare occasions",
+    "effect": {
+      "en": "Has a chance to instantly kill enemies with each hit",
+      "vi": "Mỗi đòn trúng có tỉ lệ hạ ngay kẻ địch"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Each enemy has an HP threshold, refer to this sheet for more information",
+      "vi": "Mỗi kẻ địch có một ngưỡng HP, xem bảng tính gốc để biết thêm"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_periodical_giant_glintblades",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Periodical Giant Glintblades",
+      "vi": "Periodical Giant Glintblades"
+    },
+    "inGame": "Creates a glintblade which automatically attack nearby foes at regular intervals",
+    "effect": {
+      "en": "Creates 3 giant glintblades every 18s. 100 magic attack and 10.175 poise damage per blade",
+      "vi": "Tạo 3 glintblade lớn mỗi 18 giây. Mỗi lưỡi 100 AP phép và 10,175 sát thương poise"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Not affected by Glintblade sorcery buffs",
+      "vi": "Không được hưởng buff của phép Glintblade"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_attack_boost_dragons",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack Boost [Dragons]",
+      "vi": "Attack Boost [Dragons]"
+    },
+    "inGame": "Enhances attacks against dragons",
+    "effect": {
+      "en": "Increases damage towards Draconic enemies by 1.1x and Ancient Draconic enemies by 1.05x",
+      "vi": "Tăng sát thương lên kẻ địch Draconic 1,1x và Ancient Draconic 1,05x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_attack_boost_lifeforms_born_of_falling_stars",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack Boost [Lifeforms Born of Falling Stars]",
+      "vi": "Attack Boost [Lifeforms Born of Falling Stars]"
+    },
+    "inGame": "Enhances attacks against blockers lifeforms born of falling stars",
+    "effect": {
+      "en": "Increases damage towards Lifeforms Born of Falling Stars by 1.2x",
+      "vi": "Tăng sát thương lên Lifeforms Born of Falling Stars 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_attack_boost_those_who_live_in_death",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Attack Boost [Those Who Live in Death]",
+      "vi": "Attack Boost [Those Who Live in Death]"
+    },
+    "inGame": "Enhances attacks against Those Who Live in Death",
+    "effect": {
+      "en": "Increases damage towards Those Who Live in Death by 1.2x",
+      "vi": "Tăng sát thương lên Those Who Live in Death 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_communion_grants_anti_dragon_effect",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Communion Grants Anti-Dragon Effect",
+      "vi": "Communion Grants Anti-Dragon Effect"
+    },
+    "inGame": "Dragon Communion incantations add anti-dragon effect to right hand armament",
+    "effect": {
+      "en": "Increases damage towards Ancient Draconic enemies by 1.2x and Draconic enemies by 1.3x for 45 seconds",
+      "vi": "Tăng sát thương lên kẻ địch Ancient Draconic 1,2x và Draconic 1,3x trong 45 giây"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "dormant_blood_loss_in_vicinity_increases_attack_power",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Blood Loss in Vicinity Increases Attack Power",
+      "vi": "Blood Loss in Vicinity Increases Attack Power"
+    },
+    "inGame": "Nearby blood loss increases attack power",
+    "effect": {
+      "en": "Increases damage by 1.2x for 20 seconds when bleed is activated",
+      "vi": "Tăng sát thương 1,2x trong 20 giây khi chảy máu kích hoạt"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_damage_boosted_after_critical_hit",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Damage Boosted after Critical Hit",
+      "vi": "Damage Boosted after Critical Hit"
+    },
+    "inGame": "Critical hits increase damage inflicted upon enemies",
+    "effect": {
+      "en": "Decreases enemy damage negation by 15% for 30 seconds",
+      "vi": "Giảm hấp thụ sát thương của kẻ địch 15% trong 30 giây"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "dormant_critical_hits_inflict_blood_loss",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Critical Hits Inflict Blood Loss",
+      "vi": "Critical Hits Inflict Blood Loss"
+    },
+    "inGame": "Armament inflicts blood loss when performing critical hits",
+    "effect": {
+      "en": "Adds 50 blood loss buildup to the weapon after critical hits",
+      "vi": "Thêm 50 buildup chảy máu cho vũ khí sau đòn chí mạng"
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_thrusting_counterattack",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Thrusting Counterattack",
+      "vi": "Improved Thrusting Counterattack"
+    },
+    "inGame": "Enhances counterattacks unique to thrusting weapons",
+    "effect": {
+      "en": "Increases counterhit damage by 1.2x",
+      "vi": "Tăng sát thương counter 1,2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_stance_breaking",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Improved Stance-Breaking",
+      "vi": "Improved Stance-Breaking"
+    },
+    "inGame": "Attacks more likely to break stance of enemies",
+    "effect": {
+      "en": "Increases poise damage by 1.1x / 1.15x",
+      "vi": "Tăng sát thương poise 1,1x / 1,15x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_increased_sorcery_incantation_duration",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Increased Sorcery & Incantation Duration",
+      "vi": "Increased Sorcery & Incantation Duration"
+    },
+    "inGame": "Extends spell effect duration",
+    "effect": {
+      "en": "Increases the duration of buff spells by 2x",
+      "vi": "Tăng thời gian của phép buff lên 2x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_traces_of_a_grace_given_lord",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Traces of a Grace-Given Lord",
+      "vi": "Traces of a Grace-Given Lord"
+    },
+    "inGame": "Newly found Sites of Grace raise attack power",
+    "effect": {
+      "en": "Increases attack power by 1.02x for each grace discovered. Stacks up to 10 times (1.2189x total)",
+      "vi": "Tăng AP 1,02x cho mỗi Site of Grace phát hiện được. Tối đa 10 lần (tổng 1,2189x)"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_demons_plating",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Demon's Plating",
+      "vi": "Demon's Plating"
+    },
+    "inGame": "Enhances attack power depending on runes in possession",
+    "effect": {
+      "en": "Increases damage by 1.2x at 50k runes, 1.3x at 100k, 1.9x at 900k, and 3x at 2mil",
+      "vi": "Tăng sát thương 1,2x khi có 50k rune, 1,3x ở 100k, 1,9x ở 900k và 3x ở 2 triệu"
+    },
+    "stacking": "na",
+    "notes": {
+      "en": "Demon's Plating Information",
+      "vi": "Xem thêm thông tin về Demon's Plating trong bảng tính gốc"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_favor_of_noklateo_the_shrouded_city",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Favor of Noklateo, the Shrouded City",
+      "vi": "Favor of Noklateo, the Shrouded City"
+    },
+    "inGame": "Rise from near-death, unaided, a single time and become more powerful for a short time",
+    "effect": {
+      "en": "After being revived:\nIncreases HP, FP, and stamina by 1.3x for 40 seconds\nRegen 5% of your max HP per second for 10 seconds\n~3x faster ultimate art charge for 10 seconds",
+      "vi": "Sau khi hồi sinh:\nTăng HP, FP và Stamina 1,3x trong 40 giây\nHồi 5% HP tối đa mỗi giây trong 10 giây\nNạp Ultimate Art nhanh ~3x trong 10 giây"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_power_to_balance_the_world",
+    "kind": "dormant",
+    "categories": [
+      "offensive"
+    ],
+    "name": {
+      "en": "Power to Balance the World",
+      "vi": "Power to Balance the World"
+    },
+    "inGame": "Rise from near-death unaided on occasion. Attack power increases after rising from death.",
+    "effect": {
+      "en": "After being revived, increases damage by 1.1x for 45 seconds",
+      "vi": "Sau khi hồi sinh, tăng sát thương 1,1x trong 45 giây"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_favor_of_the_mountaintop",
+    "kind": "dormant",
+    "categories": [
+      "offensive",
+      "defensive"
+    ],
+    "name": {
+      "en": "Favor of the Mountaintop",
+      "vi": "Favor of the Mountaintop"
+    },
+    "inGame": "Halves frostbite damage and frost buildup. Nearby frostbite boosts attack.",
+    "effect": {
+      "en": "Reduces frostbite damage and incoming frostbite buildup by 0.5x\nIncreases damage by 1.15x when frostbite procs for 20 seconds",
+      "vi": "Giảm sát thương băng giá và buildup băng giá phải nhận còn 0,5x\nTăng sát thương 1,15x trong 20 giây khi băng giá kích hoạt"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_physical_damage_negation",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Physical Damage Negation",
+      "vi": "Improved Physical Damage Negation"
+    },
+    "inGame": "Boosts physical damage negation",
+    "effect": {
+      "en": "Increases physical damage negation by 12% / 18%",
+      "vi": "Tăng hấp thụ sát thương vật lý 12% / 18%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_non_physical_damage_negation",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Non-Physical Damage Negation",
+      "vi": "Improved Non-Physical Damage Negation"
+    },
+    "inGame": "Boosts magic, fire, lightning, and holy damage negation",
+    "effect": {
+      "en": "Increases magic, fire, lightning, and holy damage negation by 12% / 18%",
+      "vi": "Tăng hấp thụ sát thương phép, lửa, sét và thánh 12% / 18%"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_creates_holy_ground_at_low_hp",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Creates Holy Ground at Low HP",
+      "vi": "Creates Holy Ground at Low HP"
+    },
+    "inGame": "At low HP, create holy ground, slowly restore HP, and improve damage negation",
+    "effect": {
+      "en": "Creates a holy ground when HP is below 20%. Heals for 10 hp/s and increases all damage negation by 20%. Lasts for 35 seconds.",
+      "vi": "Tạo vùng đất thánh khi HP dưới 20%. Hồi 10 HP/giây và tăng toàn bộ hấp thụ sát thương 20%. Kéo dài 35 giây."
+    },
+    "stacking": "no",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_poise",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Poise",
+      "vi": "Improved Poise"
+    },
+    "inGame": "Raises poise",
+    "effect": {
+      "en": "Reduces incoming poise damage by 0.75x / 0.62x",
+      "vi": "Giảm sát thương poise phải nhận còn 0,75x / 0,62x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_all_resistances_up",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "All Resistances Up",
+      "vi": "All Resistances Up"
+    },
+    "inGame": "Raises resistance to all ailments",
+    "effect": {
+      "en": "Increases status resistance by 57 / 75",
+      "vi": "Tăng kháng hiệu ứng 57 / 75"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_dodging",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Improved Dodging",
+      "vi": "Improved Dodging"
+    },
+    "inGame": "Longer invincibility windows during evasive maneuvers",
+    "effect": {
+      "en": "+3 iFrames to all dodges in 30FPS or +6 iFrames in 60FPS. Adds +1 iFrame to Duchess backstep in 30FPS or +2 in 60FPS",
+      "vi": "+3 iFrame cho mọi cú né ở 30 FPS hoặc +6 iFrame ở 60 FPS. Thêm +1 iFrame cho backstep của Duchess ở 30 FPS hoặc +2 ở 60 FPS"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Does not stack with itself, Crucible Feather Talisman, or the Recluse's triple Lightning cocktail",
+      "vi": "Không stack với chính nó, Crucible Feather Talisman, hay triple Lightning cocktail của Recluse"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_cold_mirage",
+    "kind": "dormant",
+    "categories": [
+      "defensive"
+    ],
+    "name": {
+      "en": "Cold Mirage",
+      "vi": "Cold Mirage"
+    },
+    "inGame": "Conceals oneself when faced with threats to life, neutralizing all attacks",
+    "effect": {
+      "en": "Turns you invisible at low HP, making you immune to all attacks for a short duration (duration currently unknown)",
+      "vi": "Tàng hình khi HP thấp, miễn nhiễm mọi đòn đánh trong thời gian ngắn (chưa rõ thời gian)"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_favor_of_the_rotten_woods",
+    "kind": "dormant",
+    "categories": [
+      "defensive",
+      "regen"
+    ],
+    "name": {
+      "en": "Favor of the Rotten Woods",
+      "vi": "Favor of the Rotten Woods"
+    },
+    "inGame": "Nullifies scarlet rot and increases max HP. Attacks after receiving damage partially recover HP.",
+    "effect": {
+      "en": "Increases maximum HP by 1.25x and attacks heal the user after taking damage for a short period of time",
+      "vi": "Tăng HP tối đa 1,25x và hồi HP khi đánh trong một khoảng ngắn sau khi trúng đòn"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_hp_restoration_upon_successive_attacks",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP Restoration upon Successive Attacks",
+      "vi": "HP Restoration upon Successive Attacks"
+    },
+    "inGame": "Successive attacks restore HP",
+    "effect": {
+      "en": "Restores 3 HP on continuous attacks",
+      "vi": "Hồi 3 HP khi đánh liên tiếp"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_fp_restoration_upon_successive_attacks",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "FP Restoration upon Successive Attacks",
+      "vi": "FP Restoration upon Successive Attacks"
+    },
+    "inGame": "Successive attacks restore FP",
+    "effect": {
+      "en": "Restores 10 FP on continuous attacks",
+      "vi": "Hồi 10 FP khi đánh liên tiếp"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_hp_recovery_from_successful_guarding",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "HP Recovery From Successful Guarding",
+      "vi": "HP Recovery From Successful Guarding"
+    },
+    "inGame": "Successful guards restore HP",
+    "effect": {
+      "en": "Restores 2 HP after guarding an attack",
+      "vi": "Hồi 2 HP sau khi đỡ được đòn"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_fp_recovery_from_successful_guarding",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "FP Recovery From Successful Guarding",
+      "vi": "FP Recovery From Successful Guarding"
+    },
+    "inGame": "Successful guards restore FP",
+    "effect": {
+      "en": "Restores 2 FP after guarding an attack",
+      "vi": "Hồi 2 FP sau khi đỡ được đòn"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_critical_hit_hp_restoration",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Critical Hit HP Restoration",
+      "vi": "Critical Hit HP Restoration"
+    },
+    "inGame": "Critical hits restore HP",
+    "effect": {
+      "en": "Restores [MaxHP * 0.18] HP on critical hits",
+      "vi": "Hồi [HP tối đa × 0,18] HP khi đánh chí mạng"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_critical_hit_fp_restoration",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Critical Hit FP Restoration",
+      "vi": "Critical Hit FP Restoration"
+    },
+    "inGame": "Critical hits restore FP",
+    "effect": {
+      "en": "Restores [MaxFP * 0.1] FP on critical hits",
+      "vi": "Hồi [FP tối đa × 0,1] FP khi đánh chí mạng"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_flask_hp_restoration",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Improved Flask HP Restoration",
+      "vi": "Improved Flask HP Restoration"
+    },
+    "inGame": "Boosts HP restoration from flasks",
+    "effect": {
+      "en": "Increases HP gained from flasks by 1.2x / 1.3x",
+      "vi": "Tăng lượng HP hồi từ bình máu 1,2x / 1,3x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_gradual_restoration_by_flask",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Gradual Restoration by Flask",
+      "vi": "Gradual Restoration by Flask"
+    },
+    "inGame": "Flask slowly restores HP and provides increased HP restoration",
+    "effect": {
+      "en": "Restores a small portion of HP + [MaxHP * 0.01] every 0.1s for 8 seconds (80% total)",
+      "vi": "Hồi một phần nhỏ HP + [HP tối đa × 0,01] mỗi 0,1 giây trong 8 giây (tổng 80%)"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "When wearing \"Flask Also Heals Allies,\" allies restore [MaxHP * 0.01] every 0.1s for 4 seconds (40% total)",
+      "vi": "Khi đeo \"Flask Also Heals Allies\", đồng đội hồi [HP tối đa × 0,01] mỗi 0,1 giây trong 4 giây (tổng 40%)"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_poison_rot_trigger_continuous_hp_recovery",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Poison & Rot Trigger Continuous HP Recovery",
+      "vi": "Poison & Rot Trigger Continuous HP Recovery"
+    },
+    "inGame": "Poisoning or Scarlet Rot in vicinity continuously restores HP",
+    "effect": {
+      "en": "Restores 7 HP/s for 20 seconds after poison or rot is activated",
+      "vi": "Hồi 7 HP/giây trong 20 giây sau khi độc hoặc thối rữa kích hoạt"
+    },
+    "stacking": "unknown",
+    "verified": true
+  },
+  {
+    "id": "dormant_improved_stamina_recovery",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Improved Stamina Recovery",
+      "vi": "Improved Stamina Recovery"
+    },
+    "inGame": "Raises stamina recovery speed",
+    "effect": {
+      "en": "Increases stamina recovery by 4/s / 6/s",
+      "vi": "Tăng tốc hồi Stamina thêm 4/giây / 6/giây"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_ultimate_art_guage_charge_speed_up",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Ultimate Art Guage Charge Speed Up",
+      "vi": "Ultimate Art Guage Charge Speed Up"
+    },
+    "inGame": "Improves the charging speed of Ultimate Art gauge",
+    "effect": {
+      "en": "Increases passive Ultimate Art gauge charge by 1.06x",
+      "vi": "Tăng tốc tự nạp thanh Ultimate Art 1,06x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_character_skill_cooldown_reduction",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Character Skill Cooldown Reduction",
+      "vi": "Character Skill Cooldown Reduction"
+    },
+    "inGame": "Shortens Character Skill cooldown time",
+    "effect": {
+      "en": "Lowers character skill cooldown by 0.9x",
+      "vi": "Giảm thời gian hồi Character Skill còn 0,9x"
+    },
+    "stacking": "yes",
+    "verified": true
+  },
+  {
+    "id": "dormant_favor_of_the_night",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Favor of the Night",
+      "vi": "Favor of the Night"
+    },
+    "inGame": "Improves the charging speed of Ultimate Art gauge",
+    "effect": {
+      "en": "Permanently increases passive ult gauge regeneration by 1",
+      "vi": "Tăng vĩnh viễn tốc độ tự nạp thanh Ultimate thêm 1"
+    },
+    "stacking": "na",
+    "verified": true
+  },
+  {
+    "id": "dormant_unifying_fate",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Unifying Fate",
+      "vi": "Unifying Fate"
+    },
+    "inGame": "Using flask also restores FP",
+    "effect": {
+      "en": "Using flask also restores FP",
+      "vi": "Dùng bình máu cũng hồi FP"
+    },
+    "stacking": "no",
+    "notes": {
+      "en": "Amount of FP recovered is unknown",
+      "vi": "Chưa rõ lượng FP được hồi"
+    },
+    "verified": true
+  },
+  {
+    "id": "dormant_beasts_hunt",
+    "kind": "dormant",
+    "categories": [
+      "regen"
+    ],
+    "name": {
+      "en": "Beast's Hunt",
+      "vi": "Beast's Hunt"
+    },
+    "inGame": "Successive attacks restore stamina and hasten stamina recovery for self and nearby allies",
+    "effect": {
+      "en": "Recovers 15 stamina on successive attacks and increases stamina regen for self and allies by 5/s for 15 seconds",
+      "vi": "Hồi 15 Stamina khi đánh liên tiếp và tăng tốc hồi Stamina cho bản thân và đồng đội thêm 5/giây trong 15 giây"
+    },
+    "stacking": "unknown",
+    "verified": true
   }
 ]
