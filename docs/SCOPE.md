@@ -169,6 +169,12 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 
 **Bài toán:** Ở chế độ thường, người chơi chọn Nightlord. Ở **Deep of Night depth ≥ 3**, Nightlord bị ẩn/ngẫu nhiên → cần đoán dựa trên các boss đã gặp ở Night 1 và Night 2 (và các dấu hiệu khác).
 
+**Hiện trạng (2026-10-11):**
+- ✅ Data: `bosses.json` (chỉ số Nightlord thường + Everdark Sovereign, Solo/Duo/Trio: máu, poise, hấp thụ sát thương, kháng hiệu ứng; 27 boss đêm) và `boss_priors.json` (pool Night 1/Night 2 của 8 Nightlord) sinh bằng `tools/import_bosses.py` từ bảng cộng đồng (*Nightreign Useful Info* v1.03.2, *Nightlord Boss Pools*). Nightlord DLC (Harmonia, Straghess) có chỉ số nhưng chưa có pool.
+- ✅ Dự đoán (`internal/boss`): Bayes với prior đều và rút đều trong pool; loại trừ cứng boss ngoài pool; dự đoán luôn boss của đêm chưa nhập. Người chơi có thể loại Nightlord thủ công.
+- ✅ Màn hình Boss: tab Dự đoán · Chỉ số Nightlord (weakness cheat sheet) · Bảng pool.
+- Chưa làm: ghi run + thống kê local (bổ sung tần suất quan sát vào likelihood), overlay hiện dự đoán/điểm yếu.
+
 **Thu thập dữ liệu:**
 1. **Ghi nhận run** (P0): sau mỗi run người dùng nhập nhanh (hoặc chọn từ dropdown trên overlay): chế độ, depth, nhân vật, Night 1 boss, Night 2 boss, Shifting Earth (nếu có), Nightlord thực tế, kết quả.
 2. **Dữ liệu prior** (P0): bảng pool boss theo Nightlord từ datamine/cộng đồng, đóng gói trong `boss_priors.json`.
@@ -194,7 +200,7 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 
 **Weakness Cheat Sheet** (gộp vào M5 từ đề xuất cũ): bảng điểm yếu/kháng của mọi Night boss & Nightlord, hiện trên overlay khi chọn boss.
 
-⚠️ Cần xác minh: pool boss đêm ở Deep of Night có thực sự phụ thuộc Nightlord hay hoàn toàn độc lập. Nếu độc lập, mô hình chỉ trả về prior (và app phải nói rõ "không có tín hiệu", không đưa ra % giả tạo).
+✅ Đã xác minh (2026-10-11, bảng Nightlord Boss Pools): pool boss đêm phụ thuộc Nightlord — mỗi Nightlord có pool riêng, riêng Heolstor (Night Aspect) rút từ mọi boss đêm.
 
 ---
 

@@ -136,25 +136,54 @@ func (p *Pack) Validate() error {
 	}
 
 	bossKind := map[string]string{}
+	bossNight := map[string]int{}
 	for _, b := range p.Bosses {
+		where := "boss " + b.ID
 		if _, dup := bossKind[b.ID]; dup || b.ID == "" {
 			add("bosses: missing or duplicate id %q", b.ID)
 		}
 		bossKind[b.ID] = b.Kind
+		bossNight[b.ID] = b.Night
 		if !bossKinds[b.Kind] {
-			add("boss %s: unknown kind %q", b.ID, b.Kind)
+			add("%s: unknown kind %q", where, b.Kind)
 		}
-		checkName(add, "boss "+b.ID, b.Name)
+		checkName(add, where, b.Name)
+		switch b.Kind {
+		case "night_boss":
+			if b.Night != 1 && b.Night != 2 {
+				add("%s: night must be 1 or 2, got %d", where, b.Night)
+			}
+			if b.Stats != nil {
+				add("%s: only nightlords have stats", where)
+			}
+		case "nightlord":
+			if b.Night != 0 {
+				add("%s: nightlords have no night", where)
+			}
+			if b.Stats != nil {
+				checkForms(add, where+" normal", b.Stats.Normal)
+				checkForms(add, where+" everdark", b.Stats.Everdark)
+			}
+		}
 	}
 
+	pooled := map[string]bool{}
 	for _, pool := range p.Priors.Pools {
 		if bossKind[pool.Nightlord] != "nightlord" {
 			add("priors: %q is not a nightlord", pool.Nightlord)
 		}
-		for _, id := range append(append([]string(nil), pool.Night1...), pool.Night2...) {
-			if bossKind[id] != "night_boss" {
-				add("priors %s: %q is not a night boss", pool.Nightlord, id)
+		if !uniqueID(pooled, pool.Nightlord) {
+			add("priors: duplicate pool for %q", pool.Nightlord)
+		}
+		for night, ids := range [][]string{pool.Night1, pool.Night2} {
+			for _, id := range ids {
+				if bossKind[id] != "night_boss" || bossNight[id] != night+1 {
+					add("priors %s: %q is not a night %d boss", pool.Nightlord, id, night+1)
+				}
 			}
+		}
+		if p.Priors.Verified && (len(pool.Night1) == 0 || len(pool.Night2) == 0) {
+			add("priors %s: verified pools need night 1 and night 2 bosses", pool.Nightlord)
 		}
 	}
 
@@ -209,6 +238,44 @@ func uniqueID(seen map[string]bool, id string) bool {
 	}
 	seen[id] = true
 	return true
+}
+
+func checkForms(add func(string, ...any), where string, forms []BossForm) {
+	for i, f := range forms {
+		at := fmt.Sprintf("%s form %d", where, i)
+		if f.Name == "" {
+			add("%s: needs a name", at)
+		}
+		if len(f.GameIDs) == 0 {
+			add("%s: needs at least one game id", at)
+		}
+		if f.Health != nil && len(f.Health) != 3 {
+			add("%s: health needs solo, duo and trio values", at)
+		}
+		if len(f.Poise) != 3 {
+			add("%s: poise needs solo, duo and trio values", at)
+		}
+		if len(f.Negation) != len(damageTypes) {
+			add("%s: negation needs exactly %v", at, damageTypes)
+		}
+		for _, d := range damageTypes {
+			if _, ok := f.Negation[d]; !ok {
+				add("%s: missing %s negation", at, d)
+			}
+		}
+		immune := map[string]bool{}
+		for _, s := range f.Immune {
+			immune[s] = true
+		}
+		if len(f.Resist)+len(f.Immune) != len(statusTypes) {
+			add("%s: resist + immune need exactly %v", at, statusTypes)
+		}
+		for _, s := range statusTypes {
+			if _, ok := f.Resist[s]; ok == immune[s] {
+				add("%s: status %s must be in exactly one of resist/immune", at, s)
+			}
+		}
+	}
 }
 
 func checkName(add func(string, ...any), where string, n Localized) {

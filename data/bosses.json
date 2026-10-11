@@ -1,10 +1,1278 @@
 [
-  { "id": "gladius",  "kind": "nightlord", "name": { "en": "Gladius, Beast of Night",       "vi": "Gladius, Beast of Night" },       "expedition": { "en": "Tricephalos",        "vi": "Tricephalos" },        "weaknesses": [], "verified": false },
-  { "id": "adel",     "kind": "nightlord", "name": { "en": "Adel, Baron of Night",          "vi": "Adel, Baron of Night" },          "expedition": { "en": "Gaping Jaw",         "vi": "Gaping Jaw" },         "weaknesses": [], "verified": false },
-  { "id": "gnoster",  "kind": "nightlord", "name": { "en": "Gnoster, Wisdom of Night",      "vi": "Gnoster, Wisdom of Night" },      "expedition": { "en": "Sentient Pest",      "vi": "Sentient Pest" },      "weaknesses": [], "verified": false },
-  { "id": "maris",    "kind": "nightlord", "name": { "en": "Maris, Fathom of Night",        "vi": "Maris, Fathom of Night" },        "expedition": { "en": "Augur",              "vi": "Augur" },              "weaknesses": [], "verified": false },
-  { "id": "libra",    "kind": "nightlord", "name": { "en": "Libra, Creature of Night",      "vi": "Libra, Creature of Night" },      "expedition": { "en": "Equilibrious Beast", "vi": "Equilibrious Beast" }, "weaknesses": [], "verified": false },
-  { "id": "fulghor",  "kind": "nightlord", "name": { "en": "Fulghor, Champion of Nightglow", "vi": "Fulghor, Champion of Nightglow" }, "expedition": { "en": "Darkdrift Knight",   "vi": "Darkdrift Knight" },   "weaknesses": [], "verified": false },
-  { "id": "caligo",   "kind": "nightlord", "name": { "en": "Caligo, Miasma of Night",       "vi": "Caligo, Miasma of Night" },       "expedition": { "en": "Fissure in the Fog", "vi": "Fissure in the Fog" }, "weaknesses": [], "verified": false },
-  { "id": "heolstor", "kind": "nightlord", "name": { "en": "Heolstor the Nightlord",        "vi": "Heolstor the Nightlord" },        "expedition": { "en": "Night Aspect",       "vi": "Night Aspect" },       "weaknesses": [], "verified": false }
+  {
+    "id": "gladius",
+    "kind": "nightlord",
+    "name": {
+      "en": "Gladius, Beast of Night",
+      "vi": "Gladius, Beast of Night"
+    },
+    "expedition": {
+      "en": "Tricephalos",
+      "vi": "Tricephalos"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Gladius, Beast of Night",
+          "gameIds": [
+            75000020,
+            75002020,
+            75003020
+          ],
+          "health": [
+            11328,
+            22656,
+            33984
+          ],
+          "poise": [
+            120.0,
+            218.2,
+            400
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": -10,
+            "magic": 0,
+            "fire": 50,
+            "lightning": 0,
+            "holy": -35
+          },
+          "resist": {
+            "poison": 542,
+            "rot": 252,
+            "bleed": 252,
+            "frost": 542,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Gladius, Beast of Night",
+          "gameIds": [
+            75000210,
+            75002210,
+            75003210
+          ],
+          "health": [
+            11328,
+            22656,
+            33984
+          ],
+          "poise": [
+            120.0,
+            218.2,
+            400
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": -10,
+            "magic": 0,
+            "fire": 50,
+            "lightning": 0,
+            "holy": -35
+          },
+          "resist": {
+            "poison": 542,
+            "rot": 252,
+            "bleed": 252,
+            "frost": 542,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "adel",
+    "kind": "nightlord",
+    "name": {
+      "en": "Adel, Baron of Night",
+      "vi": "Adel, Baron of Night"
+    },
+    "expedition": {
+      "en": "Gaping Jaw",
+      "vi": "Gaping Jaw"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Adel, Baron of Night",
+          "gameIds": [
+            75100020
+          ],
+          "health": [
+            13140,
+            26280,
+            39420
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 20,
+            "lightning": 50,
+            "holy": 0
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 542,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Adel, Baron of Night",
+          "gameIds": [
+            75110010
+          ],
+          "health": [
+            16426,
+            32852,
+            49278
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 20,
+            "lightning": 50,
+            "holy": 0
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 542,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "gnoster",
+    "kind": "nightlord",
+    "name": {
+      "en": "Gnoster, Wisdom of Night",
+      "vi": "Gnoster, Wisdom of Night"
+    },
+    "expedition": {
+      "en": "Sentient Pest",
+      "vi": "Sentient Pest"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Gnoster, Wisdom of Night",
+          "gameIds": [
+            75200020,
+            75200110
+          ],
+          "health": [
+            13027,
+            26054,
+            39081
+          ],
+          "poise": [
+            100.0,
+            181.8,
+            333.3
+          ],
+          "negation": {
+            "standard": -15,
+            "strike": -15,
+            "slash": -25,
+            "pierce": -25,
+            "magic": 50,
+            "fire": -40,
+            "lightning": 10,
+            "holy": 10
+          },
+          "resist": {
+            "poison": 542,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 542
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        },
+        {
+          "name": "Faurtis Stoneshield",
+          "gameIds": [
+            75300010,
+            75300110
+          ],
+          "health": [
+            13027,
+            26054,
+            39081
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 10,
+            "strike": -20,
+            "slash": 20,
+            "pierce": -10,
+            "magic": 10,
+            "fire": -35,
+            "lightning": 10,
+            "holy": 10
+          },
+          "resist": {
+            "poison": 252,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Gnoster, Wisdom of Night",
+          "gameIds": [
+            75200120,
+            75200030
+          ],
+          "health": [
+            7816,
+            15632,
+            23448
+          ],
+          "poise": [
+            100.0,
+            181.8,
+            333.3
+          ],
+          "negation": {
+            "standard": -15,
+            "strike": -15,
+            "slash": -25,
+            "pierce": -25,
+            "magic": 50,
+            "fire": -40,
+            "lightning": 10,
+            "holy": 10
+          },
+          "resist": {
+            "poison": 542,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 542
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        },
+        {
+          "name": "Animus, Ascendant Light",
+          "gameIds": [
+            75210010
+          ],
+          "health": [
+            6364,
+            12728,
+            19092
+          ],
+          "poise": [
+            100.0,
+            181.8,
+            333.3
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 0,
+            "lightning": 0,
+            "holy": 0
+          },
+          "resist": {},
+          "immune": [
+            "poison",
+            "rot",
+            "bleed",
+            "frost",
+            "sleep",
+            "madness",
+            "blight"
+          ]
+        },
+        {
+          "name": "Faurtis Stoneshield",
+          "gameIds": [
+            75300120,
+            75300020
+          ],
+          "health": [
+            8564,
+            17128,
+            25692
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 10,
+            "strike": -20,
+            "slash": 20,
+            "pierce": -10,
+            "magic": 10,
+            "fire": -35,
+            "lightning": 10,
+            "holy": 10
+          },
+          "resist": {
+            "poison": 252,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "maris",
+    "kind": "nightlord",
+    "name": {
+      "en": "Maris, Fathom of Night",
+      "vi": "Maris, Fathom of Night"
+    },
+    "expedition": {
+      "en": "Augur",
+      "vi": "Augur"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Maris, Fathom of Night",
+          "gameIds": [
+            75400020
+          ],
+          "health": [
+            12687,
+            25374,
+            38061
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 20,
+            "slash": -15,
+            "pierce": 10,
+            "magic": 20,
+            "fire": 50,
+            "lightning": -40,
+            "holy": 15
+          },
+          "resist": {
+            "rot": 252,
+            "frost": 252
+          },
+          "immune": [
+            "poison",
+            "bleed",
+            "sleep",
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Augur",
+          "gameIds": [
+            75400100
+          ],
+          "health": [
+            3171,
+            6342,
+            9513
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 20,
+            "slash": -15,
+            "pierce": 10,
+            "magic": 20,
+            "fire": 50,
+            "lightning": -40,
+            "holy": 15
+          },
+          "resist": {
+            "rot": 252,
+            "frost": 252
+          },
+          "immune": [
+            "poison",
+            "bleed",
+            "sleep",
+            "madness",
+            "blight"
+          ]
+        },
+        {
+          "name": "Maris, Fathom of Night",
+          "gameIds": [
+            75410000
+          ],
+          "health": [
+            29452,
+            58904,
+            88356
+          ],
+          "poise": [
+            600.0,
+            1090.9,
+            2000
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 20,
+            "slash": -15,
+            "pierce": 10,
+            "magic": 20,
+            "fire": 50,
+            "lightning": -40,
+            "holy": 15
+          },
+          "resist": {
+            "rot": 252,
+            "frost": 252
+          },
+          "immune": [
+            "poison",
+            "bleed",
+            "sleep",
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "libra",
+    "kind": "nightlord",
+    "name": {
+      "en": "Libra, Creature of Night",
+      "vi": "Libra, Creature of Night"
+    },
+    "expedition": {
+      "en": "Equilibrious Beast",
+      "vi": "Equilibrious Beast"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Libra, Creature of Night",
+          "gameIds": [
+            75600020
+          ],
+          "health": [
+            13048,
+            26096,
+            39144
+          ],
+          "poise": [
+            120.0,
+            218.2,
+            400
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": -10,
+            "pierce": 0,
+            "magic": 20,
+            "fire": -20,
+            "lightning": 0,
+            "holy": -35
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 252,
+            "frost": 252,
+            "madness": 154
+          },
+          "immune": [
+            "sleep",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Libra, Creature of Night",
+          "gameIds": [
+            75610010
+          ],
+          "health": [
+            13048,
+            26096,
+            39144
+          ],
+          "poise": [
+            120.0,
+            218.2,
+            400
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": -10,
+            "pierce": 0,
+            "magic": 20,
+            "fire": -20,
+            "lightning": 0,
+            "holy": -35
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 252,
+            "frost": 252,
+            "madness": 154
+          },
+          "immune": [
+            "sleep",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "fulghor",
+    "kind": "nightlord",
+    "name": {
+      "en": "Fulghor, Champion of Nightglow",
+      "vi": "Fulghor, Champion of Nightglow"
+    },
+    "expedition": {
+      "en": "Darkdrift Knight",
+      "vi": "Darkdrift Knight"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Fulghor, Champion of Nightglow",
+          "gameIds": [
+            76000010
+          ],
+          "health": [
+            11894,
+            23788,
+            35682
+          ],
+          "poise": [
+            155.0,
+            281.8,
+            516.7
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 0,
+            "lightning": -20,
+            "holy": 30
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Fulghor, Champion of Nightglow",
+          "gameIds": [
+            76001010
+          ],
+          "health": [
+            14273,
+            28546,
+            42819
+          ],
+          "poise": [
+            155.0,
+            281.8,
+            516.7
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": 0,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 0,
+            "lightning": -20,
+            "holy": 30
+          },
+          "resist": {
+            "poison": 154,
+            "rot": 154,
+            "bleed": 154,
+            "frost": 154,
+            "sleep": 154
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "caligo",
+    "kind": "nightlord",
+    "name": {
+      "en": "Caligo, Miasma of Night",
+      "vi": "Caligo, Miasma of Night"
+    },
+    "expedition": {
+      "en": "Fissure in the Fog",
+      "vi": "Fissure in the Fog"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "Caligo, Miasma of Night",
+          "gameIds": [
+            49000010
+          ],
+          "health": [
+            12008,
+            24016,
+            36024
+          ],
+          "poise": [
+            160.0,
+            290.9,
+            533.3
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": -15,
+            "slash": 15,
+            "pierce": 10,
+            "magic": 20,
+            "fire": -35,
+            "lightning": 20,
+            "holy": 20
+          },
+          "resist": {
+            "poison": 252,
+            "rot": 252,
+            "bleed": 252,
+            "frost": 542,
+            "sleep": 542
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": [
+        {
+          "name": "Caligo, Miasma of Night",
+          "gameIds": [
+            49010010
+          ],
+          "health": [
+            12007,
+            24014,
+            36021
+          ],
+          "poise": [
+            160.0,
+            290.9,
+            533.3
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": -15,
+            "slash": 15,
+            "pierce": 10,
+            "magic": 20,
+            "fire": -35,
+            "lightning": 20,
+            "holy": 20
+          },
+          "resist": {
+            "poison": 252,
+            "rot": 252,
+            "bleed": 252,
+            "frost": 542,
+            "sleep": 542
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ]
+    },
+    "verified": true
+  },
+  {
+    "id": "heolstor",
+    "kind": "nightlord",
+    "name": {
+      "en": "Heolstor the Nightlord",
+      "vi": "Heolstor the Nightlord"
+    },
+    "expedition": {
+      "en": "Night Aspect",
+      "vi": "Night Aspect"
+    },
+    "dlc": false,
+    "stats": {
+      "normal": [
+        {
+          "name": "The Shape of Night",
+          "gameIds": [
+            75800010
+          ],
+          "health": [
+            4985,
+            9970,
+            14955
+          ],
+          "poise": [
+            130.0,
+            236.4,
+            433.3
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 10,
+            "slash": -15,
+            "pierce": -10,
+            "magic": 0,
+            "fire": -20,
+            "lightning": 0,
+            "holy": -35
+          },
+          "resist": {
+            "rot": 252,
+            "sleep": 542
+          },
+          "immune": [
+            "poison",
+            "bleed",
+            "frost",
+            "madness",
+            "blight"
+          ]
+        },
+        {
+          "name": "Heolstor the Nightlord",
+          "gameIds": [
+            75802010
+          ],
+          "health": [
+            10196,
+            20392,
+            30588
+          ],
+          "poise": [
+            130.0,
+            236.4,
+            433.3
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": -10,
+            "slash": 10,
+            "pierce": -15,
+            "magic": 0,
+            "fire": 0,
+            "lightning": -20,
+            "holy": -30
+          },
+          "resist": {
+            "rot": 252,
+            "sleep": 542
+          },
+          "immune": [
+            "poison",
+            "bleed",
+            "frost",
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": []
+    },
+    "verified": true
+  },
+  {
+    "id": "harmonia",
+    "kind": "nightlord",
+    "name": {
+      "en": "Weapon-Bequeathed Harmonia",
+      "vi": "Weapon-Bequeathed Harmonia"
+    },
+    "dlc": true,
+    "stats": {
+      "normal": [
+        {
+          "name": "Weapon-Bequeathed Harmonia",
+          "gameIds": [
+            76200010
+          ],
+          "health": null,
+          "poise": [
+            75.0,
+            136.4,
+            250
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": -10,
+            "slash": 8,
+            "pierce": 0,
+            "magic": 0,
+            "fire": 8,
+            "lightning": 10,
+            "holy": 30
+          },
+          "resist": {
+            "poison": 252,
+            "rot": 252,
+            "bleed": 252,
+            "frost": 252,
+            "sleep": 84
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": []
+    },
+    "verified": true
+  },
+  {
+    "id": "straghess",
+    "kind": "nightlord",
+    "name": {
+      "en": "Straghess",
+      "vi": "Straghess"
+    },
+    "dlc": true,
+    "stats": {
+      "normal": [
+        {
+          "name": "Traitorous Straghess / Pure Impulse Straghess",
+          "gameIds": [
+            76100010
+          ],
+          "health": [
+            11554,
+            23108,
+            34662
+          ],
+          "poise": [
+            150.0,
+            272.7,
+            500
+          ],
+          "negation": {
+            "standard": 0,
+            "strike": 0,
+            "slash": -10,
+            "pierce": -10,
+            "magic": 0,
+            "fire": -20,
+            "lightning": 10,
+            "holy": -25
+          },
+          "resist": {
+            "poison": 542,
+            "rot": 542,
+            "bleed": 252,
+            "frost": 252,
+            "sleep": 252
+          },
+          "immune": [
+            "madness",
+            "blight"
+          ]
+        }
+      ],
+      "everdark": []
+    },
+    "verified": true
+  },
+  {
+    "id": "battlefield_commander",
+    "kind": "night_boss",
+    "name": {
+      "en": "Battlefield Commander",
+      "vi": "Battlefield Commander"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "bell_bearing_hunter",
+    "kind": "night_boss",
+    "name": {
+      "en": "Bell Bearing Hunter",
+      "vi": "Bell Bearing Hunter"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "centipede_demon",
+    "kind": "night_boss",
+    "name": {
+      "en": "Centipede Demon",
+      "vi": "Centipede Demon"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "demi_human_duo",
+    "kind": "night_boss",
+    "name": {
+      "en": "Demi-Human Duo",
+      "vi": "Demi-Human Duo"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "gaping_dragon",
+    "kind": "night_boss",
+    "name": {
+      "en": "Gaping Dragon",
+      "vi": "Gaping Dragon"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "grafted_monarch",
+    "kind": "night_boss",
+    "name": {
+      "en": "Grafted Monarch",
+      "vi": "Grafted Monarch"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "nights_cavalry_duo",
+    "kind": "night_boss",
+    "name": {
+      "en": "Night's Cavalry Duo",
+      "vi": "Night's Cavalry Duo"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "royal_revenant",
+    "kind": "night_boss",
+    "name": {
+      "en": "Royal Revenant",
+      "vi": "Royal Revenant"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "smelter_demon",
+    "kind": "night_boss",
+    "name": {
+      "en": "Smelter Demon",
+      "vi": "Smelter Demon"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "the_dukes_dear_freja",
+    "kind": "night_boss",
+    "name": {
+      "en": "The Duke's Dear Freja",
+      "vi": "The Duke's Dear Freja"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "tibia_mariner",
+    "kind": "night_boss",
+    "name": {
+      "en": "Tibia Mariner",
+      "vi": "Tibia Mariner"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "ulcerated_tree_spirit",
+    "kind": "night_boss",
+    "name": {
+      "en": "Ulcerated Tree Spirit",
+      "vi": "Ulcerated Tree Spirit"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "valiant_gargoyle",
+    "kind": "night_boss",
+    "name": {
+      "en": "Valiant Gargoyle",
+      "vi": "Valiant Gargoyle"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "wormface",
+    "kind": "night_boss",
+    "name": {
+      "en": "Wormface",
+      "vi": "Wormface"
+    },
+    "night": 1,
+    "verified": true
+  },
+  {
+    "id": "ancient_dragon",
+    "kind": "night_boss",
+    "name": {
+      "en": "Ancient Dragon",
+      "vi": "Ancient Dragon"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "crucible_hippo",
+    "kind": "night_boss",
+    "name": {
+      "en": "Crucible/Hippo",
+      "vi": "Crucible/Hippo"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "dancer_of_the_boreal_valley",
+    "kind": "night_boss",
+    "name": {
+      "en": "Dancer of the Boreal Valley",
+      "vi": "Dancer of the Boreal Valley"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "death_rite_bird",
+    "kind": "night_boss",
+    "name": {
+      "en": "Death Rite Bird",
+      "vi": "Death Rite Bird"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "draconic_sentinel_trio",
+    "kind": "night_boss",
+    "name": {
+      "en": "Draconic Sentinel Trio",
+      "vi": "Draconic Sentinel Trio"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "fallingstar_beast",
+    "kind": "night_boss",
+    "name": {
+      "en": "Fallingstar Beast",
+      "vi": "Fallingstar Beast"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "fell_omen",
+    "kind": "night_boss",
+    "name": {
+      "en": "Fell Omen",
+      "vi": "Fell Omen"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "godskin_duo",
+    "kind": "night_boss",
+    "name": {
+      "en": "Godskin Duo",
+      "vi": "Godskin Duo"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "great_wyrm",
+    "kind": "night_boss",
+    "name": {
+      "en": "Great Wyrm",
+      "vi": "Great Wyrm"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "nameless_king",
+    "kind": "night_boss",
+    "name": {
+      "en": "Nameless King",
+      "vi": "Nameless King"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "nox_dragonkin_soldier",
+    "kind": "night_boss",
+    "name": {
+      "en": "Nox Dragonkin Soldier",
+      "vi": "Nox Dragonkin Soldier"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "outland_commander",
+    "kind": "night_boss",
+    "name": {
+      "en": "Outland Commander",
+      "vi": "Outland Commander"
+    },
+    "night": 2,
+    "verified": true
+  },
+  {
+    "id": "tree_sentinel_trio",
+    "kind": "night_boss",
+    "name": {
+      "en": "Tree Sentinel Trio",
+      "vi": "Tree Sentinel Trio"
+    },
+    "night": 2,
+    "verified": true
+  }
 ]

@@ -1,5 +1,146 @@
 {
-  "verified": false,
-  "note": "Night-boss pools per Nightlord are not sourced yet (Phase 2). An empty pool means 'no signal': the predictor must fall back to a uniform prior.",
-  "pools": []
+  "verified": true,
+  "note": "Night-boss pools per Nightlord (Deep of Night, hidden Nightlord), from 'Nightlord Boss Pools.xlsx'. DLC Nightlords have no pool yet.",
+  "pools": [
+    {
+      "nightlord": "gladius",
+      "night1": [
+        "bell_bearing_hunter",
+        "demi_human_duo"
+      ],
+      "night2": [
+        "fell_omen",
+        "tree_sentinel_trio"
+      ]
+    },
+    {
+      "nightlord": "adel",
+      "night1": [
+        "gaping_dragon",
+        "nights_cavalry_duo",
+        "the_dukes_dear_freja",
+        "valiant_gargoyle",
+        "wormface"
+      ],
+      "night2": [
+        "ancient_dragon",
+        "crucible_hippo",
+        "death_rite_bird",
+        "outland_commander"
+      ]
+    },
+    {
+      "nightlord": "gnoster",
+      "night1": [
+        "battlefield_commander",
+        "centipede_demon",
+        "smelter_demon",
+        "tibia_mariner",
+        "ulcerated_tree_spirit"
+      ],
+      "night2": [
+        "draconic_sentinel_trio",
+        "great_wyrm",
+        "nox_dragonkin_soldier",
+        "tree_sentinel_trio"
+      ]
+    },
+    {
+      "nightlord": "maris",
+      "night1": [
+        "gaping_dragon",
+        "grafted_monarch",
+        "smelter_demon",
+        "valiant_gargoyle",
+        "wormface"
+      ],
+      "night2": [
+        "fallingstar_beast",
+        "godskin_duo",
+        "tree_sentinel_trio"
+      ]
+    },
+    {
+      "nightlord": "libra",
+      "night1": [
+        "battlefield_commander",
+        "centipede_demon",
+        "royal_revenant",
+        "the_dukes_dear_freja",
+        "tibia_mariner"
+      ],
+      "night2": [
+        "crucible_hippo",
+        "death_rite_bird",
+        "godskin_duo"
+      ]
+    },
+    {
+      "nightlord": "fulghor",
+      "night1": [
+        "centipede_demon",
+        "gaping_dragon",
+        "nights_cavalry_duo",
+        "royal_revenant",
+        "valiant_gargoyle",
+        "wormface"
+      ],
+      "night2": [
+        "fell_omen",
+        "nameless_king",
+        "nox_dragonkin_soldier",
+        "outland_commander"
+      ]
+    },
+    {
+      "nightlord": "caligo",
+      "night1": [
+        "bell_bearing_hunter",
+        "grafted_monarch",
+        "smelter_demon",
+        "the_dukes_dear_freja",
+        "tibia_mariner",
+        "ulcerated_tree_spirit"
+      ],
+      "night2": [
+        "dancer_of_the_boreal_valley",
+        "draconic_sentinel_trio",
+        "godskin_duo"
+      ]
+    },
+    {
+      "nightlord": "heolstor",
+      "night1": [
+        "battlefield_commander",
+        "bell_bearing_hunter",
+        "centipede_demon",
+        "demi_human_duo",
+        "gaping_dragon",
+        "grafted_monarch",
+        "nights_cavalry_duo",
+        "royal_revenant",
+        "smelter_demon",
+        "the_dukes_dear_freja",
+        "tibia_mariner",
+        "ulcerated_tree_spirit",
+        "valiant_gargoyle",
+        "wormface"
+      ],
+      "night2": [
+        "ancient_dragon",
+        "crucible_hippo",
+        "dancer_of_the_boreal_valley",
+        "death_rite_bird",
+        "draconic_sentinel_trio",
+        "fallingstar_beast",
+        "fell_omen",
+        "godskin_duo",
+        "great_wyrm",
+        "nameless_king",
+        "nox_dragonkin_soldier",
+        "outland_commander",
+        "tree_sentinel_trio"
+      ]
+    }
+  ]
 }
