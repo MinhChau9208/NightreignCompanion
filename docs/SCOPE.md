@@ -208,7 +208,12 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 
 **Bài toán:** Game chỉ ghi "Physical Attack Up +2" mà không nói giá trị. App cung cấp giá trị thực (đã datamine) và tính tổng khi trang bị nhiều relic.
 
-**Mô hình dữ liệu (`relic_effects.json`):**
+**Hiện trạng (2026-10-11):**
+- ✅ Data: `relic_effects.json` — 246 hiệu ứng (116 Relic, 78 Deep Relic gồm Curse, 52 Dormant Power) sinh bằng `tools/import_relics.py` từ *Nightreign Useful Info* v1.03.2. Giá trị là mô tả chữ song ngữ (nguồn là chữ, nhiều hiệu ứng có điều kiện), kèm "stack với chính nó", ghi chú, nhân vật. Bản dịch tiếng Việt nằm ở `tools/relic_vi.json` (khoá theo câu tiếng Anh; import báo lỗi khi có câu mới chưa dịch). `characters.json` thêm Scholar, Undertaker (DLC).
+- ✅ Màn hình tra cứu: tìm kiếm (không dấu, cả hai ngôn ngữ), lọc theo loại / nhóm / nhân vật / stack được.
+- Chưa làm: Relic Calculator (cần thêm modifier có cấu trúc cho nhóm hiệu ứng có hệ số rõ ràng), bảng Chalice & Guaranteed Relics, bộ relic cá nhân. Schema cũ (`tiers`, `stacking` additive/multiplicative) bị thay vì không khớp với nguồn dữ liệu.
+
+**Mô hình dữ liệu ban đầu (`relic_effects.json`, v0.2 — đã thay, xem Hiện trạng):**
 ```json
 {
   "id": "phys_atk_up",

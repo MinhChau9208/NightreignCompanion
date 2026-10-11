@@ -2,8 +2,8 @@
   import {createEventDispatcher} from 'svelte'
   import {PredictNightlord} from '../../wailsjs/go/main/App'
   import type {boss, gamedata, main} from '../../wailsjs/go/models'
-  import {lang, t} from '../lib/i18n'
-  import {loc, pct} from '../lib/boss'
+  import {lang, loc, t} from '../lib/i18n'
+  import {pct} from '../lib/boss'
   import BossTraits from './BossTraits.svelte'
 
   export let data: main.BossData

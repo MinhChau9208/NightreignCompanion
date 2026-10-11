@@ -1,6 +1,6 @@
 {
-  "dataVersion": "0.2.0",
+  "dataVersion": "0.3.0",
   "gameVersion": "unknown",
   "updated": "2026-10-11",
-  "note": "bosses.json and boss_priors.json come from community spreadsheets (Nightreign Useful Info v1.03.2 by Slay et al., Nightlord Boss Pools) via tools/import_bosses.py. Relic and timer values are still placeholders (verified=false)."
+  "note": "bosses.json, boss_priors.json and relic_effects.json come from community spreadsheets (Nightreign Useful Info v1.03.2 by Slay et al., Nightlord Boss Pools) via tools/import_bosses.py and tools/import_relics.py. Timer values are still placeholders (verified=false)."
 }

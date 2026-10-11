@@ -1,8 +1,7 @@
 <script lang="ts">
   import {createEventDispatcher} from 'svelte'
   import type {gamedata, main} from '../../wailsjs/go/models'
-  import {lang, t} from '../lib/i18n'
-  import {loc} from '../lib/boss'
+  import {lang, loc, t} from '../lib/i18n'
 
   export let data: main.BossData
 

@@ -6,5 +6,7 @@
   { "id": "raider",   "name": { "en": "Raider",   "vi": "Raider" } },
   { "id": "revenant", "name": { "en": "Revenant", "vi": "Revenant" } },
   { "id": "recluse",  "name": { "en": "Recluse",  "vi": "Recluse" } },
-  { "id": "executor", "name": { "en": "Executor", "vi": "Executor" } }
+  { "id": "executor", "name": { "en": "Executor", "vi": "Executor" } },
+  { "id": "scholar",    "name": { "en": "Scholar",    "vi": "Scholar" },    "dlc": true },
+  { "id": "undertaker", "name": { "en": "Undertaker", "vi": "Undertaker" }, "dlc": true }
 ]

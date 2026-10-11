@@ -6,6 +6,7 @@
   import Settings from './pages/Settings.svelte'
   import Network from './pages/Network.svelte'
   import Bosses from './pages/Bosses.svelte'
+  import Relics from './pages/Relics.svelte'
   import ComingSoon from './pages/ComingSoon.svelte'
 
   type Page = {id: string; label: Key; phase?: string}
@@ -13,7 +14,7 @@
     {id: 'dashboard', label: 'nav.dashboard'},
     {id: 'network', label: 'nav.network'},
     {id: 'bosses', label: 'nav.bosses'},
-    {id: 'relics', label: 'nav.relics', phase: 'Phase 3'},
+    {id: 'relics', label: 'nav.relics'},
     {id: 'timer', label: 'nav.timer', phase: 'Phase 4'},
     {id: 'settings', label: 'nav.settings'},
   ]
@@ -53,6 +54,8 @@
       <Network />
     {:else if current.id === 'bosses'}
       <Bosses />
+    {:else if current.id === 'relics'}
+      <Relics />
     {:else if current.id === 'settings'}
       <Settings />
     {:else}

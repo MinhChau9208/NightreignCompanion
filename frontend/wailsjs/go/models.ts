@@ -381,7 +381,89 @@ export namespace gamedata {
 	    }
 	}
 	
+	export class Character {
+	    id: string;
+	    name: Localized;
+	    dlc?: boolean;
 	
+	    static createFrom(source: any = {}) {
+	        return new Character(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = this.convertValues(source["name"], Localized);
+	        this.dlc = source["dlc"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	
+	export class RelicEffect {
+	    id: string;
+	    kind: string;
+	    categories: string[];
+	    name: Localized;
+	    inGame?: string;
+	    effect?: Localized;
+	    stacking: string;
+	    notes?: Localized;
+	    character?: string;
+	    verified: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new RelicEffect(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.kind = source["kind"];
+	        this.categories = source["categories"];
+	        this.name = this.convertValues(source["name"], Localized);
+	        this.inGame = source["inGame"];
+	        this.effect = this.convertValues(source["effect"], Localized);
+	        this.stacking = source["stacking"];
+	        this.notes = this.convertValues(source["notes"], Localized);
+	        this.character = source["character"];
+	        this.verified = source["verified"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class Stats {
 	    dataVersion: string;
 	    gameVersion: string;
@@ -568,6 +650,38 @@ export namespace main {
 	        this.bosses = this.convertValues(source["bosses"], gamedata.Boss);
 	        this.pools = this.convertValues(source["pools"], gamedata.BossPool);
 	        this.poolsVerified = source["poolsVerified"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+	export class RelicData {
+	    effects: gamedata.RelicEffect[];
+	    characters: gamedata.Character[];
+	
+	    static createFrom(source: any = {}) {
+	        return new RelicData(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.effects = this.convertValues(source["effects"], gamedata.RelicEffect);
+	        this.characters = this.convertValues(source["characters"], gamedata.Character);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

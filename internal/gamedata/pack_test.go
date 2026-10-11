@@ -51,10 +51,15 @@ func TestValidateRejects(t *testing.T) {
 			"must be untimed",
 		},
 		{
-			"verified relic without value", "relic_effects.json",
-			`[{"id":"r","name":{"en":"a","vi":"a"},"category":"attack","stacking":"additive","verified":true,
-			   "tiers":[{"level":0,"value":null,"unit":"percent"}]}]`,
-			"verified but tier 0 has no value",
+			"relic effect missing vi", "relic_effects.json",
+			`[{"id":"r","kind":"relic","categories":["stat"],"name":{"en":"a","vi":"a"},"stacking":"yes",
+			   "effect":{"en":"b","vi":""},"verified":true}]`,
+			"relic r effect: needs both en and vi",
+		},
+		{
+			"relic unknown category", "relic_effects.json",
+			`[{"id":"r","kind":"deep","categories":["attack"],"name":{"en":"a","vi":"a"},"stacking":"no","verified":true}]`,
+			`unknown category "attack"`,
 		},
 		{
 			"prior references unknown boss", "boss_priors.json",
@@ -76,8 +81,8 @@ func TestValidateRejects(t *testing.T) {
 		},
 		{
 			"relic for unknown character", "relic_effects.json",
-			`[{"id":"r","name":{"en":"a","vi":"a"},"category":"attack","stacking":"none","characters":["ghost"],
-			   "tiers":[{"level":0,"value":null,"unit":"percent"}]}]`,
+			`[{"id":"r","kind":"relic","categories":["character"],"name":{"en":"a","vi":"a"},"stacking":"no",
+			   "character":"ghost","verified":true}]`,
 			`unknown character "ghost"`,
 		},
 	}

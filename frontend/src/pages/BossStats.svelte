@@ -1,7 +1,7 @@
 <script lang="ts">
   import type {gamedata, main} from '../../wailsjs/go/models'
-  import {lang, t, type Key} from '../lib/i18n'
-  import {damageKey, damageTypes, levelKey, loc, signed, statusKey, statusLevel, statusTypes, type Version} from '../lib/boss'
+  import {lang, loc, t, type Key} from '../lib/i18n'
+  import {damageKey, damageTypes, levelKey, signed, statusKey, statusLevel, statusTypes, type Version} from '../lib/boss'
   import BossTraits from './BossTraits.svelte'
 
   export let data: main.BossData
@@ -76,7 +76,7 @@
               <div class="nrow" role="row" title={$t('boss.dmgTaken').replace('{n}', String(100 - v))}>
                 <span role="cell">{$t(damageKey(d))}</span>
                 <span class="track" role="cell">
-                  <span class="mid"></span>
+                  <span class="axis"></span>
                   {#if v < 0}
                     <span class="fill weak" style="right: 50%; width: {width(v)}%"></span>
                   {:else if v > 0}
@@ -187,7 +187,7 @@
     background: var(--hover);
     border-radius: 4px;
   }
-  .mid {
+  .axis {
     position: absolute;
     left: 50%;
     top: -2px;

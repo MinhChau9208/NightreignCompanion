@@ -1,4 +1,5 @@
 import {derived, writable} from 'svelte/store'
+import type {gamedata} from '../../wailsjs/go/models'
 
 export type Lang = 'vi' | 'en'
 
@@ -149,6 +150,44 @@ const vi = {
   'boss.status.sleep': 'Ngủ',
   'boss.status.madness': 'Điên loạn',
   'boss.status.blight': 'Tử khí',
+  'relic.search': 'Tìm theo tên, hiệu ứng hoặc ghi chú (vd "physical", "sát thương", "Wylder")',
+  'relic.all': 'Tất cả',
+  'relic.kind.relic': 'Relic',
+  'relic.kind.deep': 'Deep Relic',
+  'relic.kind.dormant': 'Dormant Power',
+  'relic.intro': 'Giá trị thật đằng sau dòng chữ trên relic, ví dụ Physical Attack Up +2 = sát thương vật lý ×1,06. "Stack được" nghĩa là đeo hai dòng giống nhau thì cả hai đều có tác dụng.',
+  'relic.kindHint.relic': 'Relic thường: 3 ô đầu của mỗi chalice, có tác dụng ở mọi expedition.',
+  'relic.kindHint.deep': 'Deep Relic: 3 ô thêm chỉ có tác dụng trong Deep of Night. Thường đi kèm hiệu ứng xấu (Curse).',
+  'relic.kindHint.dormant': 'Dormant Power: sức mạnh tiềm ẩn nhặt được trong expedition, không phải relic. Khi có hai giá trị (vd 1,1x / 1,15x) là hai cấp của cùng một sức mạnh.',
+  'relic.cat.stat': 'Chỉ số',
+  'relic.cat.start': 'Khởi đầu',
+  'relic.cat.exploration': 'Khám phá',
+  'relic.cat.offensive': 'Tấn công',
+  'relic.cat.defensive': 'Phòng thủ',
+  'relic.cat.regen': 'Hồi phục',
+  'relic.cat.character': 'Nhân vật',
+  'relic.cat.curse': 'Curse',
+  'relic.character': 'Nhân vật',
+  'relic.anyCharacter': 'Mọi nhân vật',
+  'relic.generic': 'Chỉ hiệu ứng chung',
+  'relic.stackOnly': 'Chỉ hiện loại stack được',
+  'relic.count': '{n} hiệu ứng',
+  'relic.clear': 'Bỏ lọc',
+  'relic.empty': 'Không có hiệu ứng nào khớp.',
+  'relic.asNamed': 'Như tên gọi',
+  'relic.notes': 'Ghi chú',
+  'relic.inGame': 'Mô tả trong game',
+  'relic.stack.yes': 'Stack được',
+  'relic.stack.no': 'Không stack',
+  'relic.stack.na': 'Không áp dụng',
+  'relic.stack.varies': 'Xem ghi chú',
+  'relic.stack.unknown': 'Chưa rõ',
+  'relic.stackHint.yes': 'Đeo nhiều dòng giống nhau thì tác dụng cộng dồn.',
+  'relic.stackHint.no': 'Đeo nhiều dòng giống nhau thì chỉ một dòng có tác dụng.',
+  'relic.stackHint.na': 'Chỉ có trên một relic/nguồn duy nhất nên không thể có hai dòng.',
+  'relic.stackHint.varies': 'Tuỳ cấp — xem ghi chú.',
+  'relic.stackHint.unknown': 'Bảng nguồn chưa ghi.',
+  'relic.source': 'Nguồn số liệu: bảng "Nightreign Useful Info" v1.03.2 (Slay, Unlined-Betters, Emerald Wolf, Penumbra). Tên hiệu ứng giữ tiếng Anh như trong game.',
 }
 
 const en: Record<keyof typeof vi, string> = {
@@ -298,9 +337,50 @@ const en: Record<keyof typeof vi, string> = {
   'boss.status.sleep': 'Sleep',
   'boss.status.madness': 'Madness',
   'boss.status.blight': 'Death Blight',
+  'relic.search': 'Search names, effects or notes (e.g. "physical", "flask", "Wylder")',
+  'relic.all': 'All',
+  'relic.kind.relic': 'Relic',
+  'relic.kind.deep': 'Deep Relic',
+  'relic.kind.dormant': 'Dormant Power',
+  'relic.intro': 'The real values behind relic text, e.g. Physical Attack Up +2 = ×1.06 physical damage. "Stacks" means two identical lines both take effect.',
+  'relic.kindHint.relic': 'Regular relics: the first 3 slots of every chalice, active in every expedition.',
+  'relic.kindHint.deep': 'Deep relics: 3 extra slots that only work in Deep of Night. They often come with a Curse.',
+  'relic.kindHint.dormant': 'Dormant powers: picked up during an expedition, not relics. Two values (e.g. 1.1x / 1.15x) are two levels of the same power.',
+  'relic.cat.stat': 'Stats',
+  'relic.cat.start': 'Start of game',
+  'relic.cat.exploration': 'Exploration',
+  'relic.cat.offensive': 'Offensive',
+  'relic.cat.defensive': 'Defensive',
+  'relic.cat.regen': 'Regen',
+  'relic.cat.character': 'Character',
+  'relic.cat.curse': 'Curse',
+  'relic.character': 'Character',
+  'relic.anyCharacter': 'Any character',
+  'relic.generic': 'Generic effects only',
+  'relic.stackOnly': 'Stackable only',
+  'relic.count': '{n} effects',
+  'relic.clear': 'Clear filters',
+  'relic.empty': 'No effect matches.',
+  'relic.asNamed': 'As named',
+  'relic.notes': 'Notes',
+  'relic.inGame': 'In-game text',
+  'relic.stack.yes': 'Stacks',
+  'relic.stack.no': 'No stack',
+  'relic.stack.na': 'N/A',
+  'relic.stack.varies': 'See notes',
+  'relic.stack.unknown': 'Unknown',
+  'relic.stackHint.yes': 'Several identical lines all take effect.',
+  'relic.stackHint.no': 'With several identical lines, only one takes effect.',
+  'relic.stackHint.na': 'Only one relic/source has it, so it cannot appear twice.',
+  'relic.stackHint.varies': 'Depends on the level — see notes.',
+  'relic.stackHint.unknown': 'Not stated by the source sheet.',
+  'relic.source': 'Source: the "Nightreign Useful Info" sheet v1.03.2 (Slay, Unlined-Betters, Emerald Wolf, Penumbra). Effect names stay in English as in the game.',
 }
 
 export type Key = keyof typeof vi
 
 export const lang = writable<Lang>('vi')
+// loc picks the current language from a data-pack string.
+export const loc = (n: gamedata.Localized | undefined, l: Lang) => (n ? (l === 'en' ? n.en : n.vi) : '')
+
 export const t = derived(lang, (l) => (k: Key) => (l === 'en' ? en : vi)[k])

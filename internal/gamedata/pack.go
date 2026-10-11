@@ -85,27 +85,28 @@ func (p *Pack) Validate() error {
 			add("relics: missing or duplicate id %q", r.ID)
 		}
 		checkName(add, where, r.Name)
+		if !relicKinds[r.Kind] {
+			add("%s: unknown kind %q", where, r.Kind)
+		}
+		if len(r.Categories) == 0 {
+			add("%s: needs at least one category", where)
+		}
+		for _, c := range r.Categories {
+			if !relicCategories[c] {
+				add("%s: unknown category %q", where, c)
+			}
+		}
 		if !stackingModes[r.Stacking] {
 			add("%s: unknown stacking %q", where, r.Stacking)
 		}
-		if len(r.Tiers) == 0 {
-			add("%s: needs at least one tier", where)
+		if r.Effect != nil {
+			checkText(add, where+" effect", *r.Effect)
 		}
-		for i, t := range r.Tiers {
-			if t.Level != i {
-				add("%s: tier %d has level %d, levels must be 0,1,2,…", where, i, t.Level)
-			}
-			if !tierUnits[t.Unit] {
-				add("%s: tier %d unknown unit %q", where, i, t.Unit)
-			}
-			if r.Verified && t.Value == nil {
-				add("%s: verified but tier %d has no value", where, i)
-			}
+		if r.Notes != nil {
+			checkText(add, where+" notes", *r.Notes)
 		}
-		for _, c := range r.Characters {
-			if !chars[c] {
-				add("%s: unknown character %q", where, c)
-			}
+		if r.Character != "" && !chars[r.Character] {
+			add("%s: unknown character %q", where, r.Character)
 		}
 	}
 
@@ -279,7 +280,11 @@ func checkForms(add func(string, ...any), where string, forms []BossForm) {
 }
 
 func checkName(add func(string, ...any), where string, n Localized) {
+	checkText(add, where+" name", n)
+}
+
+func checkText(add func(string, ...any), where string, n Localized) {
 	if n.EN == "" || n.VI == "" {
-		add("%s: name needs both en and vi", where)
+		add("%s: needs both en and vi", where)
 	}
 }
