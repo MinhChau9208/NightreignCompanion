@@ -2,6 +2,7 @@
   import type {gamedata} from '../../wailsjs/go/models'
   import {t} from '../lib/i18n'
   import {damageKey, easyStatuses, signed, statusKey, weakAndResist} from '../lib/boss'
+  import {damageIcon, statusIcon} from '../lib/icons'
 
   export let form: gamedata.BossForm
 
@@ -12,22 +13,22 @@
 <dl class="traits">
   <dt>{$t('boss.weak')}</dt>
   <dd>
-    {#each wr.weak as d}<span class="trait weak">▼ {$t(damageKey(d.type))} {signed(d.value)}%</span>{/each}
+    {#each wr.weak as d}<span class="trait weak"><img class="ico" src={damageIcon(d.type)} alt="" /> {$t(damageKey(d.type))} {signed(d.value)}%</span>{/each}
     {#if wr.weak.length === 0}<span class="muted">—</span>{/if}
   </dd>
   <dt>{$t('boss.resist')}</dt>
   <dd>
-    {#each wr.resist as d}<span class="trait resist">▲ {$t(damageKey(d.type))} {signed(d.value)}%</span>{/each}
+    {#each wr.resist as d}<span class="trait resist"><img class="ico" src={damageIcon(d.type)} alt="" /> {$t(damageKey(d.type))} {signed(d.value)}%</span>{/each}
     {#if wr.resist.length === 0}<span class="muted">—</span>{/if}
   </dd>
   <dt>{$t('boss.easyStatus')}</dt>
   <dd>
-    {#each easy as s}<span class="trait weak">{$t(statusKey(s))}</span>{/each}
+    {#each easy as s}<span class="trait weak"><img class="ico" src={statusIcon(s)} alt="" /> {$t(statusKey(s))}</span>{/each}
     {#if easy.length === 0}<span class="muted">—</span>{/if}
   </dd>
   <dt>{$t('boss.level.immune')}</dt>
   <dd>
-    {#each form.immune ?? [] as s}<span class="trait">{$t(statusKey(s))}</span>{/each}
+    {#each form.immune ?? [] as s}<span class="trait"><img class="ico" src={statusIcon(s)} alt="" /> {$t(statusKey(s))}</span>{/each}
     {#if !form.immune?.length}<span class="muted">—</span>{/if}
   </dd>
 </dl>
@@ -56,6 +57,11 @@
     border-radius: 4px;
     padding: 1px 7px;
     color: var(--muted);
+  }
+  .trait .ico {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.25em;
   }
   .trait.weak {
     color: var(--ok);

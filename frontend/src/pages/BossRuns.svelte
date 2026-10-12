@@ -4,6 +4,7 @@
   import {store, type gamedata, type main} from '../../wailsjs/go/models'
   import {lang, loc, t} from '../lib/i18n'
   import {clock} from '../lib/timer'
+  import {portrait} from '../lib/icons'
   import {groupBy, maxDepth, parseClock, resultKey, runResults, summary, type Prefill, type Run} from '../lib/runs'
 
   export let data: main.BossData
@@ -205,7 +206,10 @@
             <tbody>
               {#each tbl.rows as g (g.id)}
                 <tr>
-                  <td>{name(g.id)}</td>
+                  <td>
+                    {#if portrait(g.id)}<img class="portrait" src={portrait(g.id)} alt="" />{/if}
+                    {name(g.id)}
+                  </td>
                   <td class="num">{g.runs}</td>
                   <td class="num">{rate(g.wins, g.runs)}</td>
                   <td class="num">{g.avgClear ? clock(g.avgClear) : '—'}</td>
@@ -319,6 +323,12 @@
   td {
     padding: 5px 8px 5px 0;
     border-bottom: 1px solid var(--border);
+  }
+  td .portrait {
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    margin-right: 6px;
   }
   .num {
     text-align: right;

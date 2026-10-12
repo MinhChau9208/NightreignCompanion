@@ -3,6 +3,7 @@
   import {lang, loc, t, type Key} from '../lib/i18n'
   import {damageKey, damageTypes, levelKey, signed, statusKey, statusLevel, statusTypes, type Version} from '../lib/boss'
   import BossTraits from './BossTraits.svelte'
+  import {damageIcon, portrait, statusIcon} from '../lib/icons'
 
   export let data: main.BossData
   export let focus = ''
@@ -28,6 +29,7 @@
 <div class="picker">
   {#each nightlords as b (b.id)}
     <button class="chip" class:on={b.id === focus} on:click={() => (focus = b.id)}>
+      {#if portrait(b.id)}<img class="portrait" src={portrait(b.id)} alt="" />{/if}
       {loc(b.name, $lang)}
       {#if b.dlc}<small class="tag">DLC</small>{/if}
     </button>
@@ -35,6 +37,13 @@
 </div>
 
 {#if nl}
+  <div class="title">
+    {#if portrait(nl.id)}<img class="portrait" src={portrait(nl.id)} alt="" />{/if}
+    <div>
+      <h2>{loc(nl.name, $lang)}</h2>
+      {#if nl.expedition}<span class="muted">{$t('boss.expedition')}: {loc(nl.expedition, $lang)}</span>{/if}
+    </div>
+  </div>
   <div class="controls">
     <div class="seg">
       <button class:on={version === 'normal'} on:click={() => (version = 'normal')}>{$t('boss.normal')}</button>
@@ -46,7 +55,6 @@
         <button class:on={party === i} on:click={() => (party = i)}>{$t(p)}</button>
       {/each}
     </div>
-    {#if nl.expedition}<span class="muted">{$t('boss.expedition')}: {loc(nl.expedition, $lang)}</span>{/if}
   </div>
 
   {#each forms as f}
@@ -74,7 +82,7 @@
             {#each damageTypes as d}
               {@const v = f.negation[d] ?? 0}
               <div class="nrow" role="row" title={$t('boss.dmgTaken').replace('{n}', String(100 - v))}>
-                <span role="cell">{$t(damageKey(d))}</span>
+                <span role="cell"><img class="ico" src={damageIcon(d)} alt="" /> {$t(damageKey(d))}</span>
                 <span class="track" role="cell">
                   <span class="axis"></span>
                   {#if v < 0}
@@ -96,7 +104,7 @@
             {#each statusTypes as s}
               {@const lvl = statusLevel(f, s)}
               <div class="srow" role="row">
-                <span role="cell">{$t(statusKey(s))}</span>
+                <span role="cell"><img class="ico" src={statusIcon(s)} alt="" /> {$t(statusKey(s))}</span>
                 <span role="cell" class="num">{lvl === 'immune' ? '—' : f.resist[s]}</span>
                 <span role="cell" class="lvl {lvl}">{$t(levelKey(lvl))}</span>
               </div>
@@ -118,6 +126,30 @@
     flex-wrap: wrap;
     gap: 6px;
     margin-bottom: 14px;
+  }
+  .picker .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .picker .portrait {
+    width: 20px;
+    height: 20px;
+    margin-left: -6px;
+  }
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .title h2 {
+    margin: 0 0 2px;
+    font-size: 18px;
+  }
+  .title .portrait {
+    width: 72px;
+    height: 72px;
   }
   .tag {
     margin-left: 4px;

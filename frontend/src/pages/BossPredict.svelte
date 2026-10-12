@@ -6,6 +6,7 @@
   import {pct} from '../lib/boss'
   import type {Prefill} from '../lib/runs'
   import BossTraits from './BossTraits.svelte'
+  import {portrait} from '../lib/icons'
 
   export let data: main.BossData
 
@@ -114,8 +115,11 @@
         {@const nl = byId.get(c.nightlord)}
         <div class="row" class:out={c.excluded || c.probability === 0}>
           <span class="who">
-            <b>{loc(nl?.name, $lang)}</b>
-            <small class="muted">{loc(nl?.expedition, $lang)}</small>
+            {#if portrait(c.nightlord)}<img class="portrait" src={portrait(c.nightlord)} alt="" />{:else}<span class="portrait"></span>{/if}
+            <span>
+              <b>{loc(nl?.name, $lang)}</b>
+              <small class="muted">{loc(nl?.expedition, $lang)}</small>
+            </span>
           </span>
           <span class="bar" title={pct(c.probability)}>
             <span style="width: {c.probability * 100}%"></span>
@@ -141,7 +145,10 @@
       {#each top as c (c.nightlord)}
         {@const nl = byId.get(c.nightlord)}
         <section class="card">
-          <h2>{$t('boss.prepare')} {loc(nl?.name, $lang)} <span class="muted">· {pct(c.probability)}</span></h2>
+          <h2 class="prepTitle">
+            {#if portrait(c.nightlord)}<img class="portrait" src={portrait(c.nightlord)} alt="" />{/if}
+            <span>{$t('boss.prepare')} {loc(nl?.name, $lang)} <span class="muted">· {pct(c.probability)}</span></span>
+          </h2>
           {#each nl?.stats?.normal ?? [] as f}
             {#if (nl?.stats?.normal.length ?? 0) > 1}<h3>{f.name}</h3>{/if}
             <BossTraits form={f} />
@@ -204,7 +211,25 @@
   }
   .who {
     display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .who > span:not(.portrait) {
+    display: flex;
     flex-direction: column;
+  }
+  .who .portrait {
+    width: 36px;
+    height: 36px;
+  }
+  .prepTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prepTitle .portrait {
+    width: 44px;
+    height: 44px;
   }
   .bar {
     height: 8px;

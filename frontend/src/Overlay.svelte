@@ -8,6 +8,7 @@
   import {flowLevel, gameNet, hasPing, kind, mainFlow} from './lib/gamenet'
   import {mainClock, timerState, urgency} from './lib/timer'
   import {damageKey, pct, weakAndResist, type Hint} from './lib/boss'
+  import {damageIcon, portrait} from './lib/icons'
 
   const net = netStats()
   const fps = fpsStatus()
@@ -99,11 +100,12 @@
     <ul class="lords">
       {#each hints as h (h.nightlord)}
         <li>
+          {#if portrait(h.nightlord)}<img class="portrait" src={portrait(h.nightlord)} alt="" />{:else}<span></span>{/if}
           <span class="name">{loc(h.name, $lang)}</span>
           <span class="num">{pct(h.probability)}</span>
           <span class="weak">
             {#if h.form}
-              {#each weakAndResist(h.form).weak.slice(0, 2) as d}<span>▼{$t(damageKey(d.type))}</span>{/each}
+              {#each weakAndResist(h.form).weak.slice(0, 2) as d}<img class="ico" src={damageIcon(d.type)} alt={$t(damageKey(d.type))} title={$t(damageKey(d.type))} />{/each}
             {/if}
           </span>
         </li>
@@ -215,15 +217,17 @@
   }
   .lords li {
     display: grid;
-    grid-template-columns: 1fr 36px auto;
+    grid-template-columns: 18px 1fr 36px auto;
     gap: 6px;
-    align-items: baseline;
+    align-items: center;
+  }
+  .lords .portrait {
+    width: 18px;
+    height: 18px;
   }
   .weak {
     display: flex;
-    gap: 6px;
-    color: var(--ok);
-    font-size: 12px;
+    gap: 3px;
   }
   .timer {
     margin-top: 8px;

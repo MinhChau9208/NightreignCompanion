@@ -2,6 +2,7 @@
   import {createEventDispatcher} from 'svelte'
   import type {gamedata, main} from '../../wailsjs/go/models'
   import {lang, loc, t} from '../lib/i18n'
+  import {portrait} from '../lib/icons'
 
   export let data: main.BossData
 
@@ -25,7 +26,8 @@
           {#each sets as s}
             {@const nl = byId.get(s.id)}
             <th>
-              <button class="link" title={loc(nl?.name, $lang)} on:click={() => dispatch('stats', s.id)}>
+              <button class="link head" title={loc(nl?.name, $lang)} on:click={() => dispatch('stats', s.id)}>
+                {#if portrait(s.id)}<img class="portrait" src={portrait(s.id)} alt="" />{/if}
                 {loc(nl?.expedition, $lang) || loc(nl?.name, $lang)}
               </button>
             </th>
@@ -64,6 +66,16 @@
   .warn {
     color: var(--warn);
     font-size: 12px;
+  }
+  .head {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .head .portrait {
+    width: 40px;
+    height: 40px;
   }
   .scroll {
     overflow-x: auto;
