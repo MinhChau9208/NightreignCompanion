@@ -25,7 +25,7 @@ func prob(r Result, nightlord string) float64 {
 func near(a, b float64) bool { return math.Abs(a-b) < 1e-9 }
 
 func TestPredictNoSignalIsUniform(t *testing.T) {
-	r := Predict(testPools, Query{})
+	r := Predict(testPools, Seen{}, Query{})
 	if r.Signal || r.Impossible {
 		t.Fatalf("signal=%v impossible=%v", r.Signal, r.Impossible)
 	}
@@ -38,7 +38,7 @@ func TestPredictNoSignalIsUniform(t *testing.T) {
 
 func TestPredictWeighsPoolSize(t *testing.T) {
 	// x: a draws it with 1/2, b with 1/4, c never.
-	r := Predict(testPools, Query{Night1: "x"})
+	r := Predict(testPools, Seen{}, Query{Night1: "x"})
 	if got := prob(r, "a"); !near(got, 2.0/3) {
 		t.Errorf("a = %v, want 2/3", got)
 	}
@@ -61,12 +61,12 @@ func TestPredictWeighsPoolSize(t *testing.T) {
 }
 
 func TestPredictBothNightsAndExclusion(t *testing.T) {
-	r := Predict(testPools, Query{Night1: "z", Night2: "q"})
+	r := Predict(testPools, Seen{}, Query{Night1: "z", Night2: "q"})
 	// b: 1/4·1/2 = 1/8, c: 1·1 = 1.
 	if got := prob(r, "c"); !near(got, 8.0/9) {
 		t.Errorf("c = %v, want 8/9", got)
 	}
-	r = Predict(testPools, Query{Night1: "z", Night2: "q", Exclude: []string{"c"}})
+	r = Predict(testPools, Seen{}, Query{Night1: "z", Night2: "q", Exclude: []string{"c"}})
 	if got := prob(r, "b"); !near(got, 1) {
 		t.Errorf("b = %v, want 1 with c excluded", got)
 	}
@@ -78,7 +78,7 @@ func TestPredictBothNightsAndExclusion(t *testing.T) {
 }
 
 func TestPredictImpossible(t *testing.T) {
-	r := Predict(testPools, Query{Night1: "x", Night2: "q", Exclude: []string{"b"}})
+	r := Predict(testPools, Seen{}, Query{Night1: "x", Night2: "q", Exclude: []string{"b"}})
 	if !r.Impossible {
 		t.Fatalf("want impossible, got %+v", r.Ranking)
 	}
@@ -96,7 +96,7 @@ func TestPredictEmbeddedPools(t *testing.T) {
 	}
 	// Demi-Human Duo + Fell Omen only fit Gladius and Heolstor, whose pools
 	// hold every night boss and so explain them far less well.
-	r := Predict(p.Priors.Pools, Query{Night1: "demi_human_duo", Night2: "fell_omen"})
+	r := Predict(p.Priors.Pools, Seen{}, Query{Night1: "demi_human_duo", Night2: "fell_omen"})
 	if r.Ranking[0].Nightlord != "gladius" || r.Ranking[1].Nightlord != "heolstor" || r.Ranking[2].Probability != 0 {
 		t.Errorf("ranking = %+v", r.Ranking)
 	}
@@ -106,5 +106,39 @@ func TestPredictEmbeddedPools(t *testing.T) {
 	}
 	if !near(sum, 1) {
 		t.Errorf("probabilities sum to %v", sum)
+	}
+}
+
+func TestPredictLearnsFromRuns(t *testing.T) {
+	seen := Observe(testPools, []Sighting{
+		{Nightlord: "a", Night1: "x"},
+		{Nightlord: "a", Night1: "x", Night2: "q"}, // q is not in a's pool
+		{Nightlord: "c", Night1: "x"},              // x is not in c's pool
+		{Nightlord: "nobody", Night1: "x"},
+	})
+	if seen.Runs != 2 {
+		t.Errorf("runs = %d, want 2", seen.Runs)
+	}
+	// a draws x with (2+1)/(2+2) = 3/4, b with 1/4.
+	r := Predict(testPools, seen, Query{Night1: "x"})
+	if got := prob(r, "a"); !near(got, 0.75) {
+		t.Errorf("a = %v, want 3/4", got)
+	}
+	if r.Runs != 2 {
+		t.Errorf("result runs = %d", r.Runs)
+	}
+	// With nothing entered, a's Night 1 leans towards x: 1/3·3/4 + 1/3·1/4.
+	r = Predict(testPools, seen, Query{})
+	for _, c := range r.Night1 {
+		if c.Boss == "x" && !near(c.Probability, 1.0/3) {
+			t.Errorf("x = %v, want 1/3", c.Probability)
+		}
+	}
+	var sum float64
+	for _, c := range r.Night1 {
+		sum += c.Probability
+	}
+	if !near(sum, 1) {
+		t.Errorf("night 1 chances sum to %v", sum)
 	}
 }

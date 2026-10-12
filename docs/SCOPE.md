@@ -16,7 +16,7 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 | # | Module | Mô tả ngắn | Trạng thái |
 |---|--------|------------|-----------|
 | M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime; kết nối thật của game | ✅ Phase 1 |
-| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 (dự đoán ✅, chưa ghi run) |
+| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 (✅, chưa lên overlay) |
 | M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 (tra cứu ✅, chưa có calculator) |
 | M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 (✅ base game, chưa có Deep of Night) |
 | M6 | **Community Data** *(sau)* | Gom dữ liệu run từ nhiều người (opt-in) để cải thiện M5 | Phase 6 |
@@ -173,7 +173,9 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 - ✅ Data: `bosses.json` (chỉ số Nightlord thường + Everdark Sovereign, Solo/Duo/Trio: máu, poise, hấp thụ sát thương, kháng hiệu ứng; 27 boss đêm) và `boss_priors.json` (pool Night 1/Night 2 của 8 Nightlord) sinh bằng `tools/import_bosses.py` từ bảng cộng đồng (*Nightreign Useful Info* v1.03.2, *Nightlord Boss Pools*). Nightlord DLC (Harmonia, Straghess) có chỉ số nhưng chưa có pool.
 - ✅ Dự đoán (`internal/boss`): Bayes với prior đều và rút đều trong pool; loại trừ cứng boss ngoài pool; dự đoán luôn boss của đêm chưa nhập. Người chơi có thể loại Nightlord thủ công.
 - ✅ Màn hình Boss: tab Dự đoán · Chỉ số Nightlord (weakness cheat sheet) · Bảng pool.
-- Chưa làm: ghi run + thống kê local (bổ sung tần suất quan sát vào likelihood), overlay hiện dự đoán/điểm yếu.
+- ✅ Ghi run (tab "Ghi run & thống kê", lưu SQLite local): chế độ/depth, nhân vật, boss Night 1/2, Nightlord, kết quả, thời gian clear (tự điền khi Timer đã chạy xong, hoặc "Lấy từ Timer"). Nút "Ghi run này" ở tab Dự đoán chuyển boss đã chọn sang form. Thống kê: tỉ lệ thắng, clear trung bình theo Nightlord/nhân vật, tần suất boss từng đêm; lịch sử run có xoá.
+- ✅ Bộ dự đoán học từ run đã ghi: xác suất rút boss trong pool = (số lần gặp + 1) / (tổng + cỡ pool) — chưa có run thì vẫn là rút đều; boss ghi ngoài pool bị bỏ qua.
+- Chưa làm: overlay hiện dự đoán/điểm yếu, Shifting Earth trong form.
 
 **Thu thập dữ liệu:**
 1. **Ghi nhận run** (P0): sau mỗi run người dùng nhập nhanh (hoặc chọn từ dropdown trên overlay): chế độ, depth, nhân vật, Night 1 boss, Night 2 boss, Shifting Earth (nếu có), Nightlord thực tế, kết quả.

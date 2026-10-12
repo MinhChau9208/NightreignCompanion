@@ -4,11 +4,12 @@
   import type {boss, gamedata, main} from '../../wailsjs/go/models'
   import {lang, loc, t} from '../lib/i18n'
   import {pct} from '../lib/boss'
+  import type {Prefill} from '../lib/runs'
   import BossTraits from './BossTraits.svelte'
 
   export let data: main.BossData
 
-  const dispatch = createEventDispatcher<{stats: string}>()
+  const dispatch = createEventDispatcher<{stats: string; record: Prefill}>()
 
   let night1 = ''
   let night2 = ''
@@ -59,11 +60,20 @@
 
   $: top = result && result.signal && !result.impossible ? result.ranking.filter((c) => c.probability > 0).slice(0, 2) : []
   $: selected = [night1, night2]
+  // Only a certain Nightlord is worth filling into the run form.
+  $: sure = result?.signal && !result.impossible && result.ranking[0]?.probability >= 0.995 ? result.ranking[0].nightlord : ''
+
+  function record() {
+    dispatch('record', {night1, night2, nightlord: sure})
+  }
 </script>
 
 <section class="card intro">
   <p class="muted">{$t('boss.predictIntro')}</p>
-  <button class="secondary" on:click={reset} disabled={!night1 && !night2 && exclude.length === 0}>{$t('boss.reset')}</button>
+  <span class="buttons">
+    <button class="secondary" on:click={record} disabled={!night1 && !night2}>{$t('boss.recordRun')}</button>
+    <button class="secondary" on:click={reset} disabled={!night1 && !night2 && exclude.length === 0}>{$t('boss.reset')}</button>
+  </span>
 </section>
 
 <div class="pickers">
@@ -120,7 +130,10 @@
         </div>
       {/each}
     </div>
-    <p class="muted foot">{$t('boss.assumption')}</p>
+    <p class="muted foot">
+      {$t('boss.assumption')}
+      {result.runs ? $t('boss.learned').replace('{n}', String(result.runs)) : $t('boss.learnHint')}
+    </p>
   </section>
 
   {#if top.length}
@@ -149,6 +162,10 @@
   }
   .intro p {
     margin: 0;
+  }
+  .buttons {
+    display: flex;
+    gap: 8px;
   }
   .pickers,
   .prep {

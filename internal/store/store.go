@@ -133,7 +133,14 @@ func (db *DB) InsertRun(ctx context.Context, r *Run) error {
 	return err
 }
 
-// ListRuns returns the most recent runs first.
+// DeleteRun removes the run with id; a missing run is not an error.
+func (db *DB) DeleteRun(ctx context.Context, id string) error {
+	_, err := db.sql.ExecContext(ctx, `DELETE FROM runs WHERE id = ?`, id)
+	return err
+}
+
+// ListRuns returns the most recent runs first; a negative limit returns
+// them all.
 func (db *DB) ListRuns(ctx context.Context, limit int) ([]Run, error) {
 	rows, err := db.sql.QueryContext(ctx, `SELECT id, created_at, mode, depth, character,
 		night1_boss, night2_boss, shifting_earth, nightlord, result, clear_seconds, build_json
