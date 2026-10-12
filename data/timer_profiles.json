@@ -2,8 +2,8 @@
   {
     "id": "normal",
     "name": { "en": "Normal expedition", "vi": "Expedition thường" },
-    "verified": false,
-    "note": "Durations are placeholders; measure in-game before relying on them.",
+    "verified": true,
+    "note": "Each Day: 4:30 until the circle starts closing, 3:00 shrinking, 3:30 until the second shrink, 3:00 final shrink (14:00 total), then the Night boss. Confirmed in-game 2026-10-12.",
     "phases": [
       { "id": "day1_explore",  "kind": "explore", "seconds": 270, "label": { "en": "Day 1 – until the rain closes in", "vi": "Ngày 1 – tới lúc bo thu" } },
       { "id": "day1_shrink_1", "kind": "shrink",  "seconds": 180, "label": { "en": "Day 1 – circle shrinking",           "vi": "Ngày 1 – bo đang thu" } },
