@@ -3,6 +3,7 @@
   import {GetSettings, SaveSettings} from '../../wailsjs/go/main/App'
   import {config} from '../../wailsjs/go/models'
   import {lang, t} from '../lib/i18n'
+  import HotkeyInput from './HotkeyInput.svelte'
 
   let s: config.Settings | null = null
   let status = ''
@@ -76,10 +77,10 @@
     <section class="card">
       <h2>{$t('settings.hotkeys')}</h2>
       <ul class="keys">
-        <li><span>Timer start</span><kbd>{s.hotkeys.timerStart}</kbd></li>
-        <li><span>Timer sync</span><kbd>{s.hotkeys.timerSync}</kbd></li>
-        <li><span>Timer reset</span><kbd>{s.hotkeys.timerReset}</kbd></li>
-        <li><span>Overlay</span><kbd>{s.hotkeys.overlay}</kbd></li>
+        <li><span>{$t('timer.key.start')}</span><HotkeyInput bind:value={s.hotkeys.timerStart} /></li>
+        <li><span>{$t('timer.key.sync')}</span><HotkeyInput bind:value={s.hotkeys.timerSync} /></li>
+        <li><span>{$t('timer.key.reset')}</span><HotkeyInput bind:value={s.hotkeys.timerReset} /></li>
+        <li><span>{$t('timer.key.overlay')}</span><HotkeyInput bind:value={s.hotkeys.overlay} /></li>
       </ul>
       <p class="muted">{$t('settings.hotkeysNote')}</p>
     </section>
@@ -164,16 +165,12 @@
     display: grid;
     gap: 6px;
   }
-  .keys span {
-    display: inline-block;
-    min-width: 110px;
-    color: var(--muted);
+  .keys li {
+    display: flex;
+    align-items: center;
   }
-  kbd {
-    background: var(--hover);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 6px;
-    font-size: 12px;
+  .keys li > span:first-child {
+    min-width: 190px;
+    color: var(--muted);
   }
 </style>

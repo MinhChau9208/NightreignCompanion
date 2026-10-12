@@ -64,7 +64,7 @@ func runOverlay() error {
 	return wails.Run(&options.App{
 		Title:            "Nightreign Companion Overlay",
 		Width:            300,
-		Height:           170,
+		Height:           196,
 		DisableResize:    true,
 		Frameless:        true,
 		AlwaysOnTop:      true,

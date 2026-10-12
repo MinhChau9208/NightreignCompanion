@@ -18,7 +18,7 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 | M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime; kết nối thật của game | ✅ Phase 1 |
 | M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 |
 | M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 |
-| M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 |
+| M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 (bản đầu ✅, chờ đo thời lượng) |
 | M6 | **Community Data** *(sau)* | Gom dữ liệu run từ nhiều người (opt-in) để cải thiện M5 | Phase 6 |
 | ~~M4~~ | ~~**Builds**~~ | **Đã bỏ** — xem [mục 3, M4](#m4--builds--đã-bỏ) | — |
 
@@ -246,6 +246,15 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 ### M2 — Cycle Timer
 
 **Bài toán:** App không đọc được trạng thái game (do EAC), nên timer phải được **kích hoạt từ bên ngoài**.
+
+**Hiện trạng (2026-10-11):**
+- ✅ State machine (`internal/timer`): phase có giờ (explore/shrink) tự chuyển khi hết giờ; phase boss không giới hạn, chờ "Phase kế / Boss xong". Có tạm dừng (không tính thời gian dừng), lùi phase, làm lại, tổng thời gian run.
+- ✅ "Phase kế" kiêm luôn **sync**: nếu phase hiện tại vừa tự bắt đầu chưa tới 30s (timer chạy nhanh hơn game) thì chỉ đặt lại phase đó về 0, không nhảy thêm; còn lại thì sang phase kế ngay lúc bấm.
+- ✅ Phím tắt toàn hệ thống (`internal/hotkey`, `RegisterHotKey` của Windows — không đụng vào game): Bắt đầu/tạm dừng, Phase kế, Làm lại, Bật/tắt overlay. Sửa trong Cài đặt (bấm để ghi tổ hợp phím; hotkey tạm tắt khi đang ghi). Chữ/số/Space bắt buộc kèm Ctrl/Alt/Win vì phím đã đăng ký bị "nuốt" khỏi app khác. Phím bị app khác giữ → báo lỗi trên trang Timer.
+- ✅ Âm báo (Beep của Windows, bật/tắt được): 1/2/3 tiếng lúc còn 60s/30s/10s của phase có giờ, 1 tiếng dài khi phase mới tự bắt đầu.
+- ✅ Trang Timer (đồng hồ lớn, phase kế, danh sách phase, chọn chế độ) và overlay (tên phase + đếm ngược, `≈` khi profile chưa xác minh).
+- ⚠️ `timer_profiles.json` vẫn là placeholder (`verified: false`) — chưa có nguồn cộng đồng nào ghi thời lượng; cần đo trong game. Chưa có profile Deep of Night/sự kiện.
+- Chưa làm: tự điền thời gian vào run của M5 (chờ form ghi run), TTS, OCR auto-sync (Phase 5).
 
 **Cách kích hoạt:**
 1. **Hotkey** (P0) — người chơi bấm phím khi bắt đầu Day 1 (lúc rơi xuống từ chim). Các hotkey phụ để "sync" lại khi bước sang Day 2, hoặc pause/reset.

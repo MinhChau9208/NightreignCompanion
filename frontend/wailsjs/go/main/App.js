@@ -22,6 +22,14 @@ export function GetSettings() {
   return window['go']['main']['App']['GetSettings']();
 }
 
+export function GetTimerProfiles() {
+  return window['go']['main']['App']['GetTimerProfiles']();
+}
+
+export function HotkeyErrors() {
+  return window['go']['main']['App']['HotkeyErrors']();
+}
+
 export function Info() {
   return window['go']['main']['App']['Info']();
 }
@@ -52,6 +60,18 @@ export function StartFPS() {
 
 export function StopFPS() {
   return window['go']['main']['App']['StopFPS']();
+}
+
+export function SuspendHotkeys(arg1) {
+  return window['go']['main']['App']['SuspendHotkeys'](arg1);
+}
+
+export function TimerCommand(arg1) {
+  return window['go']['main']['App']['TimerCommand'](arg1);
+}
+
+export function TimerState() {
+  return window['go']['main']['App']['TimerState']();
 }
 
 export function ToggleOverlay() {

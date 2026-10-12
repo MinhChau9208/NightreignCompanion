@@ -112,3 +112,25 @@ func TestValidateFPSProcess(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateHotkeys(t *testing.T) {
+	cases := []struct {
+		name string
+		edit func(*Hotkeys)
+		ok   bool
+	}{
+		{"defaults", func(*Hotkeys) {}, true},
+		{"disabled", func(h *Hotkeys) { h.TimerSync = "" }, true},
+		{"bare letter", func(h *Hotkeys) { h.TimerStart = "S" }, false},
+		{"unknown key", func(h *Hotkeys) { h.TimerStart = "Ctrl+Banana" }, false},
+		{"duplicate", func(h *Hotkeys) { h.TimerReset = "shift+ctrl+f1" }, false},
+		{"two disabled", func(h *Hotkeys) { h.TimerSync, h.TimerReset = "", "" }, true},
+	}
+	for _, tc := range cases {
+		s := Defaults()
+		tc.edit(&s.Hotkeys)
+		if err := s.Validate(); (err == nil) != tc.ok {
+			t.Errorf("%s: err = %v, want ok=%v", tc.name, err, tc.ok)
+		}
+	}
+}
