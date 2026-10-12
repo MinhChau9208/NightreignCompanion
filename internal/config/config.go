@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/MinhChau9208/NightreignCompanion/internal/hotkey"
 	"github.com/MinhChau9208/NightreignCompanion/internal/netmon"
 )
 
@@ -26,7 +27,14 @@ type Settings struct {
 	Hotkeys  Hotkeys         `json:"hotkeys"`
 	Network  NetworkSettings `json:"network"`
 	FPS      FPSSettings     `json:"fps"`
+	Timer    TimerSettings   `json:"timer"`
 	Sharing  Sharing         `json:"sharing"`
+}
+
+// TimerSettings configures the cycle timer (M2).
+type TimerSettings struct {
+	Profile string `json:"profile"` // timer_profiles.json id
+	Sound   bool   `json:"sound"`   // beep before a phase ends
 }
 
 // FPSSettings configures the elevated FPS helper.
@@ -40,6 +48,8 @@ type OverlaySettings struct {
 	Opacity float64 `json:"opacity"` // 0.2 – 1.0
 }
 
+// Hotkeys are system-wide shortcuts such as "Ctrl+Shift+F1" (see
+// internal/hotkey); an empty string disables one.
 type Hotkeys struct {
 	TimerStart string `json:"timerStart"`
 	TimerSync  string `json:"timerSync"`
@@ -84,7 +94,8 @@ func Defaults() Settings {
 			PingTargets: []string{"gateway", "1.1.1.1", "8.8.8.8"},
 			Thresholds:  Thresholds{PingMs: 150, JitterMs: 30, LossPct: 2, MinFPS: 50},
 		},
-		FPS: FPSSettings{Process: "nightreign.exe"},
+		FPS:   FPSSettings{Process: "nightreign.exe"},
+		Timer: TimerSettings{Profile: "normal", Sound: true},
 	}
 }
 
@@ -115,6 +126,21 @@ func (s Settings) Validate() error {
 	}
 	if !validExeName(s.FPS.Process) {
 		errs = append(errs, fmt.Errorf("fps process %q: must be a file name like nightreign.exe", s.FPS.Process))
+	}
+	seenKey := map[string]bool{}
+	for _, k := range []string{s.Hotkeys.TimerStart, s.Hotkeys.TimerSync, s.Hotkeys.TimerReset, s.Hotkeys.Overlay} {
+		if k == "" {
+			continue
+		}
+		c, err := hotkey.Parse(k)
+		if err != nil {
+			errs = append(errs, err)
+			continue
+		}
+		if seenKey[c.String()] {
+			errs = append(errs, fmt.Errorf("hotkey %s is used twice", c))
+		}
+		seenKey[c.String()] = true
 	}
 	t := s.Network.Thresholds
 	if t.PingMs <= 0 || t.JitterMs <= 0 || t.LossPct < 0 || t.MinFPS <= 0 {

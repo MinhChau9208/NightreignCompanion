@@ -3,8 +3,10 @@
 import {gamenet} from '../models';
 import {main} from '../models';
 import {config} from '../models';
+import {gamedata} from '../models';
 import {netmon} from '../models';
 import {boss} from '../models';
+import {timer} from '../models';
 
 export function FPSRunning():Promise<boolean>;
 
@@ -15,6 +17,10 @@ export function GetBossData():Promise<main.BossData>;
 export function GetRelicData():Promise<main.RelicData>;
 
 export function GetSettings():Promise<config.Settings>;
+
+export function GetTimerProfiles():Promise<Array<gamedata.TimerProfile>>;
+
+export function HotkeyErrors():Promise<Array<string>>;
 
 export function Info():Promise<main.AppInfo>;
 
@@ -31,5 +37,11 @@ export function SaveSettings(arg1:config.Settings):Promise<void>;
 export function StartFPS():Promise<void>;
 
 export function StopFPS():Promise<void>;
+
+export function SuspendHotkeys(arg1:boolean):Promise<void>;
+
+export function TimerCommand(arg1:string):Promise<timer.Snapshot>;
+
+export function TimerState():Promise<timer.Snapshot>;
 
 export function ToggleOverlay():Promise<boolean>;

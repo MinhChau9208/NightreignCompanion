@@ -203,12 +203,27 @@ export namespace config {
 	        this.clearTimes = source["clearTimes"];
 	    }
 	}
+	export class TimerSettings {
+	    profile: string;
+	    sound: boolean;
+	
+	    static createFrom(source: any = {}) {
+	        return new TimerSettings(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.profile = source["profile"];
+	        this.sound = source["sound"];
+	    }
+	}
 	export class Settings {
 	    language: string;
 	    overlay: OverlaySettings;
 	    hotkeys: Hotkeys;
 	    network: NetworkSettings;
 	    fps: FPSSettings;
+	    timer: TimerSettings;
 	    sharing: Sharing;
 	
 	    static createFrom(source: any = {}) {
@@ -222,6 +237,7 @@ export namespace config {
 	        this.hotkeys = this.convertValues(source["hotkeys"], Hotkeys);
 	        this.network = this.convertValues(source["network"], NetworkSettings);
 	        this.fps = this.convertValues(source["fps"], FPSSettings);
+	        this.timer = this.convertValues(source["timer"], TimerSettings);
 	        this.sharing = this.convertValues(source["sharing"], Sharing);
 	    }
 	
@@ -243,6 +259,7 @@ export namespace config {
 		    return a;
 		}
 	}
+	
 	
 
 }
@@ -416,6 +433,42 @@ export namespace gamedata {
 		}
 	}
 	
+	export class Phase {
+	    id: string;
+	    kind: string;
+	    seconds: number;
+	    label: Localized;
+	
+	    static createFrom(source: any = {}) {
+	        return new Phase(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.kind = source["kind"];
+	        this.seconds = source["seconds"];
+	        this.label = this.convertValues(source["label"], Localized);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class RelicEffect {
 	    id: string;
 	    kind: string;
@@ -493,6 +546,44 @@ export namespace gamedata {
 	        this.timersVerified = source["timersVerified"];
 	        this.priorsVerified = source["priorsVerified"];
 	    }
+	}
+	export class TimerProfile {
+	    id: string;
+	    name: Localized;
+	    verified: boolean;
+	    note?: string;
+	    phases: Phase[];
+	
+	    static createFrom(source: any = {}) {
+	        return new TimerProfile(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.name = this.convertValues(source["name"], Localized);
+	        this.verified = source["verified"];
+	        this.note = source["note"];
+	        this.phases = this.convertValues(source["phases"], Phase);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
 	}
 
 }
@@ -761,6 +852,65 @@ export namespace netmon {
 	        this.history = source["history"];
 	        this.level = source["level"];
 	        this.error = source["error"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
+export namespace timer {
+	
+	export class Snapshot {
+	    profile: string;
+	    verified: boolean;
+	    state: string;
+	    phase: number;
+	    phaseId: string;
+	    kind: string;
+	    label: gamedata.Localized;
+	    nextKind: string;
+	    nextLabel: gamedata.Localized;
+	    duration: number;
+	    remaining: number;
+	    phaseElapsed: number;
+	    elapsed: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Snapshot(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.profile = source["profile"];
+	        this.verified = source["verified"];
+	        this.state = source["state"];
+	        this.phase = source["phase"];
+	        this.phaseId = source["phaseId"];
+	        this.kind = source["kind"];
+	        this.label = this.convertValues(source["label"], gamedata.Localized);
+	        this.nextKind = source["nextKind"];
+	        this.nextLabel = this.convertValues(source["nextLabel"], gamedata.Localized);
+	        this.duration = source["duration"];
+	        this.remaining = source["remaining"];
+	        this.phaseElapsed = source["phaseElapsed"];
+	        this.elapsed = source["elapsed"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

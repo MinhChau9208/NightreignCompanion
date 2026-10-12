@@ -2,14 +2,16 @@
   import {onDestroy, onMount} from 'svelte'
   import {GetSettings} from '../wailsjs/go/main/App'
   import {EventsOn, Quit} from '../wailsjs/runtime/runtime'
-  import {lang, t} from './lib/i18n'
+  import {lang, loc, t} from './lib/i18n'
   import {fmtMs, icon, netStats} from './lib/net'
   import {fpsLevel, fpsStatus} from './lib/fps'
   import {flowLevel, gameNet, hasPing, kind, mainFlow} from './lib/gamenet'
+  import {mainClock, timerState, urgency} from './lib/timer'
 
   const net = netStats()
   const fps = fpsStatus()
   const game = gameNet()
+  const timer = timerState(false)
   let minFps = 50
 
   type Status = {uptimeSec: number; dataVersion: string; phase: string}
@@ -90,8 +92,21 @@
     {/each}
   </ul>
   <div class="timer">
-    <span class="muted">{$t('overlay.timer')}</span>
-    <strong>{status?.phase === 'idle' || !status ? $t('overlay.idle') : status.phase}</strong>
+    {#if $timer && $timer.state !== 'idle'}
+      <div class="trow">
+        <span class="tlabel">
+          {#if $timer.state === 'paused'}⏸{/if}
+          {$timer.state === 'done' ? $t('timer.finished') : loc($timer.label, $lang)}
+        </span>
+        <strong class="clock {urgency($timer)}">{$timer.verified ? '' : '≈'}{mainClock($timer)}</strong>
+      </div>
+      {#if $timer.nextKind && $timer.state !== 'done'}
+        <div class="muted tnext">{$t('timer.then')}: {loc($timer.nextLabel, $lang)}</div>
+      {/if}
+    {:else}
+      <span class="muted">{$t('overlay.timer')}</span>
+      <strong>{$t('overlay.idle')}</strong>
+    {/if}
   </div>
 </div>
 
@@ -179,5 +194,32 @@
   .timer strong {
     font-size: 16px;
     color: var(--accent);
+  }
+  .trow {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .tlabel,
+  .tnext {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .tlabel {
+    flex: 1;
+  }
+  .tnext {
+    font-size: 12px;
+  }
+  .clock {
+    font-size: 20px !important;
+    font-variant-numeric: tabular-nums;
+  }
+  .clock.warn {
+    color: var(--warn) !important;
+  }
+  .clock.bad {
+    color: var(--danger) !important;
   }
 </style>

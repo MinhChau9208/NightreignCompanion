@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"slices"
 	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -43,6 +44,7 @@ type App struct {
 	net    netWatcher
 	fps    fpsHelper
 	gnet   gameNetWatcher
+	tmr    timerCtl
 
 	initErr error
 }
@@ -84,8 +86,10 @@ func (a *App) init() error {
 		return fmt.Errorf("ipc: %w", err)
 	}
 	a.hub.OnMessage(a.onHelperMessage)
+	cfg := a.cfg.Get()
+	a.startTimer(cfg)
 	go a.publishStatus()
-	a.startNet(a.cfg.Get().Network)
+	a.startNet(cfg.Network)
 	return nil
 }
 
@@ -101,6 +105,7 @@ func (a *App) shutdown(context.Context) {
 	if a.mode == ModeMain && a.hub != nil {
 		a.ovl.stop(a.hub)
 		a.hub.Publish(helper.MsgStop, nil)
+		a.stopHotkeys()
 	}
 	if a.hub != nil {
 		a.hub.Close()
@@ -119,7 +124,7 @@ func (a *App) onSecondInstance(options.SecondInstanceData) {
 type StatusEvent struct {
 	UptimeSec   int    `json:"uptimeSec"`
 	DataVersion string `json:"dataVersion"`
-	Phase       string `json:"phase"` // timer phase; "idle" until M2 lands
+	Phase       string `json:"phase"` // timer phase id, or idle/done
 }
 
 func (a *App) publishStatus() {
@@ -133,7 +138,7 @@ func (a *App) publishStatus() {
 			a.hub.Publish("status", StatusEvent{
 				UptimeSec:   int(time.Since(a.started).Seconds()),
 				DataVersion: a.data.Manifest.DataVersion,
-				Phase:       "idle",
+				Phase:       a.timerPhase(),
 			})
 		}
 	}
@@ -201,10 +206,18 @@ func (a *App) SaveSettings(s config.Settings) error {
 	if a.cfg == nil {
 		return a.initErr
 	}
+	if a.data == nil {
+		return a.initErr
+	}
+	if !slices.ContainsFunc(a.data.Timers, func(p gamedata.TimerProfile) bool { return p.ID == s.Timer.Profile }) {
+		return fmt.Errorf("unknown timer profile %q", s.Timer.Profile)
+	}
 	if err := a.cfg.Save(s); err != nil {
 		return err
 	}
 	a.startNet(s.Network)
+	a.applyHotkeys(s.Hotkeys)
+	a.setTimerProfile(s.Timer.Profile)
 	return a.hub.Publish("settings", s)
 }
 

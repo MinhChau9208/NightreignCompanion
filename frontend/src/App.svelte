@@ -7,6 +7,7 @@
   import Network from './pages/Network.svelte'
   import Bosses from './pages/Bosses.svelte'
   import Relics from './pages/Relics.svelte'
+  import Timer from './pages/Timer.svelte'
   import ComingSoon from './pages/ComingSoon.svelte'
 
   type Page = {id: string; label: Key; phase?: string}
@@ -15,7 +16,7 @@
     {id: 'network', label: 'nav.network'},
     {id: 'bosses', label: 'nav.bosses'},
     {id: 'relics', label: 'nav.relics'},
-    {id: 'timer', label: 'nav.timer', phase: 'Phase 4'},
+    {id: 'timer', label: 'nav.timer'},
     {id: 'settings', label: 'nav.settings'},
   ]
   let current = pages[0]
@@ -56,6 +57,8 @@
       <Bosses />
     {:else if current.id === 'relics'}
       <Relics />
+    {:else if current.id === 'timer'}
+      <Timer />
     {:else if current.id === 'settings'}
       <Settings />
     {:else}

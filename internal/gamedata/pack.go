@@ -110,6 +110,9 @@ func (p *Pack) Validate() error {
 		}
 	}
 
+	if len(p.Timers) == 0 {
+		add("timers: need at least one profile")
+	}
 	timers := map[string]bool{}
 	for _, tp := range p.Timers {
 		where := "timer " + tp.ID
