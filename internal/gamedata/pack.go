@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io/fs"
+	"strings"
 
 	"github.com/MinhChau9208/NightreignCompanion/data"
 )
@@ -18,6 +19,7 @@ type Pack struct {
 	Timers     []TimerProfile
 	Bosses     []Boss
 	Priors     BossPriors
+	Screen     BossScreenNames
 }
 
 // LoadEmbedded loads the data pack bundled into the binary.
@@ -36,6 +38,7 @@ func Load(fsys fs.FS) (*Pack, error) {
 		{"timer_profiles.json", &p.Timers},
 		{"bosses.json", &p.Bosses},
 		{"boss_priors.json", &p.Priors},
+		{"boss_screen_names.json", &p.Screen},
 	}
 	for _, f := range files {
 		if err := decodeFile(fsys, f.name, f.dst); err != nil {
@@ -191,7 +194,42 @@ func (p *Pack) Validate() error {
 		}
 	}
 
+	for id, names := range p.Screen.Names {
+		if k := bossKind[id]; k != "night_boss" && k != "nightlord" {
+			add("screen names: unknown boss %q", id)
+		}
+		if len(names) == 0 {
+			add("screen names %s: list at least one name", id)
+		}
+		for _, n := range names {
+			if strings.TrimSpace(n) == "" {
+				add("screen names %s: empty name", id)
+			}
+		}
+	}
+
 	return errors.Join(errs...)
+}
+
+// ScreenNames lists the names boss id may show above its health bar: the
+// boss_screen_names.json entry, else the English name. A Nightlord also
+// matches the part before the comma ("Gladius" for "Gladius, Beast of
+// Night").
+func (p *Pack) ScreenNames(id string) []string {
+	if names, ok := p.Screen.Names[id]; ok {
+		return names
+	}
+	for _, b := range p.Bosses {
+		if b.ID != id {
+			continue
+		}
+		names := []string{b.Name.EN}
+		if short, _, ok := strings.Cut(b.Name.EN, ","); ok && b.Kind == "nightlord" {
+			names = append(names, short)
+		}
+		return names
+	}
+	return nil
 }
 
 // Stats summarises how much of the pack has been verified.

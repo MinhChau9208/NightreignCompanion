@@ -18,6 +18,10 @@ export function GetBossData() {
   return window['go']['main']['App']['GetBossData']();
 }
 
+export function GetExpedition() {
+  return window['go']['main']['App']['GetExpedition']();
+}
+
 export function GetRelicData() {
   return window['go']['main']['App']['GetRelicData']();
 }
@@ -50,6 +54,10 @@ export function NetStats() {
   return window['go']['main']['App']['NetStats']();
 }
 
+export function OCRStatus() {
+  return window['go']['main']['App']['OCRStatus']();
+}
+
 export function OverlayRunning() {
   return window['go']['main']['App']['OverlayRunning']();
 }
@@ -76,6 +84,10 @@ export function StopFPS() {
 
 export function SuspendHotkeys(arg1) {
   return window['go']['main']['App']['SuspendHotkeys'](arg1);
+}
+
+export function TestOCR(arg1) {
+  return window['go']['main']['App']['TestOCR'](arg1);
 }
 
 export function TimerCommand(arg1) {

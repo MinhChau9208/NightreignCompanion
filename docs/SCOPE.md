@@ -176,6 +176,8 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 - ✅ Ghi run (tab "Ghi run & thống kê", lưu SQLite local): chế độ/depth, nhân vật, boss Night 1/2, Nightlord, kết quả, thời gian clear (tự điền khi Timer đã chạy xong, hoặc "Lấy từ Timer"). Nút "Ghi run này" ở tab Dự đoán chuyển boss đã chọn sang form. Thống kê: tỉ lệ thắng, clear trung bình theo Nightlord/nhân vật, tần suất boss từng đêm; lịch sử run có xoá.
 - ✅ Bộ dự đoán học từ run đã ghi: xác suất rút boss trong pool = (số lần gặp + 1) / (tổng + cỡ pool) — chưa có run thì vẫn là rút đều; boss ghi ngoài pool bị bỏ qua.
 - ✅ Overlay hiện tối đa 2 Nightlord khả năng nhất (kèm %) và 2 điểm yếu sát thương mạnh nhất, theo lựa chọn ở tab Dự đoán; ẩn khi chưa chọn boss.
+- ✅ Tự nhận boss bằng OCR (2026-10-12): khi Timer ở phase boss (Night 1, Night 2, Nightlord), app chụp vùng tên boss trên cửa sổ game mỗi giây (GDI, `internal/capture` — chỉ đọc pixel, tìm cửa sổ theo PID qua window manager), đọc bằng `Windows.Media.Ocr` (`internal/ocr`, gọi WinRT trực tiếp, không cần cài thêm), khớp gần đúng với tên trên thanh máu (`boss.Match`, `data/boss_screen_names.json`), cần 2 lần chụp liên tiếp trùng nhau. Boss nhận được điền vào expedition hiện tại (giữ ở tiến trình chính, dùng chung cho tab Dự đoán, form ghi run và overlay); làm lại Timer hoặc lưu run thì xoá. Cài đặt: bật/tắt, vùng quét theo % cửa sổ, nút "Thử nhận diện" hiện ảnh chụp + chữ đọc được. `nrc-cli ocr ảnh.png` thử trên ảnh chụp màn hình.
+- ⚠️ `boss_screen_names.json` chưa xác minh (`verified: false`) và vùng quét mặc định (x 22%, y 68%, rộng 42%, cao 20%) chưa đo trên game thật — cần ảnh chụp thanh máu boss để chỉnh. Cần game tiếng Anh, chế độ Borderless/Windowed (Fullscreen độc quyền có thể cho ảnh đen).
 - Chưa làm: Shifting Earth trong form ghi run.
 
 **Thu thập dữ liệu:**
@@ -257,7 +259,8 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 - ✅ Âm báo (Beep của Windows, bật/tắt được): 1/2/3 tiếng lúc còn 60s/30s/10s của phase có giờ, 1 tiếng dài khi phase mới tự bắt đầu.
 - ✅ Trang Timer (đồng hồ lớn, phase kế, danh sách phase, chọn chế độ) và overlay (tên phase + đếm ngược, `≈` khi profile chưa xác minh).
 - ✅ `timer_profiles.json` profile thường đã xác minh trong game (2026-10-12): mỗi Ngày 4:30 tới lúc bo thu → 3:00 thu → 3:30 tới lần thu 2 → 3:00 thu lần cuối (tổng 14:00) → boss đêm. Chưa có profile Deep of Night/sự kiện.
-- Chưa làm: tự điền thời gian vào run của M5 (chờ form ghi run), TTS, OCR auto-sync (Phase 5).
+- ✅ Thời gian clear tự điền vào form ghi run của M5 khi Timer chạy xong.
+- Chưa làm: TTS, OCR auto-sync phase theo banner Day/bo thu (Phase 5) — OCR tên boss (M5) đã có, dùng lại được `internal/capture` + `internal/ocr`.
 
 **Cách kích hoạt:**
 1. **Hotkey** (P0) — người chơi bấm phím khi bắt đầu Day 1 (lúc rơi xuống từ chim). Các hotkey phụ để "sync" lại khi bước sang Day 2, hoặc pause/reset.

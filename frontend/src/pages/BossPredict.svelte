@@ -1,8 +1,9 @@
 <script lang="ts">
-  import {createEventDispatcher} from 'svelte'
-  import {PredictNightlord} from '../../wailsjs/go/main/App'
+  import {createEventDispatcher, onDestroy, onMount} from 'svelte'
+  import {GetExpedition, OCRStatus, PredictNightlord} from '../../wailsjs/go/main/App'
+  import {EventsOn} from '../../wailsjs/runtime/runtime'
   import type {boss, gamedata, main} from '../../wailsjs/go/models'
-  import {lang, loc, t} from '../lib/i18n'
+  import {lang, loc, t, type Key} from '../lib/i18n'
   import {pct} from '../lib/boss'
   import type {Prefill} from '../lib/runs'
   import BossTraits from './BossTraits.svelte'
@@ -17,6 +18,30 @@
   let exclude: string[] = []
   let result: boss.Result | null = null
   let error = ''
+  // The expedition lives in the main process (boss OCR fills it in), so
+  // predicting waits until it is loaded instead of overwriting it.
+  let loaded = false
+  let detected: string[] = []
+  let ocr: main.OCRStatus | null = null
+
+  function apply(e: main.Expedition) {
+    night1 = e.night1
+    night2 = e.night2
+    exclude = e.exclude ?? []
+    detected = e.detected ?? []
+  }
+
+  onMount(async () => {
+    try {
+      apply(await GetExpedition())
+      ocr = await OCRStatus()
+    } catch (e) {
+      error = String(e)
+    }
+    loaded = true
+  })
+  const offs = [EventsOn('boss:expedition', apply), EventsOn('ocr:status', (s: main.OCRStatus) => (ocr = s))]
+  onDestroy(() => offs.forEach((off) => off()))
 
   $: byId = new Map<string, gamedata.Boss>(data.bosses.map((b) => [b.id, b]))
   $: byName = (a: gamedata.Boss, b: gamedata.Boss) => loc(a.name, $lang).localeCompare(loc(b.name, $lang))
@@ -36,7 +61,7 @@
       if (mine === seq) error = String(e)
     }
   }
-  $: predict({night1, night2, exclude})
+  $: if (loaded) predict({night1, night2, exclude})
 
   // chance of a boss on a night still open; undefined once that night is set.
   function chance(r: boss.Result | null, night: number, id: string): number | undefined {
@@ -59,6 +84,8 @@
     exclude = []
   }
 
+  const ocrKey = (s: main.OCRStatus) => `ocr.state.${s.state}` as Key
+
   $: top = result && result.signal && !result.impossible ? result.ranking.filter((c) => c.probability > 0).slice(0, 2) : []
   $: selected = [night1, night2]
   // Only a certain Nightlord is worth filling into the run form.
@@ -70,7 +97,15 @@
 </script>
 
 <section class="card intro">
-  <p class="muted">{$t('boss.predictIntro')}</p>
+  <div>
+    <p class="muted">{$t('boss.predictIntro')}</p>
+    {#if ocr}
+      <p class="ocr {ocr.state}">
+        {$t(ocrKey(ocr))}{#if ocr.state === 'scanning'} — {$t(ocr.slot === 3 ? 'ocr.nightlord' : ocr.slot === 2 ? 'boss.night2' : 'boss.night1')}{/if}
+        {#if ocr.error}<span class="muted">({ocr.error})</span>{/if}
+      </p>
+    {/if}
+  </div>
   <span class="buttons">
     <button class="secondary" on:click={record} disabled={!night1 && !night2}>{$t('boss.recordRun')}</button>
     <button class="secondary" on:click={reset} disabled={!night1 && !night2 && exclude.length === 0}>{$t('boss.reset')}</button>
@@ -80,7 +115,10 @@
 <div class="pickers">
   {#each nights as list, i}
     <section class="card">
-      <h2>{$t(i === 0 ? 'boss.night1' : 'boss.night2')}</h2>
+      <h2>
+        {$t(i === 0 ? 'boss.night1' : 'boss.night2')}
+        {#if detected.includes(i === 0 ? 'night1' : 'night2')}<span class="auto" title={$t('ocr.detectedHint')}>{$t('ocr.detected')}</span>{/if}
+      </h2>
       <div class="bosses">
         {#each list as b (b.id)}
           {@const c = chance(result, i + 1, b.id)}
@@ -169,6 +207,27 @@
   }
   .intro p {
     margin: 0;
+  }
+  .ocr {
+    margin-top: 6px !important;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .ocr.scanning {
+    color: var(--accent);
+  }
+  .ocr.error,
+  .ocr.noGame {
+    color: var(--warn);
+  }
+  .auto {
+    margin-left: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    padding: 0 5px;
   }
   .buttons {
     display: flex;

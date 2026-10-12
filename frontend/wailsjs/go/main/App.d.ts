@@ -7,6 +7,7 @@ import {gamedata} from '../models';
 import {store} from '../models';
 import {netmon} from '../models';
 import {boss} from '../models';
+import {capture} from '../models';
 import {timer} from '../models';
 
 export function DeleteRun(arg1:string):Promise<void>;
@@ -16,6 +17,8 @@ export function FPSRunning():Promise<boolean>;
 export function GameNet():Promise<gamenet.Status>;
 
 export function GetBossData():Promise<main.BossData>;
+
+export function GetExpedition():Promise<main.Expedition>;
 
 export function GetRelicData():Promise<main.RelicData>;
 
@@ -33,6 +36,8 @@ export function Mode():Promise<main.Mode>;
 
 export function NetStats():Promise<Array<netmon.Stats>>;
 
+export function OCRStatus():Promise<main.OCRStatus>;
+
 export function OverlayRunning():Promise<boolean>;
 
 export function PredictNightlord(arg1:boss.Query):Promise<boss.Result>;
@@ -46,6 +51,8 @@ export function StartFPS():Promise<void>;
 export function StopFPS():Promise<void>;
 
 export function SuspendHotkeys(arg1:boolean):Promise<void>;
+
+export function TestOCR(arg1:capture.Region):Promise<main.OCRTest>;
 
 export function TimerCommand(arg1:string):Promise<timer.Snapshot>;
 

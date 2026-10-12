@@ -89,6 +89,29 @@ export namespace boss {
 
 }
 
+export namespace capture {
+	
+	export class Region {
+	    x: number;
+	    y: number;
+	    w: number;
+	    h: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new Region(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.x = source["x"];
+	        this.y = source["y"];
+	        this.w = source["w"];
+	        this.h = source["h"];
+	    }
+	}
+
+}
+
 export namespace config {
 	
 	export class FPSSettings {
@@ -171,6 +194,38 @@ export namespace config {
 		    return a;
 		}
 	}
+	export class OCRSettings {
+	    enabled: boolean;
+	    region: capture.Region;
+	
+	    static createFrom(source: any = {}) {
+	        return new OCRSettings(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.enabled = source["enabled"];
+	        this.region = this.convertValues(source["region"], capture.Region);
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
 	export class OverlaySettings {
 	    x: number;
 	    y: number;
@@ -226,6 +281,7 @@ export namespace config {
 	    network: NetworkSettings;
 	    fps: FPSSettings;
 	    timer: TimerSettings;
+	    ocr: OCRSettings;
 	    sharing: Sharing;
 	
 	    static createFrom(source: any = {}) {
@@ -240,6 +296,7 @@ export namespace config {
 	        this.network = this.convertValues(source["network"], NetworkSettings);
 	        this.fps = this.convertValues(source["fps"], FPSSettings);
 	        this.timer = this.convertValues(source["timer"], TimerSettings);
+	        this.ocr = this.convertValues(source["ocr"], OCRSettings);
 	        this.sharing = this.convertValues(source["sharing"], Sharing);
 	    }
 	
@@ -764,6 +821,64 @@ export namespace main {
 		    }
 		    return a;
 		}
+	}
+	export class Expedition {
+	    night1: string;
+	    night2: string;
+	    nightlord: string;
+	    exclude: string[];
+	    detected: string[];
+	
+	    static createFrom(source: any = {}) {
+	        return new Expedition(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.night1 = source["night1"];
+	        this.night2 = source["night2"];
+	        this.nightlord = source["nightlord"];
+	        this.exclude = source["exclude"];
+	        this.detected = source["detected"];
+	    }
+	}
+	export class OCRStatus {
+	    state: string;
+	    slot: number;
+	    error: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new OCRStatus(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.state = source["state"];
+	        this.slot = source["slot"];
+	        this.error = source["error"];
+	    }
+	}
+	export class OCRTest {
+	    window: string;
+	    region: string;
+	    image: string;
+	    lines: string[];
+	    match: string;
+	    score: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new OCRTest(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.window = source["window"];
+	        this.region = source["region"];
+	        this.image = source["image"];
+	        this.lines = source["lines"];
+	        this.match = source["match"];
+	        this.score = source["score"];
+	    }
 	}
 	export class RelicData {
 	    effects: gamedata.RelicEffect[];

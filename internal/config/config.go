@@ -11,6 +11,7 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/MinhChau9208/NightreignCompanion/internal/capture"
 	"github.com/MinhChau9208/NightreignCompanion/internal/hotkey"
 	"github.com/MinhChau9208/NightreignCompanion/internal/netmon"
 )
@@ -28,6 +29,7 @@ type Settings struct {
 	Network  NetworkSettings `json:"network"`
 	FPS      FPSSettings     `json:"fps"`
 	Timer    TimerSettings   `json:"timer"`
+	OCR      OCRSettings     `json:"ocr"`
 	Sharing  Sharing         `json:"sharing"`
 }
 
@@ -36,6 +38,18 @@ type TimerSettings struct {
 	Profile string `json:"profile"` // timer_profiles.json id
 	Sound   bool   `json:"sound"`   // beep before a phase ends
 }
+
+// OCRSettings configures reading night boss names off the screen (M5).
+// Scanning only happens while the timer is in a boss phase.
+type OCRSettings struct {
+	Enabled bool `json:"enabled"`
+	// Region is where boss names appear, as fractions of the game window.
+	Region capture.Region `json:"region"`
+}
+
+// DefaultOCRRegion covers the names above up to three boss health bars
+// at the bottom of a 16:9 game window.
+var DefaultOCRRegion = capture.Region{X: 0.22, Y: 0.68, W: 0.42, H: 0.2}
 
 // FPSSettings configures the elevated FPS helper.
 type FPSSettings struct {
@@ -96,6 +110,7 @@ func Defaults() Settings {
 		},
 		FPS:   FPSSettings{Process: "nightreign.exe"},
 		Timer: TimerSettings{Profile: "normal", Sound: true},
+		OCR:   OCRSettings{Enabled: true, Region: DefaultOCRRegion},
 	}
 }
 
@@ -141,6 +156,9 @@ func (s Settings) Validate() error {
 			errs = append(errs, fmt.Errorf("hotkey %s is used twice", c))
 		}
 		seenKey[c.String()] = true
+	}
+	if !s.OCR.Region.Valid() {
+		errs = append(errs, errors.New("OCR region must lie inside the game window"))
 	}
 	t := s.Network.Thresholds
 	if t.PingMs <= 0 || t.JitterMs <= 0 || t.LossPct < 0 || t.MinFPS <= 0 {

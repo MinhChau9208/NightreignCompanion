@@ -4,6 +4,7 @@
   import {config} from '../../wailsjs/go/models'
   import {lang, t} from '../lib/i18n'
   import HotkeyInput from './HotkeyInput.svelte'
+  import OCRSettings from './OCRSettings.svelte'
 
   let s: config.Settings | null = null
   let status = ''
@@ -84,6 +85,8 @@
       </ul>
       <p class="muted">{$t('settings.hotkeysNote')}</p>
     </section>
+
+    <OCRSettings bind:ocr={s.ocr} />
 
     <section class="card">
       <h2>{$t('settings.sharing')}</h2>
