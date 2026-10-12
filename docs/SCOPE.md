@@ -16,7 +16,7 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 | # | Module | Mô tả ngắn | Trạng thái |
 |---|--------|------------|-----------|
 | M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime; kết nối thật của game | ✅ Phase 1 |
-| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 (✅, chưa lên overlay) |
+| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | ✅ Phase 2 |
 | M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 (tra cứu ✅, chưa có calculator) |
 | M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 (✅ base game, chưa có Deep of Night) |
 | M6 | **Community Data** *(sau)* | Gom dữ liệu run từ nhiều người (opt-in) để cải thiện M5 | Phase 6 |
@@ -175,7 +175,8 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 - ✅ Màn hình Boss: tab Dự đoán · Chỉ số Nightlord (weakness cheat sheet) · Bảng pool.
 - ✅ Ghi run (tab "Ghi run & thống kê", lưu SQLite local): chế độ/depth, nhân vật, boss Night 1/2, Nightlord, kết quả, thời gian clear (tự điền khi Timer đã chạy xong, hoặc "Lấy từ Timer"). Nút "Ghi run này" ở tab Dự đoán chuyển boss đã chọn sang form. Thống kê: tỉ lệ thắng, clear trung bình theo Nightlord/nhân vật, tần suất boss từng đêm; lịch sử run có xoá.
 - ✅ Bộ dự đoán học từ run đã ghi: xác suất rút boss trong pool = (số lần gặp + 1) / (tổng + cỡ pool) — chưa có run thì vẫn là rút đều; boss ghi ngoài pool bị bỏ qua.
-- Chưa làm: overlay hiện dự đoán/điểm yếu, Shifting Earth trong form.
+- ✅ Overlay hiện tối đa 2 Nightlord khả năng nhất (kèm %) và 2 điểm yếu sát thương mạnh nhất, theo lựa chọn ở tab Dự đoán; ẩn khi chưa chọn boss.
+- Chưa làm: Shifting Earth trong form ghi run.
 
 **Thu thập dữ liệu:**
 1. **Ghi nhận run** (P0): sau mỗi run người dùng nhập nhanh (hoặc chọn từ dropdown trên overlay): chế độ, depth, nhân vật, Night 1 boss, Night 2 boss, Shifting Earth (nếu có), Nightlord thực tế, kết quả.

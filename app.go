@@ -45,6 +45,7 @@ type App struct {
 	fps    fpsHelper
 	gnet   gameNetWatcher
 	tmr    timerCtl
+	hints  bossHints
 
 	initErr error
 }
@@ -140,6 +141,7 @@ func (a *App) publishStatus() {
 				DataVersion: a.data.Manifest.DataVersion,
 				Phase:       a.timerPhase(),
 			})
+			a.hub.Publish("boss", a.bossHintList())
 		}
 	}
 }

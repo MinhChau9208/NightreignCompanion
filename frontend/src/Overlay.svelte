@@ -7,6 +7,7 @@
   import {fpsLevel, fpsStatus} from './lib/fps'
   import {flowLevel, gameNet, hasPing, kind, mainFlow} from './lib/gamenet'
   import {mainClock, timerState, urgency} from './lib/timer'
+  import {damageKey, pct, weakAndResist, type Hint} from './lib/boss'
 
   const net = netStats()
   const fps = fpsStatus()
@@ -19,6 +20,8 @@
   let status: Status | null = null
   let connected = false
   let opacity = 0.85
+  // Likely Nightlords from the predictor in the main window.
+  let hints: Hint[] = []
 
   function applySettings(s: {language: string; overlay: {opacity: number}; network: {thresholds: {minFps: number}}}) {
     opacity = s.overlay.opacity
@@ -32,6 +35,7 @@
       connected = true
     }),
     EventsOn('settings', applySettings),
+    EventsOn('boss', (h: Hint[]) => (hints = h ?? [])),
     EventsOn('ipc:disconnected', () => (connected = false)),
   ]
   onDestroy(() => offs.forEach((off) => off()))
@@ -91,6 +95,21 @@
       </li>
     {/each}
   </ul>
+  {#if hints.length}
+    <ul class="lords">
+      {#each hints as h (h.nightlord)}
+        <li>
+          <span class="name">{loc(h.name, $lang)}</span>
+          <span class="num">{pct(h.probability)}</span>
+          <span class="weak">
+            {#if h.form}
+              {#each weakAndResist(h.form).weak.slice(0, 2) as d}<span>▼{$t(damageKey(d.type))}</span>{/each}
+            {/if}
+          </span>
+        </li>
+      {/each}
+    </ul>
+  {/if}
   <div class="timer">
     {#if $timer && $timer.state !== 'idle'}
       <div class="trow">
@@ -185,6 +204,26 @@
   }
   .level-unknown .icon {
     color: var(--muted);
+  }
+  .lords {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 6px 0 0;
+    border-top: 1px solid var(--border);
+    display: grid;
+    gap: 2px;
+  }
+  .lords li {
+    display: grid;
+    grid-template-columns: 1fr 36px auto;
+    gap: 6px;
+    align-items: baseline;
+  }
+  .weak {
+    display: flex;
+    gap: 6px;
+    color: var(--ok);
+    font-size: 12px;
   }
   .timer {
     margin-top: 8px;
