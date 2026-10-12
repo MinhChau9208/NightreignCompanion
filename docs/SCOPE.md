@@ -16,9 +16,9 @@ Một app chạy song song với game, cung cấp 4 nhóm tính năng (+1 module
 | # | Module | Mô tả ngắn | Trạng thái |
 |---|--------|------------|-----------|
 | M1 | **Connection Checker** | Ping, jitter, packet loss; FPS & frametime; kết nối thật của game | ✅ Phase 1 |
-| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | Phase 2 |
-| M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 |
-| M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 (bản đầu ✅, chờ đo thời lượng) |
+| M5 | **Boss Predictor** | Thống kê boss từng đêm; dự đoán Nightlord ở Deep of Night (depth ≥ 3) dựa trên Night 1 & Night 2 | ✅ Phase 2 |
+| M3 | **Relic Stats** | Tra cứu giá trị thực của chỉ số relic (vd. *Physical Attack Up +2* = bao nhiêu %) và cách cộng dồn | Phase 3 (tra cứu ✅, chưa có calculator) |
+| M2 | **Cycle Timer** | Đếm ngược tới lúc bo thu, Night 1, Night 2, boss cuối | Phase 4 (✅ base game, chưa có Deep of Night) |
 | M6 | **Community Data** *(sau)* | Gom dữ liệu run từ nhiều người (opt-in) để cải thiện M5 | Phase 6 |
 | ~~M4~~ | ~~**Builds**~~ | **Đã bỏ** — xem [mục 3, M4](#m4--builds--đã-bỏ) | — |
 
@@ -173,7 +173,10 @@ Mức đánh giá: **Kém** khi vượt ngưỡng · **Cảnh báo** khi vượt
 - ✅ Data: `bosses.json` (chỉ số Nightlord thường + Everdark Sovereign, Solo/Duo/Trio: máu, poise, hấp thụ sát thương, kháng hiệu ứng; 27 boss đêm) và `boss_priors.json` (pool Night 1/Night 2 của 8 Nightlord) sinh bằng `tools/import_bosses.py` từ bảng cộng đồng (*Nightreign Useful Info* v1.03.2, *Nightlord Boss Pools*). Nightlord DLC (Harmonia, Straghess) có chỉ số nhưng chưa có pool.
 - ✅ Dự đoán (`internal/boss`): Bayes với prior đều và rút đều trong pool; loại trừ cứng boss ngoài pool; dự đoán luôn boss của đêm chưa nhập. Người chơi có thể loại Nightlord thủ công.
 - ✅ Màn hình Boss: tab Dự đoán · Chỉ số Nightlord (weakness cheat sheet) · Bảng pool.
-- Chưa làm: ghi run + thống kê local (bổ sung tần suất quan sát vào likelihood), overlay hiện dự đoán/điểm yếu.
+- ✅ Ghi run (tab "Ghi run & thống kê", lưu SQLite local): chế độ/depth, nhân vật, boss Night 1/2, Nightlord, kết quả, thời gian clear (tự điền khi Timer đã chạy xong, hoặc "Lấy từ Timer"). Nút "Ghi run này" ở tab Dự đoán chuyển boss đã chọn sang form. Thống kê: tỉ lệ thắng, clear trung bình theo Nightlord/nhân vật, tần suất boss từng đêm; lịch sử run có xoá.
+- ✅ Bộ dự đoán học từ run đã ghi: xác suất rút boss trong pool = (số lần gặp + 1) / (tổng + cỡ pool) — chưa có run thì vẫn là rút đều; boss ghi ngoài pool bị bỏ qua.
+- ✅ Overlay hiện tối đa 2 Nightlord khả năng nhất (kèm %) và 2 điểm yếu sát thương mạnh nhất, theo lựa chọn ở tab Dự đoán; ẩn khi chưa chọn boss.
+- Chưa làm: Shifting Earth trong form ghi run.
 
 **Thu thập dữ liệu:**
 1. **Ghi nhận run** (P0): sau mỗi run người dùng nhập nhanh (hoặc chọn từ dropdown trên overlay): chế độ, depth, nhân vật, Night 1 boss, Night 2 boss, Shifting Earth (nếu có), Nightlord thực tế, kết quả.
@@ -253,7 +256,7 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 - ✅ Phím tắt toàn hệ thống (`internal/hotkey`, `RegisterHotKey` của Windows — không đụng vào game): Bắt đầu/tạm dừng, Phase kế, Làm lại, Bật/tắt overlay. Sửa trong Cài đặt (bấm để ghi tổ hợp phím; hotkey tạm tắt khi đang ghi). Chữ/số/Space bắt buộc kèm Ctrl/Alt/Win vì phím đã đăng ký bị "nuốt" khỏi app khác. Phím bị app khác giữ → báo lỗi trên trang Timer.
 - ✅ Âm báo (Beep của Windows, bật/tắt được): 1/2/3 tiếng lúc còn 60s/30s/10s của phase có giờ, 1 tiếng dài khi phase mới tự bắt đầu.
 - ✅ Trang Timer (đồng hồ lớn, phase kế, danh sách phase, chọn chế độ) và overlay (tên phase + đếm ngược, `≈` khi profile chưa xác minh).
-- ⚠️ `timer_profiles.json` vẫn là placeholder (`verified: false`) — chưa có nguồn cộng đồng nào ghi thời lượng; cần đo trong game. Chưa có profile Deep of Night/sự kiện.
+- ✅ `timer_profiles.json` profile thường đã xác minh trong game (2026-10-12): mỗi Ngày 4:30 tới lúc bo thu → 3:00 thu → 3:30 tới lần thu 2 → 3:00 thu lần cuối (tổng 14:00) → boss đêm. Chưa có profile Deep of Night/sự kiện.
 - Chưa làm: tự điền thời gian vào run của M5 (chờ form ghi run), TTS, OCR auto-sync (Phase 5).
 
 **Cách kích hoạt:**

@@ -52,6 +52,7 @@ export namespace boss {
 	    impossible: boolean;
 	    night1: Chance[];
 	    night2: Chance[];
+	    runs: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new Result(source);
@@ -64,6 +65,7 @@ export namespace boss {
 	        this.impossible = source["impossible"];
 	        this.night1 = this.convertValues(source["night1"], Chance);
 	        this.night2 = this.convertValues(source["night2"], Chance);
+	        this.runs = source["runs"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -730,6 +732,7 @@ export namespace main {
 	export class BossData {
 	    bosses: gamedata.Boss[];
 	    pools: gamedata.BossPool[];
+	    characters: gamedata.Character[];
 	    poolsVerified: boolean;
 	
 	    static createFrom(source: any = {}) {
@@ -740,6 +743,7 @@ export namespace main {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.bosses = this.convertValues(source["bosses"], gamedata.Boss);
 	        this.pools = this.convertValues(source["pools"], gamedata.BossPool);
+	        this.characters = this.convertValues(source["characters"], gamedata.Character);
 	        this.poolsVerified = source["poolsVerified"];
 	    }
 	
@@ -852,6 +856,64 @@ export namespace netmon {
 	        this.history = source["history"];
 	        this.level = source["level"];
 	        this.error = source["error"];
+	    }
+	
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice && a.map) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
+}
+
+export namespace store {
+	
+	export class Run {
+	    id: string;
+	    // Go type: time
+	    createdAt: any;
+	    mode: string;
+	    depth: number;
+	    character: string;
+	    night1Boss: string;
+	    night2Boss: string;
+	    shiftingEarth: string;
+	    nightlord: string;
+	    result: string;
+	    clearSeconds: number;
+	    buildJson: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Run(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.createdAt = this.convertValues(source["createdAt"], null);
+	        this.mode = source["mode"];
+	        this.depth = source["depth"];
+	        this.character = source["character"];
+	        this.night1Boss = source["night1Boss"];
+	        this.night2Boss = source["night2Boss"];
+	        this.shiftingEarth = source["shiftingEarth"];
+	        this.nightlord = source["nightlord"];
+	        this.result = source["result"];
+	        this.clearSeconds = source["clearSeconds"];
+	        this.buildJson = source["buildJson"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

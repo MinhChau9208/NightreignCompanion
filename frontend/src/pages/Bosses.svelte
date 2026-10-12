@@ -6,10 +6,13 @@
   import BossPredict from './BossPredict.svelte'
   import BossStats from './BossStats.svelte'
   import BossPools from './BossPools.svelte'
+  import BossRuns from './BossRuns.svelte'
+  import type {Prefill} from '../lib/runs'
 
-  type Tab = 'predict' | 'stats' | 'pools'
+  type Tab = 'predict' | 'runs' | 'stats' | 'pools'
   const tabs: {id: Tab; label: Key}[] = [
     {id: 'predict', label: 'boss.tabPredict'},
+    {id: 'runs', label: 'boss.tabRuns'},
     {id: 'stats', label: 'boss.tabStats'},
     {id: 'pools', label: 'boss.tabPools'},
   ]
@@ -18,6 +21,8 @@
   let error = ''
   // Nightlord shown on the stats tab; the predictor can jump to it.
   let focus = ''
+  // Bosses the predictor hands to the run form.
+  let prefill: Prefill | null = null
 
   onMount(async () => {
     try {
@@ -30,6 +35,11 @@
   function showStats(id: string) {
     focus = id
     tab = 'stats'
+  }
+
+  function record(p: Prefill) {
+    prefill = p
+    tab = 'runs'
   }
 </script>
 
@@ -47,7 +57,9 @@
   <p class="err">{error}</p>
 {:else if data}
   {#if tab === 'predict'}
-    <BossPredict {data} on:stats={(e) => showStats(e.detail)} />
+    <BossPredict {data} on:stats={(e) => showStats(e.detail)} on:record={(e) => record(e.detail)} />
+  {:else if tab === 'runs'}
+    <BossRuns {data} bind:prefill />
   {:else if tab === 'stats'}
     <BossStats {data} bind:focus />
   {:else}

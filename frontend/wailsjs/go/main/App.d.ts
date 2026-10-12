@@ -4,9 +4,12 @@ import {gamenet} from '../models';
 import {main} from '../models';
 import {config} from '../models';
 import {gamedata} from '../models';
+import {store} from '../models';
 import {netmon} from '../models';
 import {boss} from '../models';
 import {timer} from '../models';
+
+export function DeleteRun(arg1:string):Promise<void>;
 
 export function FPSRunning():Promise<boolean>;
 
@@ -24,6 +27,8 @@ export function HotkeyErrors():Promise<Array<string>>;
 
 export function Info():Promise<main.AppInfo>;
 
+export function ListRuns():Promise<Array<store.Run>>;
+
 export function Mode():Promise<main.Mode>;
 
 export function NetStats():Promise<Array<netmon.Stats>>;
@@ -31,6 +36,8 @@ export function NetStats():Promise<Array<netmon.Stats>>;
 export function OverlayRunning():Promise<boolean>;
 
 export function PredictNightlord(arg1:boss.Query):Promise<boss.Result>;
+
+export function SaveRun(arg1:store.Run):Promise<store.Run>;
 
 export function SaveSettings(arg1:config.Settings):Promise<void>;
 

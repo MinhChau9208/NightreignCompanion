@@ -34,6 +34,16 @@ func TestRunsRoundTrip(t *testing.T) {
 	if len(runs) != 2 || runs[0].ID != newer.ID || runs[1].Nightlord != "gladius" || runs[0].Depth != 3 {
 		t.Fatalf("unexpected runs: %+v", runs)
 	}
+
+	if err := db.DeleteRun(ctx, newer.ID); err != nil {
+		t.Fatal(err)
+	}
+	if runs, err = db.ListRuns(ctx, -1); err != nil {
+		t.Fatal(err)
+	}
+	if len(runs) != 1 || runs[0].ID != older.ID {
+		t.Fatalf("after delete: %+v", runs)
+	}
 }
 
 func TestMigrateIsIdempotent(t *testing.T) {

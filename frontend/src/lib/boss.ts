@@ -40,3 +40,6 @@ export const easyStatuses = (f: gamedata.BossForm) => statusTypes.filter((s) => 
 export const pct = (p: number) => (p >= 0.995 ? '100%' : p > 0 && p < 0.005 ? '<1%' : `${Math.round(p * 100)}%`)
 
 export const signed = (v: number) => (v > 0 ? `+${v}` : `${v}`)
+
+// Hint mirrors main.BossHint, published to the overlay as the "boss" event.
+export type Hint = {nightlord: string; name: gamedata.Localized; probability: number; form: gamedata.BossForm | null}

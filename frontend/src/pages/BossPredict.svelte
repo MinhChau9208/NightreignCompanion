@@ -4,11 +4,13 @@
   import type {boss, gamedata, main} from '../../wailsjs/go/models'
   import {lang, loc, t} from '../lib/i18n'
   import {pct} from '../lib/boss'
+  import type {Prefill} from '../lib/runs'
   import BossTraits from './BossTraits.svelte'
+  import {portrait} from '../lib/icons'
 
   export let data: main.BossData
 
-  const dispatch = createEventDispatcher<{stats: string}>()
+  const dispatch = createEventDispatcher<{stats: string; record: Prefill}>()
 
   let night1 = ''
   let night2 = ''
@@ -59,11 +61,20 @@
 
   $: top = result && result.signal && !result.impossible ? result.ranking.filter((c) => c.probability > 0).slice(0, 2) : []
   $: selected = [night1, night2]
+  // Only a certain Nightlord is worth filling into the run form.
+  $: sure = result?.signal && !result.impossible && result.ranking[0]?.probability >= 0.995 ? result.ranking[0].nightlord : ''
+
+  function record() {
+    dispatch('record', {night1, night2, nightlord: sure})
+  }
 </script>
 
 <section class="card intro">
   <p class="muted">{$t('boss.predictIntro')}</p>
-  <button class="secondary" on:click={reset} disabled={!night1 && !night2 && exclude.length === 0}>{$t('boss.reset')}</button>
+  <span class="buttons">
+    <button class="secondary" on:click={record} disabled={!night1 && !night2}>{$t('boss.recordRun')}</button>
+    <button class="secondary" on:click={reset} disabled={!night1 && !night2 && exclude.length === 0}>{$t('boss.reset')}</button>
+  </span>
 </section>
 
 <div class="pickers">
@@ -104,8 +115,11 @@
         {@const nl = byId.get(c.nightlord)}
         <div class="row" class:out={c.excluded || c.probability === 0}>
           <span class="who">
-            <b>{loc(nl?.name, $lang)}</b>
-            <small class="muted">{loc(nl?.expedition, $lang)}</small>
+            {#if portrait(c.nightlord)}<img class="portrait" src={portrait(c.nightlord)} alt="" />{:else}<span class="portrait"></span>{/if}
+            <span>
+              <b>{loc(nl?.name, $lang)}</b>
+              <small class="muted">{loc(nl?.expedition, $lang)}</small>
+            </span>
           </span>
           <span class="bar" title={pct(c.probability)}>
             <span style="width: {c.probability * 100}%"></span>
@@ -120,7 +134,10 @@
         </div>
       {/each}
     </div>
-    <p class="muted foot">{$t('boss.assumption')}</p>
+    <p class="muted foot">
+      {$t('boss.assumption')}
+      {result.runs ? $t('boss.learned').replace('{n}', String(result.runs)) : $t('boss.learnHint')}
+    </p>
   </section>
 
   {#if top.length}
@@ -128,7 +145,10 @@
       {#each top as c (c.nightlord)}
         {@const nl = byId.get(c.nightlord)}
         <section class="card">
-          <h2>{$t('boss.prepare')} {loc(nl?.name, $lang)} <span class="muted">· {pct(c.probability)}</span></h2>
+          <h2 class="prepTitle">
+            {#if portrait(c.nightlord)}<img class="portrait" src={portrait(c.nightlord)} alt="" />{/if}
+            <span>{$t('boss.prepare')} {loc(nl?.name, $lang)} <span class="muted">· {pct(c.probability)}</span></span>
+          </h2>
           {#each nl?.stats?.normal ?? [] as f}
             {#if (nl?.stats?.normal.length ?? 0) > 1}<h3>{f.name}</h3>{/if}
             <BossTraits form={f} />
@@ -149,6 +169,10 @@
   }
   .intro p {
     margin: 0;
+  }
+  .buttons {
+    display: flex;
+    gap: 8px;
   }
   .pickers,
   .prep {
@@ -187,7 +211,25 @@
   }
   .who {
     display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .who > span:not(.portrait) {
+    display: flex;
     flex-direction: column;
+  }
+  .who .portrait {
+    width: 36px;
+    height: 36px;
+  }
+  .prepTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .prepTitle .portrait {
+    width: 44px;
+    height: 44px;
   }
   .bar {
     height: 8px;
