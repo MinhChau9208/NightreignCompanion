@@ -1,0 +1,33 @@
+{
+  "verified": false,
+  "note": "Names as printed above the boss health bar (English game text), used to recognise night bosses on screen. Bosses missing here fall back to their English name; Nightlords always use their name and the part before the comma. Check each against an in-game screenshot.",
+  "names": {
+    "battlefield_commander": ["Battlefield Commander"],
+    "bell_bearing_hunter": ["Bell Bearing Hunter"],
+    "centipede_demon": ["Centipede Demon"],
+    "demi_human_duo": ["Demi-Human Queen Marigga", "Demi-Human Swordmaster Onze"],
+    "gaping_dragon": ["Gaping Dragon"],
+    "grafted_monarch": ["Grafted Monarch"],
+    "nights_cavalry_duo": ["Night's Cavalry"],
+    "royal_revenant": ["Royal Revenant"],
+    "smelter_demon": ["Smelter Demon"],
+    "the_dukes_dear_freja": ["Duke's Dear Freja"],
+    "tibia_mariner": ["Tibia Mariner"],
+    "ulcerated_tree_spirit": ["Ulcerated Tree Spirit"],
+    "valiant_gargoyle": ["Valiant Gargoyle"],
+    "wormface": ["Wormface"],
+    "ancient_dragon": ["Ancient Dragon"],
+    "crucible_hippo": ["Crucible Knight"],
+    "dancer_of_the_boreal_valley": ["Dancer of the Boreal Valley"],
+    "death_rite_bird": ["Death Rite Bird"],
+    "draconic_sentinel_trio": ["Draconic Tree Sentinel"],
+    "fallingstar_beast": ["Fallingstar Beast"],
+    "fell_omen": ["Fell Omen"],
+    "godskin_duo": ["Godskin Apostle", "Godskin Noble"],
+    "great_wyrm": ["Great Wyrm"],
+    "nameless_king": ["Nameless King"],
+    "nox_dragonkin_soldier": ["Dragonkin Soldier"],
+    "outland_commander": ["Outland Commander"],
+    "tree_sentinel_trio": ["Tree Sentinel"]
+  }
+}

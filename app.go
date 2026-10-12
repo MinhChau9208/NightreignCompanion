@@ -46,6 +46,8 @@ type App struct {
 	gnet   gameNetWatcher
 	tmr    timerCtl
 	hints  bossHints
+	exp    expState
+	scan   bossScanner
 
 	initErr error
 }
@@ -89,6 +91,7 @@ func (a *App) init() error {
 	a.hub.OnMessage(a.onHelperMessage)
 	cfg := a.cfg.Get()
 	a.startTimer(cfg)
+	go a.runBossOCR()
 	go a.publishStatus()
 	a.startNet(cfg.Network)
 	return nil

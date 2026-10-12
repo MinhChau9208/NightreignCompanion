@@ -1,6 +1,6 @@
 <script lang="ts">
   import {onMount} from 'svelte'
-  import {DeleteRun, ListRuns, SaveRun, TimerState} from '../../wailsjs/go/main/App'
+  import {DeleteRun, GetExpedition, ListRuns, SaveRun, TimerState} from '../../wailsjs/go/main/App'
   import {store, type gamedata, type main} from '../../wailsjs/go/models'
   import {lang, loc, t} from '../lib/i18n'
   import {clock} from '../lib/timer'
@@ -49,6 +49,14 @@
 
   onMount(async () => {
     await load()
+    // Bosses picked on the predictor or read by boss OCR.
+    if (!night1 && !night2 && !nightlord) {
+      try {
+        const e = await GetExpedition()
+        ;({night1, night2, nightlord} = e)
+        if (e.night1 || e.night2) mode = 'deep'
+      } catch {}
+    }
     // A finished timer run is most likely the one being recorded.
     try {
       const s = await TimerState()

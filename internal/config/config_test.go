@@ -134,3 +134,14 @@ func TestValidateHotkeys(t *testing.T) {
 		}
 	}
 }
+
+func TestValidateOCRRegion(t *testing.T) {
+	s := Defaults()
+	if err := s.Validate(); err != nil {
+		t.Fatalf("defaults: %v", err)
+	}
+	s.OCR.Region.W = 0.9 // runs past the right edge
+	if s.Validate() == nil {
+		t.Error("region outside the window accepted")
+	}
+}

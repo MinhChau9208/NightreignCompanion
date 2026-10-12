@@ -97,6 +97,14 @@ type BossPriors struct {
 	Pools    []BossPool `json:"pools"`
 }
 
+// BossScreenNames maps boss ids to the names printed above their health
+// bar, for recognising bosses on screen (see ScreenNames).
+type BossScreenNames struct {
+	Verified bool                `json:"verified"`
+	Note     string              `json:"note,omitempty"`
+	Names    map[string][]string `json:"names"`
+}
+
 type BossPool struct {
 	Nightlord string   `json:"nightlord"`
 	Night1    []string `json:"night1"`

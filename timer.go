@@ -113,6 +113,10 @@ func (a *App) timerPhase() string {
 func (a *App) command(cmd string) (timer.Snapshot, error) {
 	c := &a.tmr
 	c.mu.Lock()
+	if (cmd == "start" || cmd == "toggle") && c.t.Snapshot().State == timer.Done {
+		// Starting over after a finished run is a new expedition.
+		defer a.clearExpedition()
+	}
 	switch cmd {
 	case "start":
 		c.t.Start()
@@ -129,6 +133,8 @@ func (a *App) command(cmd string) (timer.Snapshot, error) {
 	case "reset":
 		// Pick up a profile chosen while the run was in progress.
 		c.t = timer.New(a.profile(a.cfg.Get().Timer.Profile), nil)
+		// A new expedition: forget the bosses of the last one.
+		defer a.clearExpedition()
 	default:
 		c.mu.Unlock()
 		return timer.Snapshot{}, fmt.Errorf("unknown timer command %q", cmd)

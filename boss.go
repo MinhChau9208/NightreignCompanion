@@ -33,19 +33,28 @@ func (a *App) GetBossData() (BossData, error) {
 }
 
 // PredictNightlord ranks the hidden Nightlord from the night bosses seen,
-// learning the pool draws from the player's recorded runs.
+// learning the pool draws from the player's recorded runs. q becomes the
+// expedition's bosses, shared with boss OCR and the overlay.
 func (a *App) PredictNightlord(q boss.Query) (boss.Result, error) {
 	if err := a.runsErr(); err != nil {
 		return boss.Result{}, err
 	}
+	a.setQuery(q)
+	res, err := a.predict(q)
+	if err != nil {
+		return boss.Result{}, err
+	}
+	a.setBossHints(res)
+	return res, nil
+}
+
+func (a *App) predict(q boss.Query) (boss.Result, error) {
 	s, err := a.sightings()
 	if err != nil {
 		return boss.Result{}, err
 	}
 	pools := a.data.Priors.Pools
-	res := boss.Predict(pools, boss.Observe(pools, s), q)
-	a.setBossHints(res)
-	return res, nil
+	return boss.Predict(pools, boss.Observe(pools, s), q), nil
 }
 
 // BossHint is a likely Nightlord as shown on the overlay.

@@ -6,6 +6,7 @@
 //	nrc-cli conns [-n seconds] [process]   list the game's network connections via ETW (Administrator);
 //	                                       -all also lists the Steam flows the app filters out
 //	nrc-cli udp [-n seconds]               UDP traffic per process, to see who carries co-op data (Administrator)
+//	nrc-cli ocr [-x -y -w -h | -full] img  read boss names from a game screenshot with Windows OCR
 package main
 
 import (
@@ -44,13 +45,15 @@ func main() {
 		measureConns(os.Args[2:])
 	case "udp":
 		measureUDP(os.Args[2:])
+	case "ocr":
+		readBossNames(os.Args[2:])
 	default:
 		usage()
 	}
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [-all] [process] | udp [-n seconds]")
+	fmt.Fprintln(os.Stderr, "usage: nrc-cli validate [dir] | ping [-n count] [target ...] | fps [-n seconds] [process] | conns [-n seconds] [-all] [process] | udp [-n seconds] | ocr [-x -y -w -h | -full] screenshot.png")
 	os.Exit(2)
 }
 

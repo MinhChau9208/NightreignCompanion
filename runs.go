@@ -98,6 +98,8 @@ func (a *App) SaveRun(r store.Run) (store.Run, error) {
 	if err := a.db.InsertRun(a.ctx, &r); err != nil {
 		return store.Run{}, err
 	}
+	// The expedition is over once it is recorded.
+	a.clearExpedition()
 	return r, nil
 }
 
