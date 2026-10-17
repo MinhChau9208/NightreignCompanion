@@ -1,7 +1,8 @@
 // Package timer runs the day/night cycle of one expedition (docs/SCOPE.md,
-// M2). The app cannot read the game's state, so the player drives the timer
-// from outside: start when Day 1 begins, then "next" to confirm that a boss
-// is down or to re-sync when the circle visibly starts closing.
+// M2). The app cannot read the game's state, so the timer is driven from
+// outside: by the player (start when Day 1 begins, then "next" to confirm
+// that a boss is down or to re-sync when the circle visibly starts closing),
+// or by banners read off the screen (Sync).
 //
 // Timed phases (explore, shrink) advance on their own when their duration
 // runs out. Boss phases are untimed and wait for "next".
@@ -186,6 +187,76 @@ func (t *Timer) Prev() {
 		return
 	}
 	t.enter(t.phase-1, t.clock())
+}
+
+// Sync says the game entered phase at at, as read off the screen. It
+// resumes a pause, and from idle or done it starts a run at that phase.
+// at is clamped to now.
+func (t *Timer) Sync(phase int, at time.Time) {
+	if phase < 0 || phase >= len(t.prof.Phases) {
+		return
+	}
+	t.Resume()
+	t.update()
+	if now := t.now(); at.After(now) {
+		at = now
+	}
+	if s := t.state(); s == Idle || s == Done {
+		t.runStart = at
+	}
+	t.enter(phase, at)
+}
+
+// DayPhase is the phase Day day begins with: the one after day-1 boss
+// phases, or -1 if the profile has no such day.
+func DayPhase(p gamedata.TimerProfile, day int) int {
+	if day < 1 {
+		return -1
+	}
+	bosses := 0
+	for i, ph := range p.Phases {
+		if bosses == day-1 {
+			return i
+		}
+		if ph.Kind == "boss" {
+			bosses++
+		}
+	}
+	return -1
+}
+
+// NearestShrink finds the shrink phase of the current day that the timer
+// expected to begin closest to at, and how far off it is: positive when
+// the timer has it starting later than at. ok is false outside a running
+// day (idle, done, or in a boss phase) or when the day has no shrink.
+func (t *Timer) NearestShrink(at time.Time) (phase int, off time.Duration, ok bool) {
+	t.update()
+	if s := t.state(); s != Running && s != Paused {
+		return 0, 0, false
+	}
+	ph := t.prof.Phases
+	if ph[t.phase].Kind == "boss" {
+		return 0, 0, false
+	}
+	dur := func(i int) time.Duration { return time.Duration(ph[i].Seconds) * time.Second }
+	// Where the current phase began on the wall clock, pauses removed.
+	cur := t.now().Add(-t.clock().Sub(t.phaseStart))
+	first := t.phase
+	start := cur
+	for first > 0 && ph[first-1].Kind != "boss" {
+		first--
+		start = start.Add(-dur(first))
+	}
+	for i := first; i < len(ph) && ph[i].Kind != "boss"; i++ {
+		if ph[i].Kind == "shrink" {
+			d := start.Sub(at)
+			if !ok || d.Abs() < off.Abs() {
+				phase, off, ok = i, d, true
+			}
+		}
+		start = start.Add(dur(i))
+	}
+	return phase, off, ok
 }
 
 // Reset returns to idle.

@@ -1,0 +1,9 @@
+{
+  "verified": false,
+  "note": "Messages the game shows in the bar at the top right (English game text), used to re-sync the cycle timer. The Day I / II / III banner in the middle of the screen is recognised in code (internal/banner). event \"shrink\" means a circle shrink begins as the message appears; the timer snaps to whichever shrink of the current day it expected closest. \"grows stronger\" was checked against a screenshot (2026-10-17); the others are unconfirmed wording.",
+  "messages": [
+    { "text": "The Night's tide grows stronger", "event": "shrink", "verified": true },
+    { "text": "The Night's Tide approaches", "event": "shrink", "verified": false },
+    { "text": "The Night's Tide is shifting", "event": "shrink", "verified": false }
+  ]
+}

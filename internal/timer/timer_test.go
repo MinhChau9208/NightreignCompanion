@@ -177,3 +177,100 @@ func TestAlert(t *testing.T) {
 		t.Errorf("short phase: Alert = %d, want 0", got)
 	}
 }
+
+var dayProfile = gamedata.TimerProfile{
+	ID: "days",
+	Phases: []gamedata.Phase{
+		phase("d1_explore", "explore", 270),
+		phase("d1_shrink1", "shrink", 180),
+		phase("d1_explore2", "explore", 210),
+		phase("d1_shrink2", "shrink", 180),
+		phase("night1", "boss", 0),
+		phase("d2_explore", "explore", 270),
+		phase("d2_shrink1", "shrink", 180),
+		phase("night2", "boss", 0),
+		phase("nightlord", "boss", 0),
+	},
+}
+
+func TestDayPhase(t *testing.T) {
+	for day, want := range map[int]int{0: -1, 1: 0, 2: 5, 3: 8, 4: -1} {
+		if got := DayPhase(dayProfile, day); got != want {
+			t.Errorf("DayPhase(%d) = %d, want %d", day, got, want)
+		}
+	}
+}
+
+func TestSync(t *testing.T) {
+	c := newClock()
+	tm := New(dayProfile, c.now)
+
+	// Day II seen with the timer idle: the run starts there, anchored to
+	// when the banner first showed.
+	seen := c.t
+	c.addSec(2)
+	tm.Sync(5, seen)
+	s := tm.Snapshot()
+	check(t, s, Running, "d2_explore", 268)
+	if s.Elapsed != 2 {
+		t.Fatalf("elapsed %d, want 2", s.Elapsed)
+	}
+
+	// From a boss phase the banner ends the fight; a pause is resumed.
+	tm.Sync(7, c.t)
+	tm.Pause()
+	c.addSec(30)
+	tm.Sync(8, c.t.Add(time.Hour)) // future times are clamped
+	check(t, tm.Snapshot(), Running, "nightlord", 0)
+	if s := tm.Snapshot(); s.PhaseElapsed != 0 {
+		t.Fatalf("phase elapsed %d, want 0", s.PhaseElapsed)
+	}
+
+	tm.Sync(99, c.t) // out of range: ignored
+	check(t, tm.Snapshot(), Running, "nightlord", 0)
+}
+
+func TestNearestShrink(t *testing.T) {
+	c := newClock()
+	tm := New(dayProfile, c.now)
+	if _, _, ok := tm.NearestShrink(c.t); ok {
+		t.Fatal("idle timer has no shrink")
+	}
+	tm.Start()
+
+	// The game's first shrink starts 10s before the timer expects it.
+	c.addSec(260)
+	p, off, ok := tm.NearestShrink(c.t)
+	if !ok || p != 1 || off != 10*time.Second {
+		t.Fatalf("got %d %v %v, want 1 10s true", p, off, ok)
+	}
+
+	// Well into the first gap the second shrink is nearer.
+	c.addSec(10 + 180 + 200) // d1_explore2, 10s before the second shrink
+	p, off, _ = tm.NearestShrink(c.t)
+	if p != 3 || off != 10*time.Second {
+		t.Fatalf("got %d %v, want 3 10s", p, off)
+	}
+
+	// Timer running ahead: the shrink it already began is 20s early.
+	c.addSec(30)
+	p, off, _ = tm.NearestShrink(c.t)
+	if p != 3 || off != -20*time.Second {
+		t.Fatalf("got %d %v, want 3 -20s", p, off)
+	}
+
+	// Pauses do not count: the expected start moves with them.
+	tm.Pause()
+	c.addSec(100)
+	p, off, _ = tm.NearestShrink(c.t)
+	if p != 3 || off != -20*time.Second {
+		t.Fatalf("paused: got %d %v, want 3 -20s", p, off)
+	}
+	tm.Resume()
+
+	// No shrink during a boss fight.
+	c.addSec(200)
+	if _, _, ok := tm.NearestShrink(c.t); ok {
+		t.Fatal("boss phase has no shrink")
+	}
+}

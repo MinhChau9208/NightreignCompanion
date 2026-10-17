@@ -17,6 +17,7 @@ var (
 	procClientToScreen     = user32.NewProc("ClientToScreen")
 	procIsWindowVisible    = user32.NewProc("IsWindowVisible")
 	procIsIconic           = user32.NewProc("IsIconic")
+	procGetForegroundWnd   = user32.NewProc("GetForegroundWindow")
 	procGetDC              = user32.NewProc("GetDC")
 	procReleaseDC          = user32.NewProc("ReleaseDC")
 	procCreateCompatibleDC = gdi32.NewProc("CreateCompatibleDC")
@@ -87,6 +88,18 @@ func Window(pid uint32) (image.Rectangle, error) {
 		return image.Rectangle{}, ErrNoWindow
 	}
 	return search.best, nil
+}
+
+// Foreground reports whether the window in front belongs to pid, i.e. the
+// screen shows the game rather than another app on top of it.
+func Foreground(pid uint32) bool {
+	hwnd, _, _ := procGetForegroundWnd.Call()
+	if hwnd == 0 {
+		return false
+	}
+	var owner uint32
+	windows.GetWindowThreadProcessId(windows.HWND(hwnd), &owner)
+	return owner == pid
 }
 
 func area(r image.Rectangle) int { return r.Dx() * r.Dy() }

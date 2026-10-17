@@ -260,7 +260,8 @@ Night 1: Tibia Mariner · Night 2: Demi-Human Queen
 - ✅ Trang Timer (đồng hồ lớn, phase kế, danh sách phase, chọn chế độ) và overlay (tên phase + đếm ngược, `≈` khi profile chưa xác minh).
 - ✅ `timer_profiles.json` profile thường đã xác minh trong game (2026-10-12): mỗi Ngày 4:30 tới lúc bo thu → 3:00 thu → 3:30 tới lần thu 2 → 3:00 thu lần cuối (tổng 14:00) → boss đêm. Chưa có profile Deep of Night/sự kiện.
 - ✅ Thời gian clear tự điền vào form ghi run của M5 khi Timer chạy xong.
-- Chưa làm: TTS, OCR auto-sync phase theo banner Day/bo thu (Phase 5) — OCR tên boss (M5) đã có, dùng lại được `internal/capture` + `internal/ocr`.
+- ✅ Tự đồng bộ bằng OCR (2026-10-17): khi cửa sổ game ở trên cùng, app chụp mỗi giây 2 vùng: dải giữa màn hình (chữ DAY, không lấy vòng cung trang trí phía trên vì làm OCR hỏng) và thanh thông báo góc phải trên (dùng chung `internal/capture` + `internal/ocr` với OCR boss) và nhận banner (`internal/banner`). "DAY I" → bắt đầu run mới (đang có run dở/đã xong thì coi là expedition mới, xoá boss cũ); "DAY II"/"DAY III" → nhảy tới phase đầu của ngày đó (kiêm luôn "Boss xong"); thông báo bo thu trong `data/screen_messages.json` ("The Night's tide grows stronger" — đã đối chiếu ảnh chụp; "approaches"/"is shifting" chưa xác minh) ở thanh thông báo góc phải trên → căn lại lần thu gần nhất của ngày hiện tại nếu lệch 1s–2 phút. Cần 2 lần chụp liên tiếp trùng nhau, mốc thời gian lấy từ lần thấy đầu tiên, cùng một banner bị bỏ qua 30s sau khi đã căn. Cài đặt: bật/tắt, vùng quét, nút "Thử nhận diện"; trạng thái hiện trên trang Timer. `nrc-cli ocr -banner ảnh.png` thử trên ảnh chụp màn hình.
+- Chưa làm: TTS.
 
 **Cách kích hoạt:**
 1. **Hotkey** (P0) — người chơi bấm phím khi bắt đầu Day 1 (lúc rơi xuống từ chim). Các hotkey phụ để "sync" lại khi bước sang Day 2, hoặc pause/reset.

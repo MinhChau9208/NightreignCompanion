@@ -48,6 +48,7 @@ type App struct {
 	hints  bossHints
 	exp    expState
 	scan   bossScanner
+	banner bannerScanner
 
 	initErr error
 }
@@ -91,7 +92,7 @@ func (a *App) init() error {
 	a.hub.OnMessage(a.onHelperMessage)
 	cfg := a.cfg.Get()
 	a.startTimer(cfg)
-	go a.runBossOCR()
+	go a.runOCR()
 	go a.publishStatus()
 	a.startNet(cfg.Network)
 	return nil

@@ -52,10 +52,14 @@ export function StopFPS():Promise<void>;
 
 export function SuspendHotkeys(arg1:boolean):Promise<void>;
 
+export function TestBannerOCR(arg1:capture.Region):Promise<main.OCRTest>;
+
 export function TestOCR(arg1:capture.Region):Promise<main.OCRTest>;
 
 export function TimerCommand(arg1:string):Promise<timer.Snapshot>;
 
 export function TimerState():Promise<timer.Snapshot>;
+
+export function TimerSyncStatus():Promise<main.SyncStatus>;
 
 export function ToggleOverlay():Promise<boolean>;

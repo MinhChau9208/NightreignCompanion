@@ -86,6 +86,10 @@ export function SuspendHotkeys(arg1) {
   return window['go']['main']['App']['SuspendHotkeys'](arg1);
 }
 
+export function TestBannerOCR(arg1) {
+  return window['go']['main']['App']['TestBannerOCR'](arg1);
+}
+
 export function TestOCR(arg1) {
   return window['go']['main']['App']['TestOCR'](arg1);
 }
@@ -96,6 +100,10 @@ export function TimerCommand(arg1) {
 
 export function TimerState() {
   return window['go']['main']['App']['TimerState']();
+}
+
+export function TimerSyncStatus() {
+  return window['go']['main']['App']['TimerSyncStatus']();
 }
 
 export function ToggleOverlay() {
