@@ -20,6 +20,7 @@ type Pack struct {
 	Bosses     []Boss
 	Priors     BossPriors
 	Screen     BossScreenNames
+	Messages   ScreenMessages
 }
 
 // LoadEmbedded loads the data pack bundled into the binary.
@@ -39,6 +40,7 @@ func Load(fsys fs.FS) (*Pack, error) {
 		{"bosses.json", &p.Bosses},
 		{"boss_priors.json", &p.Priors},
 		{"boss_screen_names.json", &p.Screen},
+		{"screen_messages.json", &p.Messages},
 	}
 	for _, f := range files {
 		if err := decodeFile(fsys, f.name, f.dst); err != nil {
@@ -205,6 +207,15 @@ func (p *Pack) Validate() error {
 			if strings.TrimSpace(n) == "" {
 				add("screen names %s: empty name", id)
 			}
+		}
+	}
+
+	for i, m := range p.Messages.Messages {
+		if strings.TrimSpace(m.Text) == "" {
+			add("screen messages #%d: empty text", i+1)
+		}
+		if !messageEvents[m.Event] {
+			add("screen messages %q: unknown event %q", m.Text, m.Event)
 		}
 	}
 

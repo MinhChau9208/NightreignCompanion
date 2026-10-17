@@ -105,6 +105,22 @@ type BossScreenNames struct {
 	Names    map[string][]string `json:"names"`
 }
 
+// ScreenMessages lists the messages the game shows at the top right that
+// tell the cycle timer where the expedition is (the Day banner is
+// recognised in code).
+type ScreenMessages struct {
+	Verified bool            `json:"verified"`
+	Note     string          `json:"note,omitempty"`
+	Messages []ScreenMessage `json:"messages"`
+}
+
+// ScreenMessage is one banner text and what it marks (see messageEvents).
+type ScreenMessage struct {
+	Text     string `json:"text"`
+	Event    string `json:"event"`
+	Verified bool   `json:"verified"`
+}
+
 type BossPool struct {
 	Nightlord string   `json:"nightlord"`
 	Night1    []string `json:"night1"`
@@ -118,8 +134,10 @@ var (
 		"stat": true, "start": true, "exploration": true, "offensive": true,
 		"defensive": true, "regen": true, "character": true, "curse": true,
 	}
-	phaseKinds  = map[string]bool{"explore": true, "shrink": true, "boss": true}
-	bossKinds   = map[string]bool{"night_boss": true, "nightlord": true}
-	damageTypes = []string{"standard", "strike", "slash", "pierce", "magic", "fire", "lightning", "holy"}
-	statusTypes = []string{"poison", "rot", "bleed", "frost", "sleep", "madness", "blight"}
+	phaseKinds = map[string]bool{"explore": true, "shrink": true, "boss": true}
+	bossKinds  = map[string]bool{"night_boss": true, "nightlord": true}
+	// messageEvents are the screen message events the timer understands.
+	messageEvents = map[string]bool{"shrink": true}
+	damageTypes   = []string{"standard", "strike", "slash", "pierce", "magic", "fire", "lightning", "holy"}
+	statusTypes   = []string{"poison", "rot", "bleed", "frost", "sleep", "madness", "blight"}
 )

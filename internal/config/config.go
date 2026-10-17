@@ -39,17 +39,32 @@ type TimerSettings struct {
 	Sound   bool   `json:"sound"`   // beep before a phase ends
 }
 
-// OCRSettings configures reading night boss names off the screen (M5).
-// Scanning only happens while the timer is in a boss phase.
+// OCRSettings configures reading the game's screen: night boss names (M5),
+// scanned only while the timer is in a boss phase, and the Day / Night's
+// Tide banners that start and re-sync the timer (M2).
 type OCRSettings struct {
 	Enabled bool `json:"enabled"`
 	// Region is where boss names appear, as fractions of the game window.
 	Region capture.Region `json:"region"`
+	// TimerSync starts and re-syncs the timer from on-screen banners: the
+	// Day banner in DayRegion and the messages in MessageRegion.
+	TimerSync     bool           `json:"timerSync"`
+	DayRegion     capture.Region `json:"dayRegion"`
+	MessageRegion capture.Region `json:"messageRegion"`
 }
 
 // DefaultOCRRegion covers the names above up to three boss health bars
 // at the bottom of a 16:9 game window.
 var DefaultOCRRegion = capture.Region{X: 0.22, Y: 0.68, W: 0.42, H: 0.2}
+
+// DefaultDayRegion is a band across the middle of the screen around the
+// "DAY I" text. It leaves out the arc drawn above the text, which stops
+// Windows OCR from reading it.
+var DefaultDayRegion = capture.Region{X: 0.25, Y: 0.45, W: 0.5, H: 0.2}
+
+// DefaultMessageRegion covers the message bar at the top right ("The
+// Night's tide grows stronger"), below the compass.
+var DefaultMessageRegion = capture.Region{X: 0.6, Y: 0.14, W: 0.4, H: 0.08}
 
 // FPSSettings configures the elevated FPS helper.
 type FPSSettings struct {
@@ -110,7 +125,10 @@ func Defaults() Settings {
 		},
 		FPS:   FPSSettings{Process: "nightreign.exe"},
 		Timer: TimerSettings{Profile: "normal", Sound: true},
-		OCR:   OCRSettings{Enabled: true, Region: DefaultOCRRegion},
+		OCR: OCRSettings{
+			Enabled: true, Region: DefaultOCRRegion,
+			TimerSync: true, DayRegion: DefaultDayRegion, MessageRegion: DefaultMessageRegion,
+		},
 	}
 }
 
@@ -159,6 +177,9 @@ func (s Settings) Validate() error {
 	}
 	if !s.OCR.Region.Valid() {
 		errs = append(errs, errors.New("OCR region must lie inside the game window"))
+	}
+	if !s.OCR.DayRegion.Valid() || !s.OCR.MessageRegion.Valid() {
+		errs = append(errs, errors.New("banner regions must lie inside the game window"))
 	}
 	t := s.Network.Thresholds
 	if t.PingMs <= 0 || t.JitterMs <= 0 || t.LossPct < 0 || t.MinFPS <= 0 {

@@ -93,7 +93,9 @@ func (a *App) setOCRStatus(st OCRStatus) {
 	}
 }
 
-func (a *App) runBossOCR() {
+// runOCR reads the screen once a second: boss names (when the timer is in
+// a boss phase) and the banners that sync the timer.
+func (a *App) runOCR() {
 	tick := time.NewTicker(ocrInterval)
 	defer tick.Stop()
 	defer func() {
@@ -110,6 +112,7 @@ func (a *App) runBossOCR() {
 		case <-tick.C:
 		}
 		a.setOCRStatus(a.scanOnce())
+		a.setSyncStatus(a.scanBanner())
 	}
 }
 
@@ -237,38 +240,51 @@ type OCRTest struct {
 	Region string   `json:"region"` // captured size
 	Image  string   `json:"image"`  // PNG data URL of the capture
 	Lines  []string `json:"lines"`  // text read
-	Match  string   `json:"match"`  // boss id, any night; "" if none
+	Match  string   `json:"match"`  // boss id, any night, or banner kind; "" if none
+	Day    int      `json:"day"`    // Day banner: 1-3
 	Score  float64  `json:"score"`
 }
 
 // TestOCR captures region now and reports what OCR reads there, matched
 // against every night boss and Nightlord.
 func (a *App) TestOCR(region capture.Region) (OCRTest, error) {
+	res, lines, err := a.testCapture(region)
+	if err != nil {
+		return res, err
+	}
+	all := append(append(a.aliases(1), a.aliases(2)...), a.aliases(3)...)
+	res.Match, res.Score = boss.Match(lines, all)
+	return res, nil
+}
+
+// testCapture grabs region of the game window and reads it, for checking
+// a region in Settings.
+func (a *App) testCapture(region capture.Region) (OCRTest, []string, error) {
 	if err := a.runsErr(); err != nil {
-		return OCRTest{}, err
+		return OCRTest{}, nil, err
 	}
 	if !region.Valid() {
-		return OCRTest{}, errors.New("OCR region must lie inside the game window")
+		return OCRTest{}, nil, errors.New("OCR region must lie inside the game window")
 	}
 	pid, err := fps.FindProcess(a.cfg.Get().FPS.Process)
 	if err != nil {
-		return OCRTest{}, err
+		return OCRTest{}, nil, err
 	}
 	if pid == 0 {
-		return OCRTest{}, errNoGame
+		return OCRTest{}, nil, errNoGame
 	}
 	win, err := capture.Window(pid)
 	if err != nil {
-		return OCRTest{}, err
+		return OCRTest{}, nil, err
 	}
 	r := region.In(win)
 	img, err := capture.Grab(r)
 	if err != nil {
-		return OCRTest{}, err
+		return OCRTest{}, nil, err
 	}
 	var buf bytes.Buffer
 	if err := png.Encode(&buf, img); err != nil {
-		return OCRTest{}, err
+		return OCRTest{}, nil, err
 	}
 	res := OCRTest{
 		Window: fmt.Sprintf("%dx%d", win.Dx(), win.Dy()),
@@ -276,9 +292,7 @@ func (a *App) TestOCR(region capture.Region) (OCRTest, error) {
 		Image:  "data:image/png;base64," + base64.StdEncoding.EncodeToString(buf.Bytes()),
 	}
 	if res.Lines, err = a.readText(img); err != nil {
-		return res, err
+		return res, nil, err
 	}
-	all := append(append(a.aliases(1), a.aliases(2)...), a.aliases(3)...)
-	res.Match, res.Score = boss.Match(res.Lines, all)
-	return res, nil
+	return res, res.Lines, nil
 }

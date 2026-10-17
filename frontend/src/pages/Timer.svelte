@@ -1,7 +1,7 @@
 <script lang="ts">
   import {onDestroy, onMount} from 'svelte'
-  import {GetSettings, GetTimerProfiles, HotkeyErrors, SaveSettings, TimerCommand} from '../../wailsjs/go/main/App'
-  import {config, type gamedata} from '../../wailsjs/go/models'
+  import {GetSettings, GetTimerProfiles, HotkeyErrors, SaveSettings, TimerCommand, TimerSyncStatus} from '../../wailsjs/go/main/App'
+  import {config, type gamedata, type main} from '../../wailsjs/go/models'
   import {EventsOn} from '../../wailsjs/runtime/runtime'
   import {lang, loc, t, type Key} from '../lib/i18n'
   import {clock, kindKey, mainClock, stateKey, timerState, urgency} from '../lib/timer'
@@ -10,14 +10,18 @@
   let profiles: gamedata.TimerProfile[] = []
   let settings: config.Settings | null = null
   let keyErrs: string[] = []
+  let sync: main.SyncStatus | null = null
   let error = ''
 
-  const off = EventsOn('hotkeys', (errs: string[]) => (keyErrs = errs ?? []))
-  onDestroy(off)
+  const offs = [
+    EventsOn('hotkeys', (errs: string[]) => (keyErrs = errs ?? [])),
+    EventsOn('timer:sync', (st: main.SyncStatus) => (sync = st)),
+  ]
+  onDestroy(() => offs.forEach((off) => off()))
 
   onMount(async () => {
     try {
-      ;[profiles, settings, keyErrs] = await Promise.all([GetTimerProfiles(), GetSettings(), HotkeyErrors()])
+      ;[profiles, settings, keyErrs, sync] = await Promise.all([GetTimerProfiles(), GetSettings(), HotkeyErrors(), TimerSyncStatus()])
     } catch (e) {
       error = String(e)
     }
@@ -55,6 +59,11 @@
         ['timer.key.overlay', settings.hotkeys.overlay],
       ] as [Key, string][])
     : []
+
+  const syncKey = (st: main.SyncStatus) => `sync.state.${st.state}` as Key
+  // The label of the phase the last banner moved the timer to.
+  $: lastPhase = sync?.last.at ? prof?.phases.find((p) => p.id === sync?.last.phase) : undefined
+  const time = (ms: number) => new Date(ms).toLocaleTimeString()
 </script>
 
 <h1>{$t('nav.timer')}</h1>
@@ -107,6 +116,16 @@
         {/if}
       </div>
       {#if error}<p class="err">{error}</p>{/if}
+      {#if sync}
+        <p class="sync small {sync.state}">
+          {$t(syncKey(sync))}{#if sync.error} <span class="muted">({sync.error})</span>{/if}
+          {#if sync.last.at}
+            <br /><span class="muted"
+              >{$t('sync.last')}: “{sync.last.text}” → {lastPhase ? loc(lastPhase.label, $lang) : sync.last.phase} · {time(sync.last.at)}</span
+            >
+          {/if}
+        </p>
+      {/if}
     </section>
 
     <section class="card">
@@ -285,6 +304,16 @@
   }
   .small {
     font-size: 12px;
+  }
+  .sync {
+    margin: 10px 0 0;
+    color: var(--muted);
+  }
+  .sync.watching {
+    color: var(--ok);
+  }
+  .sync.error {
+    color: var(--danger);
   }
   .errs {
     padding-left: 18px;
